@@ -1,8 +1,9 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit.Utilities;
 
 namespace Microsoft.MixedReality.Toolkit.WindowsDevicePortal
 {
@@ -64,7 +65,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsDevicePortal
         /// <summary>
         /// The current authorization for the device.
         /// </summary>
-        public Dictionary<string, string> Authorization => authorization ?? (authorization = new Dictionary<string, string> { { "Authorization", Microsoft.MixedReality.Toolkit.Utilities.Rest.GetBasicAuthentication(User, Password) } });
+        public Dictionary<string, string> Authorization => authorization ?? (authorization = new Dictionary<string, string> { { "Authorization", Rest.GetBasicAuthentication(User, Password) } });
 
         /// <summary>
         /// The last known battery state of the device.

@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -76,22 +76,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
         }
 
-        /// <summary>
-        /// Get the listening state
-        /// </summary>
-        public bool IsListening
-        {
-            get { return dictationSystem.IsListening; }
-        }
-
-        /// <summary>
-        /// Get the last audio clip from the dictation session
-        /// </summary>
-        public AudioClip AudioClip
-        {
-            get { return dictationSystem.AudioClip; }
-        }
-        
         #region InputSystemGlobalHandlerListener Implementation
 
         /// <inheritdoc />

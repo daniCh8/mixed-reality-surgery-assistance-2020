@@ -66,15 +66,18 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                 {
                     isLegacyXRActive = true;
 
-                    List<XRDisplaySubsystemDescriptor> descriptors = new List<XRDisplaySubsystemDescriptor>();
-                    SubsystemManager.GetSubsystemDescriptors(descriptors);
+                    List<ISubsystemDescriptor> descriptors = new List<ISubsystemDescriptor>();
+                    SubsystemManager.GetAllSubsystemDescriptors(descriptors);
 
-                    foreach (XRDisplaySubsystemDescriptor displayDescriptor in descriptors)
+                    foreach (ISubsystemDescriptor descriptor in descriptors)
                     {
-                        if (displayDescriptor.disablesLegacyVr)
+                        if (descriptor is XRDisplaySubsystemDescriptor displayDescriptor)
                         {
-                            isLegacyXRActive = false;
-                            break;
+                            if (displayDescriptor.disablesLegacyVr)
+                            {
+                                isLegacyXRActive = false;
+                                break;
+                            }
                         }
                     }
                 }

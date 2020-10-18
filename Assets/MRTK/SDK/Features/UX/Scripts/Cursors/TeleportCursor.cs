@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Physics;
@@ -12,11 +12,11 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
     [AddComponentMenu("Scripts/MRTK/SDK/TeleportCursor")]
     public class TeleportCursor : AnimatedCursor, IMixedRealityTeleportHandler
     {
-        private Vector3 cursorOrientation = Vector3.zero;
-
         [SerializeField]
         [Tooltip("Arrow Transform to point in the Teleporting direction.")]
         private Transform arrowTransform = null;
+
+        private Vector3 cursorOrientation = Vector3.zero;
 
         #region IMixedRealityCursor Implementation
 
@@ -58,7 +58,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
                         case TeleportSurfaceResult.None:
                             return CursorStateEnum.Release;
                         case TeleportSurfaceResult.Invalid:
-                            return CursorStateEnum.Observe;
+                            return CursorStateEnum.ObserveHover;
                         case TeleportSurfaceResult.HotSpot:
                         case TeleportSurfaceResult.Valid:
                             return CursorStateEnum.ObserveHover;
@@ -117,6 +117,7 @@ namespace Microsoft.MixedReality.Toolkit.Teleport
         #endregion IMixedRealityCursor Implementation
 
         #region IMixedRealityTeleportHandler Implementation
+
         /// <inheritdoc />
         public void OnTeleportRequest(TeleportEventData eventData)
         {

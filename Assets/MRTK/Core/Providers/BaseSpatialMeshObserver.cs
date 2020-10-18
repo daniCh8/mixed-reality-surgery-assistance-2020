@@ -11,7 +11,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
     /// <summary>
     /// Class providing a base implementation of the <see cref="IMixedRealitySpatialAwarenessMeshObserver"/> interface.
     /// </summary>
-    public abstract class BaseSpatialMeshObserver : BaseSpatialObserver, IMixedRealitySpatialAwarenessMeshObserver, ISpatialAwarenessPhysicsProperties
+    public abstract class BaseSpatialMeshObserver : BaseSpatialObserver, IMixedRealitySpatialAwarenessMeshObserver
     {
         /// <summary>
         /// Constructor.
@@ -66,7 +66,6 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
             LevelOfDetail = profile.LevelOfDetail;
             MeshPhysicsLayer = profile.MeshPhysicsLayer;
             OcclusionMaterial = profile.OcclusionMaterial;
-            PhysicsMaterial = profile.PhysicsMaterial;
             RecalculateNormals = profile.RecalculateNormals;
             TrianglesPerCubicMeter = profile.TrianglesPerCubicMeter;
             VisibleMaterial = profile.VisibleMaterial;
@@ -96,23 +95,6 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
                     }
 
                     meshObject.Renderer.enabled = enable;
-                }
-            }
-        }
-
-        private static readonly ProfilerMarker ApplyUpdatedMeshPhysicsPerfMarker = new ProfilerMarker("[MRTK] BaseSpatialMeshObserver.ApplyUpdatedMeshPhysics");
-
-        /// <summary>
-        /// Applies the physical material to existing meshes when modified at runtime.
-        /// </summary>
-        protected virtual void ApplyUpdatedMeshPhysics()
-        {
-            using (ApplyUpdatedMeshPhysicsPerfMarker.Auto())
-            {
-                foreach (SpatialAwarenessMeshObject meshObject in Meshes.Values)
-                {
-                    if (meshObject?.Collider == null) { continue; }
-                    meshObject.Collider.material = PhysicsMaterial;
                 }
             }
         }
@@ -295,21 +277,6 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
                     {
                         ApplyUpdatedMeshDisplayOption(SpatialAwarenessMeshDisplayOptions.Occlusion);
                     }
-                }
-            }
-        }
-
-        private PhysicMaterial physicsMaterial;
-
-        public PhysicMaterial PhysicsMaterial
-        {
-            get { return physicsMaterial; }
-            set
-            {
-                if (value != physicsMaterial)
-                {
-                    physicsMaterial = value;
-                    ApplyUpdatedMeshPhysics();
                 }
             }
         }

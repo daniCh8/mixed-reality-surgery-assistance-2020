@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
@@ -222,9 +222,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 switch (handedness)
                 {
                     case Handedness.Left:
-                        return detectedController.DefaultLeftHandedInteractions ?? detectedController.DefaultInteractions;
+                        return detectedController.DefaultLeftHandedInteractions;
                     case Handedness.Right:
-                        return detectedController.DefaultRightHandedInteractions ?? detectedController.DefaultInteractions;
+                        return detectedController.DefaultRightHandedInteractions;
                     default:
                         return detectedController.DefaultInteractions;
                 }

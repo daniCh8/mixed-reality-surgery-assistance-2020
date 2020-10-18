@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
@@ -28,10 +28,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
         ///
         /// NOTE: Not all near pointers have a grasp point (for example a poke pointer).
         /// </summary>
-        /// <param name="position">Out parameter filled with the grasp position if available, otherwise <see href="https://docs.unity3d.com/ScriptReference/Vector3-zero.html">Vector3.zero</see>.</param>
+        /// <param name="rotation">Out parameter filled with the grasp position if available, otherwise <see href="https://docs.unity3d.com/ScriptReference/Vector3-zero.html">Vector3.zero</see>.</param>
         /// <returns>True if a grasp point was retrieved, false if not.</returns>
         bool TryGetNearGraspPoint(out Vector3 position);
-
 
         /// <summary>
         /// Near pointers often interact with surfaces.

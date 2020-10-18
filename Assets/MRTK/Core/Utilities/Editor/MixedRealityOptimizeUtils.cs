@@ -1,14 +1,10 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-
-#if !UNITY_2020_1_OR_NEWER
-using Microsoft.MixedReality.Toolkit.Utilities.Editor;
-#endif // !UNITY_2020_1_OR_NEWER
 
 namespace Microsoft.MixedReality.Toolkit.Utilities
 {
@@ -34,7 +30,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <returns>True if the project has depth buffer sharing enabled, false otherwise.</returns>
         public static bool IsDepthBufferSharingEnabled()
         {
-#if !UNITY_2020_1_OR_NEWER
             if (IsBuildTargetOpenVR())
             {
                 // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
@@ -64,16 +59,14 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                 {
                     return true;
                 }
-#endif // UNITY_2019_1_OR_NEWER
-        }
-#endif // !UNITY_2020_1_OR_NEWER
+#endif
+            }
 
-            return true;
+            return false;
         }
 
         public static void SetDepthBufferSharing(bool enableDepthBuffer)
         {
-#if !UNITY_2020_1_OR_NEWER
             if (IsBuildTargetOpenVR())
             {
                 // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
@@ -95,37 +88,29 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                 ChangeProperty(playerSettings,
                     "vrSettings.hololens.depthBufferSharingEnabled",
                     property => property.boolValue = enableDepthBuffer);
-#endif // UNITY_2019_1_OR_NEWER
+#endif
             }
-#endif // !UNITY_2020_1_OR_NEWER
         }
 
         public static bool IsWMRDepthBufferFormat16bit()
         {
-#if !UNITY_2020_1_OR_NEWER
-            if (XRSettingsUtilities.IsLegacyXRActive)
-            {
 #if UNITY_2019_1_OR_NEWER
-                // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
-                // with legacy requirements.
+            // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
+            // with legacy requirements.
 #pragma warning disable 0618
-                return PlayerSettings.VRWindowsMixedReality.depthBufferFormat == PlayerSettings.VRWindowsMixedReality.DepthBufferFormat.DepthBufferFormat16Bit;
+            return PlayerSettings.VRWindowsMixedReality.depthBufferFormat == PlayerSettings.VRWindowsMixedReality.DepthBufferFormat.DepthBufferFormat16Bit;
 #pragma warning restore 0618
 #else
-                var playerSettings = GetSettingsObject("PlayerSettings");
-                var property = playerSettings?.FindProperty("vrSettings.hololens.depthFormat");
-                return property != null && property.intValue == 0;
-#endif // UNITY_2019_1_OR_NEWER
-            }
-#endif // !UNITY_2020_1_OR_NEWER
-            return true;
+            var playerSettings = GetSettingsObject("PlayerSettings");
+            var property = playerSettings?.FindProperty("vrSettings.hololens.depthFormat");
+            return property != null && property.intValue == 0;
+#endif
         }
 
         public static void SetDepthBufferFormat(bool set16BitDepthBuffer)
         {
             int depthFormat = set16BitDepthBuffer ? 0 : 1;
 
-#if !UNITY_2020_1_OR_NEWER
             // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
             // with legacy requirements.
 #pragma warning disable 0618
@@ -147,12 +132,10 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                 "vrSettings.lumin.depthFormat",
                 property => property.intValue = depthFormat);
 #else
-
             ChangeProperty(playerSettings,
                 "vrSettings.hololens.depthFormat",
                 property => property.intValue = depthFormat);
-#endif // UNITY_2019_1_OR_NEWER
-#endif // !UNITY_2020_1_OR_NEWER
+#endif
         }
 
         public static bool IsRealtimeGlobalIlluminationEnabled()

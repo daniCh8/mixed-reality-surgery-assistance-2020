@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 // Input simulation service is only built on editor platforms
 
@@ -73,7 +73,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             if (imageHandLeft)
             {
                 Sprite iconHandLeft;
-                if (InputSimService.IsSimulatingControllerLeft)
+                if (InputSimService.IsSimulatingHandLeft)
                 {
                     iconHandLeft = iconHandActiveLeft;
                 }
@@ -92,7 +92,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             if (imageHandRight)
             {
                 Sprite iconHandRight;
-                if (InputSimService.IsSimulatingControllerRight)
+                if (InputSimService.IsSimulatingHandRight)
                 {
                     iconHandRight = iconHandActiveRight;
                 }
@@ -114,7 +114,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// </summary>
         public void ToggleLeftHand()
         {
-            InputSimService.IsAlwaysVisibleControllerLeft = !InputSimService.IsAlwaysVisibleControllerLeft;
+            InputSimService.IsAlwaysVisibleHandLeft = !InputSimService.IsAlwaysVisibleHandLeft;
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// </summary>
         public void ToggleRightHand()
         {
-            InputSimService.IsAlwaysVisibleControllerRight = !InputSimService.IsAlwaysVisibleControllerRight;
+            InputSimService.IsAlwaysVisibleHandRight = !InputSimService.IsAlwaysVisibleHandRight;
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// </summary>
         public void ResetLeftHand()
         {
-            InputSimService.ResetControllerLeft();
+            InputSimService.ResetHandLeft();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// </summary>
         public void ResetRightHand()
         {
-            InputSimService.ResetControllerRight();
+            InputSimService.ResetHandRight();
         }
 #endif
     }

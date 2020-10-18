@@ -23,7 +23,6 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
         // Physics settings
         private SerializedProperty meshPhysicsLayer;
         private SerializedProperty recalculateNormals;
-        private SerializedProperty physicsMaterial;
 
         // Level of Detail settings
         private SerializedProperty levelOfDetail;
@@ -55,7 +54,6 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
 
             // Mesh settings
             meshPhysicsLayer = serializedObject.FindProperty("meshPhysicsLayer");
-            physicsMaterial = serializedObject.FindProperty("physicsMaterial");
             recalculateNormals = serializedObject.FindProperty("recalculateNormals");
             levelOfDetail = serializedObject.FindProperty("levelOfDetail");
             trianglesPerCubicMeter = serializedObject.FindProperty("trianglesPerCubicMeter");
@@ -105,7 +103,6 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
                 {
                     EditorGUILayout.PropertyField(meshPhysicsLayer, physicsLayerContent);
                     EditorGUILayout.PropertyField(recalculateNormals);
-                    EditorGUILayout.PropertyField(physicsMaterial);
                 }
 
                 EditorGUILayout.Space();

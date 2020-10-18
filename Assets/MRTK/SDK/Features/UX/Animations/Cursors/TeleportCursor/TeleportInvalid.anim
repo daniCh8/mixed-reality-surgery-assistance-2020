@@ -38,7 +38,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: TeleportMid
+    path: TeleportPadMid
   m_ScaleCurves: []
   m_FloatCurves:
   - curve:
@@ -75,7 +75,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.r
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -112,7 +112,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.g
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -149,7 +149,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.b
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -186,7 +186,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.a
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -214,7 +214,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: TeleportArrow
+    path: TeleportPadArrow
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -242,7 +242,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 1
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -349,7 +349,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -377,7 +377,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -405,7 +405,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -442,7 +442,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.r
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -479,7 +479,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.g
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -516,7 +516,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.b
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -553,7 +553,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.a
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -581,7 +581,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: TeleportArrow
+    path: TeleportPadArrow
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -609,7 +609,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: TeleportMid
+    path: TeleportPadMid
     classID: 1
     script: {fileID: 0}
   m_EulerEditorCurves: []

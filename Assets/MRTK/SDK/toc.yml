@@ -4,3 +4,5 @@
 - name: Profiles
   href: Profiles/toc.yml
   homepage: Profiles/README.md
+- name: Standard Assets
+  href: StandardAssets/toc.yml
