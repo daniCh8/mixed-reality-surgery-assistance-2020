@@ -145,11 +145,6 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
                 {
                     interactionMapping.BoolData = !Mathf.Approximately(triggerData, 0.0f);
                 }
-                else if (interactionMapping.InputType == DeviceInputType.GripTouch
-                    && inputDevice.TryGetFeatureValue(CommonUsages.grip, out float gripData))
-                {
-                    interactionMapping.BoolData = !Mathf.Approximately(gripData, 0.0f);
-                }
                 else
                 {
                     InputFeatureUsage<bool> buttonUsage;
@@ -158,35 +153,19 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
                     switch (interactionMapping.InputType)
                     {
                         case DeviceInputType.Select:
-                        case DeviceInputType.TriggerNearTouch:
-                        case DeviceInputType.TriggerPress:
                             buttonUsage = CommonUsages.triggerButton;
                             break;
-                        case DeviceInputType.GripNearTouch:
-                        case DeviceInputType.GripPress:
-                            buttonUsage = CommonUsages.gripButton;
-                            break;
-                        case DeviceInputType.ButtonPress:
-                        case DeviceInputType.PrimaryButtonPress:
-                            buttonUsage = CommonUsages.primaryButton;
-                            break;
-                        case DeviceInputType.SecondaryButtonPress:
-                            buttonUsage = CommonUsages.secondaryButton;
-                            break;
                         case DeviceInputType.TouchpadTouch:
-                            buttonUsage = CommonUsages.secondary2DAxisTouch;
+                            buttonUsage = CommonUsages.primary2DAxisTouch;
                             break;
                         case DeviceInputType.TouchpadPress:
-                            buttonUsage = CommonUsages.secondary2DAxisClick;
+                            buttonUsage = CommonUsages.primary2DAxisClick;
                             break;
                         case DeviceInputType.Menu:
                             buttonUsage = CommonUsages.menuButton;
                             break;
-                        case DeviceInputType.ThumbStickTouch:
-                            buttonUsage = CommonUsages.primary2DAxisTouch;
-                            break;
                         case DeviceInputType.ThumbStickPress:
-                            buttonUsage = CommonUsages.primary2DAxisClick;
+                            buttonUsage = CommonUsages.secondary2DAxisClick;
                             break;
                         default:
                             return;
@@ -227,53 +206,41 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
             using (UpdateSingleAxisDataPerfMarker.Auto())
             {
                 Debug.Assert(interactionMapping.AxisType == AxisType.SingleAxis);
+
                 // Update the interaction data source
                 switch (interactionMapping.InputType)
                 {
                     case DeviceInputType.TriggerPress:
-                        if (inputDevice.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed))
+                        if (inputDevice.TryGetFeatureValue(CommonUsages.gripButton, out bool buttonPressed))
                         {
-                            interactionMapping.BoolData = triggerPressed;
+                            interactionMapping.BoolData = buttonPressed;
+                        }
+
+                        // If our bool value changed raise it.
+                        if (interactionMapping.Changed)
+                        {
+                            // Raise input system event if it's enabled
+                            if (interactionMapping.BoolData)
+                            {
+                                CoreServices.InputSystem?.RaiseOnInputDown(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction);
+                            }
+                            else
+                            {
+                                CoreServices.InputSystem?.RaiseOnInputUp(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction);
+                            }
+                        }
+
+                        if (inputDevice.TryGetFeatureValue(CommonUsages.grip, out float buttonData))
+                        {
+                            interactionMapping.FloatData = buttonData;
                         }
                         break;
-                    case DeviceInputType.GripPress:
-                        if (inputDevice.TryGetFeatureValue(CommonUsages.gripButton, out bool gripPressed))
-                        {
-                            interactionMapping.BoolData = gripPressed;
-                        }
-                        break;
-                    default:
-                        return;
-                }
-
-                // If our value changed raise it.
-                if (interactionMapping.Changed)
-                {
-                    // Raise bool input system event if it's available
-                    if (interactionMapping.BoolData)
-                    {
-                        CoreServices.InputSystem?.RaiseOnInputDown(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction);
-                    }
-                    else
-                    {
-                        CoreServices.InputSystem?.RaiseOnInputUp(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction);
-                    }
-                }
-
-                switch (interactionMapping.InputType)
-                {
                     case DeviceInputType.Trigger:
                         if (inputDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerData))
                         {
                             interactionMapping.FloatData = triggerData;
                         }
                         break;
-                    case DeviceInputType.Grip:
-                        if (inputDevice.TryGetFeatureValue(CommonUsages.grip, out float gripData))
-                        {
-                            interactionMapping.FloatData = gripData;
-                        }
-                        break;
                     default:
                         return;
                 }
@@ -281,7 +248,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
                 // If our value changed raise it.
                 if (interactionMapping.Changed)
                 {
-                    // Raise float input system event if it's enabled
+                    // Raise input system event if it's enabled
                     CoreServices.InputSystem?.RaiseFloatInputChanged(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction, interactionMapping.FloatData);
                 }
             }
@@ -304,10 +271,10 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
                 switch (interactionMapping.InputType)
                 {
                     case DeviceInputType.ThumbStick:
-                        axisUsage = CommonUsages.primary2DAxis;
+                        axisUsage = CommonUsages.secondary2DAxis;
                         break;
                     case DeviceInputType.Touchpad:
-                        axisUsage = CommonUsages.secondary2DAxis;
+                        axisUsage = CommonUsages.primary2DAxis;
                         break;
                     default:
                         return;
@@ -342,7 +309,6 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
                 // Update the interaction data source
                 switch (interactionMapping.InputType)
                 {
-                    case DeviceInputType.SpatialPointer:
                     case DeviceInputType.SpatialGrip:
                         interactionMapping.PoseData = CurrentControllerPose;
 

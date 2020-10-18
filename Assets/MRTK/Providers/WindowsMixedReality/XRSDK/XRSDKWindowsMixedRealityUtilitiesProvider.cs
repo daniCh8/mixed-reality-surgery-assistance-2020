@@ -23,12 +23,9 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
             IntPtr.Zero;
 #endif
 
-        /// <inheritdoc />
-        IntPtr IWindowsMixedRealityUtilitiesProvider.IHolographicFramePtr =>
-#if WMR_ENABLED
-            WindowsMREnvironment.CurrentHolographicRenderFrame;
-#else
-            IntPtr.Zero;
-#endif
+        /// <summary>
+        /// Currently unable to access HolographicFrame in XR SDK. Always returns IntPtr.Zero.
+        /// </summary>
+        IntPtr IWindowsMixedRealityUtilitiesProvider.IHolographicFramePtr => IntPtr.Zero;
     }
 }

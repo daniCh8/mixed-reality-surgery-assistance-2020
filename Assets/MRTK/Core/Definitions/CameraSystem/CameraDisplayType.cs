@@ -1,6 +1,6 @@
-﻿// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Copyright(c) 2019 Takahiro Miyaura
-// Licensed under the MIT License.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 namespace Microsoft.MixedReality.Toolkit.CameraSystem
 {

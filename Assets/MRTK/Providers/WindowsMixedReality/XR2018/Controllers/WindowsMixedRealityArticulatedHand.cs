@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -40,8 +40,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         public WindowsMixedRealityArticulatedHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
                 : base(trackingState, controllerHandedness, inputSource, interactions)
         {
-            handDefinition = new ArticulatedHandDefinition(inputSource, controllerHandedness);
-            handMeshProvider = new WindowsMixedRealityHandMeshProvider(this);
+            handDefinition = new WindowsMixedRealityArticulatedHandDefinition(inputSource, controllerHandedness);
             articulatedHandApiAvailable = WindowsApiChecker.IsMethodAvailable(
                 "Windows.UI.Input.Spatial",
                 "SpatialInteractionSourceState",
@@ -55,8 +54,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
         public override MixedRealityInteractionMapping[] DefaultInteractions => handDefinition?.DefaultInteractions;
 
         private readonly Dictionary<TrackedHandJoint, MixedRealityPose> unityJointPoses = new Dictionary<TrackedHandJoint, MixedRealityPose>();
-        private readonly ArticulatedHandDefinition handDefinition;
-        private readonly WindowsMixedRealityHandMeshProvider handMeshProvider;
+        private readonly WindowsMixedRealityArticulatedHandDefinition handDefinition;
         private readonly bool articulatedHandApiAvailable = false;
 
         #region IMixedRealityHand Implementation
@@ -145,7 +143,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input
                     if (sourceState.Source.Id.Equals(interactionSourceState.source.id))
                     {
 #if WINDOWS_UWP
-                        handMeshProvider?.UpdateHandMesh(sourceState);
+                        handDefinition?.UpdateHandMesh(sourceState);
 #endif // WINDOWS_UWP
 
                         HandPose handPose = sourceState.TryGetHandPose();

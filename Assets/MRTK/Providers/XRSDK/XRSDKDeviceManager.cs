@@ -43,19 +43,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
         protected static readonly Dictionary<InputDevice, GenericXRSDKController> ActiveControllers = new Dictionary<InputDevice, GenericXRSDKController>();
 
         private readonly List<InputDevice> inputDevices = new List<InputDevice>();
-        private readonly List<InputDevice> inputDevicesSubset = new List<InputDevice>();
         private readonly List<InputDevice> lastInputDevices = new List<InputDevice>();
-
-        private List<InputDeviceCharacteristics> GenericDesiredInputCharacteristics = new List<InputDeviceCharacteristics>()
-        {
-            InputDeviceCharacteristics.Controller,
-            InputDeviceCharacteristics.HandTracking
-        };
-        protected virtual List<InputDeviceCharacteristics> DesiredInputCharacteristics
-        {
-            get { return GenericDesiredInputCharacteristics; }
-            set { GenericDesiredInputCharacteristics = value; }
-        }
 
         private static readonly ProfilerMarker UpdatePerfMarker = new ProfilerMarker("[MRTK] XRSDKDeviceManager.Update");
 
@@ -66,24 +54,12 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
             {
                 base.Update();
 
-                if (XRSubsystemHelpers.InputSubsystem == null || !XRSubsystemHelpers.InputSubsystem.running)
+                if (XRSDKSubsystemHelpers.InputSubsystem == null || !XRSDKSubsystemHelpers.InputSubsystem.running)
                 {
                     return;
                 }
 
-                inputDevices.Clear();
-                foreach (InputDeviceCharacteristics inputDeviceCharacteristics in DesiredInputCharacteristics)
-                {
-                    InputDevices.GetDevicesWithCharacteristics(inputDeviceCharacteristics, inputDevicesSubset);
-                    foreach (InputDevice device in inputDevicesSubset)
-                    {
-                        if (!inputDevices.Contains(device))
-                        {
-                            inputDevices.Add(device);
-                        }
-                    }
-                }
-
+                InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Controller, inputDevices);
                 foreach (InputDevice device in inputDevices)
                 {
                     if (device.isValid)
@@ -161,12 +137,13 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.Input
                     controllingHand = Handedness.None;
                 }
 
-                SupportedControllerType currentControllerType = GetCurrentControllerType(inputDevice);
+                var currentControllerType = GetCurrentControllerType(inputDevice);
                 Type controllerType = GetControllerType(currentControllerType);
                 InputSourceType inputSourceType = GetInputSourceType(currentControllerType);
 
+                IMixedRealityInputSystem inputSystem = Service as IMixedRealityInputSystem;
                 IMixedRealityPointer[] pointers = RequestPointers(currentControllerType, controllingHand);
-                IMixedRealityInputSource inputSource = Service?.RequestNewGenericInputSource($"{currentControllerType} Controller {controllingHand}", pointers, inputSourceType);
+                IMixedRealityInputSource inputSource = inputSystem?.RequestNewGenericInputSource($"{currentControllerType} Controller {controllingHand}", pointers, inputSourceType);
                 GenericXRSDKController detectedController = Activator.CreateInstance(controllerType, TrackingState.NotTracked, controllingHand, inputSource, null) as GenericXRSDKController;
 
                 if (detectedController == null || !detectedController.Enabled)

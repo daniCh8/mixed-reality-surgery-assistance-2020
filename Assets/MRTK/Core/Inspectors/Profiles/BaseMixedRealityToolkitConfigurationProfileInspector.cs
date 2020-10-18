@@ -1,6 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.﻿
 
+using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 using Microsoft.MixedReality.Toolkit.Utilities.Editor.Search;
@@ -209,7 +210,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor
                             Selection.activeObject = selectionObject;
                         }
                     }
-                    else if (!MixedRealityToolkit.Instance.HasActiveProfile)
+                    else if(!MixedRealityToolkit.Instance.HasActiveProfile)
                     {
                         EditorGUILayout.HelpBox("There is no active profile assigned in the current MRTK instance. Some properties may not be editable.", MessageType.Error);
                     }

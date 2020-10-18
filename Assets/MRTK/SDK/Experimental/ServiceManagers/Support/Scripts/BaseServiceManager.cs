@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
@@ -103,7 +103,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental
             Type interfaceType = typeof(T);
             List<T> matchingServices = new List<T>();
 
-            foreach (IMixedRealityService service in registeredServices.Values)
+            foreach(IMixedRealityService service in registeredServices.Values)
             {
                 if (!interfaceType.IsAssignableFrom(service.GetType())) { continue; }
 
@@ -195,7 +195,11 @@ namespace Microsoft.MixedReality.Toolkit.Experimental
         {
             if (concreteType == null) { return default(T); }
 
-            if (!PlatformUtility.IsPlatformSupported(supportedPlatforms))
+#if UNITY_EDITOR
+            if (!UnityEditor.EditorUserBuildSettings.activeBuildTarget.IsPlatformSupported(supportedPlatforms))
+#else
+            if (!Application.platform.IsPlatformSupported(supportedPlatforms))
+#endif
             {
                 return default(T);
             }
@@ -264,9 +268,9 @@ namespace Microsoft.MixedReality.Toolkit.Experimental
             Type interfaceType = typeof(T);
             IMixedRealityService serviceInstance;
 
-            if (!registeredServices.TryGetValue(interfaceType, out serviceInstance)) { return default(T); }
+            if (!registeredServices.TryGetValue(interfaceType, out serviceInstance)) { return default(T);  }
 
             return (T)serviceInstance;
-        }
+         }
     }
 }

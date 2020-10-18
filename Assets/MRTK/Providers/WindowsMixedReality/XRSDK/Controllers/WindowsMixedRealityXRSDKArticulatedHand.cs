@@ -33,16 +33,14 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
         public WindowsMixedRealityXRSDKArticulatedHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
             : base(trackingState, controllerHandedness, inputSource, interactions)
         {
-            handDefinition = new ArticulatedHandDefinition(inputSource, controllerHandedness);
-            handMeshProvider = new WindowsMixedRealityHandMeshProvider(this);
+            handDefinition = new WindowsMixedRealityArticulatedHandDefinition(inputSource, controllerHandedness);
         }
 
         /// <inheritdoc />
         public override MixedRealityInteractionMapping[] DefaultInteractions => handDefinition?.DefaultInteractions;
 
         private readonly Dictionary<TrackedHandJoint, MixedRealityPose> unityJointPoses = new Dictionary<TrackedHandJoint, MixedRealityPose>();
-        private readonly ArticulatedHandDefinition handDefinition;
-        private readonly WindowsMixedRealityHandMeshProvider handMeshProvider;
+        private readonly WindowsMixedRealityArticulatedHandDefinition handDefinition;
 
         private static readonly HandFinger[] handFingers = Enum.GetValues(typeof(HandFinger)) as HandFinger[];
         private readonly List<Bone> fingerBones = new List<Bone>();
@@ -104,13 +102,13 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
             using (UpdateHandDataPerfMarker.Auto())
             {
 #if WINDOWS_UWP && WMR_ENABLED
-                XRSubsystemHelpers.InputSubsystem?.GetCurrentSourceStates(states);
+                XRSDKSubsystemHelpers.InputSubsystem?.GetCurrentSourceStates(states);
 
                 foreach (SpatialInteractionSourceState sourceState in states)
                 {
                     if (sourceState.Source.Handedness.ToMRTKHandedness() == ControllerHandedness)
                     {
-                        handMeshProvider?.UpdateHandMesh(sourceState);
+                        handDefinition?.UpdateHandMesh(sourceState);
                         break;
                     }
                 }

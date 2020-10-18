@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
@@ -15,6 +15,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         #region Properties
 
         private float initialDist;
+        private Vector3 initialScale;
 
         public override TransformFlags ConstraintType => TransformFlags.Scale;
 
@@ -23,11 +24,12 @@ namespace Microsoft.MixedReality.Toolkit.UI
         #region Public Methods
 
         /// <inheritdoc />
-        public override void Initialize(MixedRealityTransform worldPose)
+        public override void Initialize(MixedRealityPose worldPose)
         {
             base.Initialize(worldPose);
 
             initialDist = (worldPose.Position - CameraCache.Main.transform.position).magnitude;
+            initialScale = TargetTransform.localScale;
         }
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         public override void ApplyConstraint(ref MixedRealityTransform transform)
         {
             float dist = (transform.Position - CameraCache.Main.transform.position).magnitude;
-            transform.Scale = (dist / initialDist) * worldPoseOnManipulationStart.Scale;
+            transform.Scale = (dist / initialDist) * initialScale;
         }
 
         #endregion Public Methods

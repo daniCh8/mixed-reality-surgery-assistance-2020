@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -27,31 +27,15 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         /// <returns>The bounds of the clipping primitive.</returns>
         protected abstract Bounds OnGetFrameBounds();
 
-        private ClippingPrimitive clippingPrimitive;
-
-        private void OnEnable()
-        {
-            clippingPrimitive = (ClippingPrimitive)target;
-        }
-
         /// <summary>
         /// Looks for changes to the list of renderers and gracefully adds and removes them.
         /// </summary>
         public override void OnInspectorGUI()
         {
+            var clippingPrimitive = (ClippingPrimitive)target;
+
             var previousRenderers = clippingPrimitive.GetRenderersCopy();
-
-            using (var check = new EditorGUI.ChangeCheckScope())
-            {
-                DrawDefaultInspector();
-
-                if (check.changed)
-                {
-                    // Flagging changes other than renderers
-                    clippingPrimitive.IsDirty = true;
-                }
-            }
-
+            DrawDefaultInspector();
             var currentRenderers = clippingPrimitive.GetRenderersCopy();
 
             // Add or remove and renderers that were added or removed via the inspector.

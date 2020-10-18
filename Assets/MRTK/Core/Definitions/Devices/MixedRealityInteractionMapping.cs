@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
@@ -28,7 +28,26 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <param name="invertXAxis">Optional horizontal axis invert option.</param>
         /// <param name="invertYAxis">Optional vertical axis invert option.</param> 
         public MixedRealityInteractionMapping(uint id, string description, AxisType axisType, DeviceInputType inputType, string axisCodeX = "", string axisCodeY = "", bool invertXAxis = false, bool invertYAxis = false)
-            : this(id, description, axisType, inputType, MixedRealityInputAction.None, KeyCode.None, axisCodeX, axisCodeY, invertXAxis, invertYAxis) { }
+        {
+            this.id = id;
+            this.description = description;
+            this.axisType = axisType;
+            this.inputType = inputType;
+            inputAction = MixedRealityInputAction.None;
+            keyCode = KeyCode.None;
+            this.axisCodeX = axisCodeX;
+            this.axisCodeY = axisCodeY;
+            this.invertXAxis = invertXAxis;
+            this.invertYAxis = invertYAxis;
+            rawData = null;
+            boolData = false;
+            floatData = 0f;
+            vector2Data = Vector2.zero;
+            positionData = Vector3.zero;
+            rotationData = Quaternion.identity;
+            poseData = MixedRealityPose.ZeroIdentity;
+            changed = false;
+        }
 
         /// <summary>
         /// The constructor for a new Interaction Mapping definition
@@ -39,7 +58,24 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <param name="inputType">The physical input device / control</param>
         /// <param name="keyCode">Optional KeyCode value to get input from Unity's old input system</param>
         public MixedRealityInteractionMapping(uint id, string description, AxisType axisType, DeviceInputType inputType, KeyCode keyCode)
-            : this(id, description, axisType, inputType, MixedRealityInputAction.None, keyCode) { }
+        {
+            this.id = id;
+            this.description = description;
+            this.axisType = axisType;
+            this.inputType = inputType;
+            inputAction = MixedRealityInputAction.None;
+            this.keyCode = keyCode;
+            axisCodeX = string.Empty;
+            axisCodeY = string.Empty;
+            rawData = null;
+            boolData = false;
+            floatData = 0f;
+            vector2Data = Vector2.zero;
+            positionData = Vector3.zero;
+            rotationData = Quaternion.identity;
+            poseData = MixedRealityPose.ZeroIdentity;
+            changed = false;
+        }
 
         /// <summary>
         /// The constructor for a new Interaction Mapping definition
@@ -66,7 +102,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
             this.axisCodeY = axisCodeY;
             this.invertXAxis = invertXAxis;
             this.invertYAxis = invertYAxis;
-
             rawData = null;
             boolData = false;
             floatData = 0f;
@@ -78,16 +113,26 @@ namespace Microsoft.MixedReality.Toolkit.Input
         }
 
         public MixedRealityInteractionMapping(MixedRealityInteractionMapping mixedRealityInteractionMapping)
-            : this(mixedRealityInteractionMapping.id,
-                   mixedRealityInteractionMapping.Description,
-                   mixedRealityInteractionMapping.AxisType,
-                   mixedRealityInteractionMapping.InputType,
-                   mixedRealityInteractionMapping.MixedRealityInputAction,
-                   mixedRealityInteractionMapping.keyCode,
-                   mixedRealityInteractionMapping.axisCodeX,
-                   mixedRealityInteractionMapping.axisCodeY,
-                   mixedRealityInteractionMapping.invertXAxis,
-                   mixedRealityInteractionMapping.invertYAxis) { }
+        {
+            id = mixedRealityInteractionMapping.id;
+            description = mixedRealityInteractionMapping.description;
+            axisType = mixedRealityInteractionMapping.axisType;
+            inputType = mixedRealityInteractionMapping.inputType;
+            inputAction = mixedRealityInteractionMapping.inputAction;
+            keyCode = mixedRealityInteractionMapping.keyCode;
+            axisCodeX = mixedRealityInteractionMapping.axisCodeX;
+            axisCodeY = mixedRealityInteractionMapping.axisCodeY;
+            invertXAxis = mixedRealityInteractionMapping.invertXAxis;
+            invertYAxis = mixedRealityInteractionMapping.invertYAxis;
+            rawData = null;
+            boolData = false;
+            floatData = 0f;
+            vector2Data = Vector2.zero;
+            positionData = Vector3.zero;
+            rotationData = Quaternion.identity;
+            poseData = MixedRealityPose.ZeroIdentity;
+            changed = false;
+        }
 
         #region Interaction Properties
 
@@ -182,7 +227,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             get { return invertXAxis; }
             set
             {
-                if (AxisType != AxisType.SingleAxis && AxisType != AxisType.DualAxis)
+                if (axisType != AxisType.SingleAxis && axisType != AxisType.DualAxis)
                 {
                     Debug.LogWarning("Inverted X axis only valid for Single or Dual Axis inputs.");
                     return;
@@ -207,7 +252,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             get { return invertYAxis; }
             set
             {
-                if (AxisType != AxisType.DualAxis)
+                if (axisType != AxisType.DualAxis)
                 {
                     Debug.LogWarning("Inverted Y axis only valid for Dual Axis inputs.");
                     return;
@@ -278,7 +323,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (AxisType != AxisType.Raw)
                 {
-                    Debug.LogError($"SetRawValue is only valid for AxisType.Raw InteractionMappings\nPlease check the {InputType} mapping for the current controller");
+                    Debug.LogError($"SetRawValue is only valid for AxisType.Raw InteractionMappings\nPlease check the {inputType} mapping for the current controller");
                 }
 
                 Changed = rawData != value;
@@ -301,7 +346,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (AxisType != AxisType.Digital && AxisType != AxisType.SingleAxis && AxisType != AxisType.DualAxis)
                 {
-                    Debug.LogError($"SetBoolValue is only valid for AxisType.Digital, AxisType.SingleAxis, or AxisType.DualAxis InteractionMappings\nPlease check the {InputType} mapping for the current controller");
+                    Debug.LogError($"SetBoolValue is only valid for AxisType.Digital, AxisType.SingleAxis, or AxisType.DualAxis InteractionMappings\nPlease check the {inputType} mapping for the current controller");
                 }
 
                 Changed = boolData != value;
@@ -324,7 +369,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (AxisType != AxisType.SingleAxis)
                 {
-                    Debug.LogError($"SetFloatValue is only valid for AxisType.SingleAxis InteractionMappings\nPlease check the {InputType} mapping for the current controller");
+                    Debug.LogError($"SetFloatValue is only valid for AxisType.SingleAxis InteractionMappings\nPlease check the {inputType} mapping for the current controller");
                 }
 
                 if (invertXAxis)
@@ -355,7 +400,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (AxisType != AxisType.DualAxis)
                 {
-                    Debug.LogError($"SetVector2Value is only valid for AxisType.DualAxis InteractionMappings\nPlease check the {InputType} mapping for the current controller");
+                    Debug.LogError($"SetVector2Value is only valid for AxisType.DualAxis InteractionMappings\nPlease check the {inputType} mapping for the current controller");
                 }
 
                 Vector2 newValue = value * new Vector2(invertXAxis ? -1f : 1f, invertYAxis ? -1f : 1f);
@@ -380,7 +425,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 if (AxisType != AxisType.ThreeDofPosition)
                 {
                     {
-                        Debug.LogError($"SetPositionValue is only valid for AxisType.ThreeDoFPosition InteractionMappings\nPlease check the {InputType} mapping for the current controller");
+                        Debug.LogError($"SetPositionValue is only valid for AxisType.ThreeDoFPosition InteractionMappings\nPlease check the {inputType} mapping for the current controller");
                     }
                 }
 
@@ -404,7 +449,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (AxisType != AxisType.ThreeDofRotation)
                 {
-                    Debug.LogError($"SetRotationValue is only valid for AxisType.ThreeDoFRotation InteractionMappings\nPlease check the {InputType} mapping for the current controller");
+                    Debug.LogError($"SetRotationValue is only valid for AxisType.ThreeDoFRotation InteractionMappings\nPlease check the {inputType} mapping for the current controller");
                 }
 
                 Changed = rotationData != value;
@@ -426,7 +471,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (AxisType != AxisType.SixDof)
                 {
-                    Debug.LogError($"SetPoseValue is only valid for AxisType.SixDoF InteractionMappings\nPlease check the {InputType} mapping for the current controller");
+                    Debug.LogError($"SetPoseValue is only valid for AxisType.SixDoF InteractionMappings\nPlease check the {inputType} mapping for the current controller");
                 }
 
                 Changed = poseData != value;
@@ -438,5 +483,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
         }
 
         #endregion Data Properties
+
     }
 }

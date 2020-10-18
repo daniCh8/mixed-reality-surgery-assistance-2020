@@ -49,12 +49,10 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality
 
         private WindowsMixedRealityCameraSettingsProfile Profile => ConfigurationProfile as WindowsMixedRealityCameraSettingsProfile;
 
-#if WINDOWS_UWP
         private static readonly bool isTryGetViewConfigurationSupported = Windows.Utilities.WindowsApiChecker.IsMethodAvailable(
             "Windows.Graphics.Holographic",
             "HolographicDisplay",
             "TryGetViewConfiguration");
-#endif // WINDOWS_UWP
 
         private WindowsMixedRealityReprojectionUpdater reprojectionUpdater = null;
 

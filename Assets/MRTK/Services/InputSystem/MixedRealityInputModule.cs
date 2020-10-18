@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Collections.Generic;
 using Unity.Profiling;
@@ -14,7 +14,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
     {
         protected class PointerData
         {
-            public readonly IMixedRealityPointer pointer;
+            public IMixedRealityPointer pointer;
 
             public Vector3? lastMousePoint3d = null; // Last position of the pointer for the input in 3D.
             public PointerEventData.FramePressState nextPressState = PointerEventData.FramePressState.NotChanged;
@@ -305,15 +305,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
         void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData)
         {
             int pointerId = (int)eventData.Pointer.PointerId;
-
-            // OnPointerUp can be raised during an OnSourceLost. If the pointer has already been removed
-            // from the pointerDataToUpdate Dictionary and added to the pointerDataToRemove list, then
-            // that pointer's state update can be ignored.
-            Debug.Assert(pointerDataToUpdate.ContainsKey(pointerId) || IsPointerIdInRemovedList(pointerId));
-            if (pointerDataToUpdate.TryGetValue(pointerId, out PointerData pointerData))
-            {
-                pointerData.nextPressState = PointerEventData.FramePressState.Released;
-            }
+            Debug.Assert(pointerDataToUpdate.ContainsKey(pointerId));
+            pointerDataToUpdate[pointerId].nextPressState = PointerEventData.FramePressState.Released;
         }
 
         void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
@@ -327,19 +320,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData)
         {
-        }
-
-        private bool IsPointerIdInRemovedList(int pointerId)
-        {
-            for (int i = 0; i < pointerDataToRemove.Count; i++)
-            {
-                if (pointerDataToRemove[i].pointer.PointerId == pointerId)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         #endregion

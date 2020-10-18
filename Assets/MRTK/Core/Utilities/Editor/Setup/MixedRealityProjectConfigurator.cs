@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Editor;
 using System;
@@ -43,9 +43,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
             SinglePassInstancing = 5,
             OptimalRenderingPath = 5, // using the same value of SinglePassInstancing as a replacement
             SpatialAwarenessLayer,
-            [Obsolete("EnableMSBuildForUnity is obsolete and may no longer be used", true)]
             EnableMSBuildForUnity,
-            AudioSpatializer = 8,
+            AudioSpatializer,
 
             // WSA Capabilities
             SpatialPerceptionCapability = 1000,
@@ -63,11 +62,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
             IOSMinOSVersion = 3000,
             IOSArchitecture,
             IOSCameraUsageDescription,
-
-#if UNITY_2019_3_OR_NEWER
-            // A workaround for the Unity bug described in https://github.com/microsoft/MixedRealityToolkit-Unity/issues/8326.
-            GraphicsJobWorkaround,
-#endif // UNITY_2019_3_OR_NEWER
         };
 
         private class ConfigGetter
@@ -117,11 +111,12 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
             { Configurations.LatestScriptingRuntime, new ConfigGetter(IsLatestScriptingRuntime) },
             { Configurations.ForceTextSerialization, new ConfigGetter(IsForceTextSerialization) },
             { Configurations.VisibleMetaFiles, new ConfigGetter(IsVisibleMetaFiles) },
-#if !UNITY_2019_3_OR_NEWER
             { Configurations.VirtualRealitySupported, new ConfigGetter(() => XRSettingsUtilities.LegacyXREnabled) },
-#endif // !UNITY_2019_3_OR_NEWER
             { Configurations.OptimalRenderingPath, new ConfigGetter(MixedRealityOptimizeUtils.IsOptimalRenderingPath) },
             { Configurations.SpatialAwarenessLayer, new ConfigGetter(HasSpatialAwarenessLayer) },
+#if !UNITY_2019_3_OR_NEWER
+            { Configurations.EnableMSBuildForUnity, new ConfigGetter(PackageManifestUpdater.IsMSBuildForUnityEnabled, BuildTarget.WSAPlayer) },
+#endif // !UNITY_2019_3_OR_NEWER
             { Configurations.AudioSpatializer, new ConfigGetter(SpatializerUtilities.CheckSettings) },
 
             // UWP Capabilities
@@ -140,11 +135,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
             { Configurations.IOSMinOSVersion, new ConfigGetter(() => float.TryParse(PlayerSettings.iOS.targetOSVersionString, out float version) ? version >= iOSMinOsVersion : false, BuildTarget.iOS) },
             { Configurations.IOSArchitecture, new ConfigGetter(() => PlayerSettings.GetArchitecture(BuildTargetGroup.iOS) == RequirediOSArchitecture, BuildTarget.iOS) },
             { Configurations.IOSCameraUsageDescription, new ConfigGetter(() => !string.IsNullOrWhiteSpace(PlayerSettings.iOS.cameraUsageDescription), BuildTarget.iOS) },
-
-#if UNITY_2019_3_OR_NEWER
-            { Configurations.GraphicsJobWorkaround, new ConfigGetter(() => !PlayerSettings.graphicsJobs, BuildTarget.WSAPlayer) },
-#endif // UNITY_2019_3_OR_NEWER
-
         };
 
         // The configure functions for each type of setting
@@ -153,11 +143,12 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
             { Configurations.LatestScriptingRuntime, SetLatestScriptingRuntime },
             { Configurations.ForceTextSerialization, SetForceTextSerialization },
             { Configurations.VisibleMetaFiles, SetVisibleMetaFiles },
-#if !UNITY_2019_3_OR_NEWER
             { Configurations.VirtualRealitySupported, () => XRSettingsUtilities.LegacyXREnabled = true },
-#endif // !UNITY_2019_3_OR_NEWER
             { Configurations.OptimalRenderingPath, MixedRealityOptimizeUtils.SetOptimalRenderingPath },
             { Configurations.SpatialAwarenessLayer,  SetSpatialAwarenessLayer },
+#if !UNITY_2019_3_OR_NEWER
+            { Configurations.EnableMSBuildForUnity, PackageManifestUpdater.EnsureMSBuildForUnity },
+#endif // !UNITY_2019_3_OR_NEWER
             { Configurations.AudioSpatializer, SetAudioSpatializer },
 
             // UWP Capabilities
@@ -176,10 +167,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
             { Configurations.IOSMinOSVersion, () => PlayerSettings.iOS.targetOSVersionString = iOSMinOsVersion.ToString("n1") },
             { Configurations.IOSArchitecture, () => PlayerSettings.SetArchitecture(BuildTargetGroup.iOS, RequirediOSArchitecture) },
             { Configurations.IOSCameraUsageDescription, () => PlayerSettings.iOS.cameraUsageDescription = iOSCameraUsageDescription },
-
-#if UNITY_2019_3_OR_NEWER
-            { Configurations.GraphicsJobWorkaround, () => PlayerSettings.graphicsJobs = false },
-#endif // UNITY_2019_3_OR_NEWER
         };
 
         /// <summary>
@@ -304,11 +291,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
         /// </summary>
         public static bool IsVisibleMetaFiles()
         {
-#if UNITY_2020_2_OR_NEWER
-            return VersionControlSettings.mode.Equals("Visible Meta Files");
-#else
             return EditorSettings.externalVersionControl.Equals("Visible Meta Files");
-#endif // UNITY_2020_2_OR_NEWER
         }
 
         /// <summary>
@@ -316,11 +299,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
         /// </summary>
         public static void SetVisibleMetaFiles()
         {
-#if UNITY_2020_2_OR_NEWER
-            VersionControlSettings.mode = "Visible Meta Files";
-#else
             EditorSettings.externalVersionControl = "Visible Meta Files";
-#endif // UNITY_2020_2_OR_NEWER
         }
 
         /// <summary>
@@ -356,10 +335,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
         /// <summary>
         /// Discover and set the appropriate XR Settings for virtual reality supported for the current build target.
         /// </summary>
-        /// <remarks>Has no effect on Unity 2020 or newer. Will be updated if a replacement API is provided by Unity.</remarks>
         public static void ApplyXRSettings()
         {
-#if !UNITY_2020_1_OR_NEWER
             // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
             // with legacy requirements.
 #pragma warning disable 0618
@@ -380,12 +357,11 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                 PlayerSettings.SetVirtualRealitySupported(targetGroup, true);
             }
 #pragma warning restore 0618
-#endif // !UNITY_2020_1_OR_NEWER
         }
 
         private static bool GetCapability(PlayerSettings.WSACapability capability)
         {
-            return !MixedRealityOptimizeUtils.IsBuildTargetUWP() || PlayerSettings.WSA.GetCapability(capability);
+            return MixedRealityOptimizeUtils.IsBuildTargetUWP() ? PlayerSettings.WSA.GetCapability(capability) : true;
         }
     }
 }
