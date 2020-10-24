@@ -20,14 +20,14 @@ public class GlobalController : MonoBehaviour
 
     private static List<GameObject> bones = new List<GameObject>();
     private static List<TransformInfo> originalTransform = new List<TransformInfo>();
-    private static List<GameObject> adjustedBones = new List<GameObject>();
+    //private static List<GameObject> adjustedBones = new List<GameObject>();
     private static List<TransformInfo> originalTransformAdjusted = new List<TransformInfo>();
 
 
     // Colors and opacities
     public static ColorState gColorState { get; set; }
 
-    public static int numberOfBones = 0, numberOfAdjustedBones = 1;
+    public static int numberOfBones = 0;//, numberOfAdjustedBones = 1;
     // adjusted bones
     public static BoneState gBoneState { get; set; }
 
@@ -63,10 +63,10 @@ public class GlobalController : MonoBehaviour
         //}
 
         numberOfBones = 6;
-        numberOfAdjustedBones = 7;
+        //numberOfAdjustedBones = 7;
 
         Debug.Log("Number of bones loaded: " + numberOfBones);
-        Debug.Log("Number of adjusted bones loaded: " + numberOfAdjustedBones);
+        //Debug.Log("Number of adjusted bones loaded: " + numberOfAdjustedBones);
 
         // init bone references
         for (int i = 1; i <= numberOfBones; i++)
@@ -83,6 +83,7 @@ public class GlobalController : MonoBehaviour
             originalTransform.Add(ti);
         }
 
+        /*
         for (int i = 1; i <= numberOfAdjustedBones; i++)
         {
             GameObject t = GameObject.Find("Bone_" + i + "_aligned");
@@ -96,11 +97,12 @@ public class GlobalController : MonoBehaviour
             };
             originalTransformAdjusted.Add(ti);
         }
+        */
 
         gBoneState = BoneState.ShowAll;
 
         // color mode init
-        gColorState = ColorState.Select;
+        //gColorState = ColorState.Select;
 
         // slider enable/disable
         slider = GameObject.Find("PinchSlider");
@@ -123,9 +125,9 @@ public class GlobalController : MonoBehaviour
             bones[i].transform.localScale = originalTransform[i].scale;
         }
 
-        adjustedBones[0].transform.localPosition = originalTransformAdjusted[0].pos;
-        adjustedBones[0].transform.localRotation = originalTransformAdjusted[0].rotate;
-        adjustedBones[0].transform.localScale = originalTransformAdjusted[0].scale;
+        //adjustedBones[0].transform.localPosition = originalTransformAdjusted[0].pos;
+        //adjustedBones[0].transform.localRotation = originalTransformAdjusted[0].rotate;
+        //adjustedBones[0].transform.localScale = originalTransformAdjusted[0].scale;
 
 
         Vector3 scale = originalTransform[0].scale;
@@ -134,6 +136,7 @@ public class GlobalController : MonoBehaviour
         bones[0].transform.localScale = localScale;
     }
 
+    /*
     public void ResetColorForAll()
     {
         foreach (GameObject o in bones)
@@ -141,6 +144,7 @@ public class GlobalController : MonoBehaviour
             o.GetComponent<AdjustBoneColor>().ResetColor();
         }
     }
+    */
 
     public void ShowOrHideAdjustments()
     {
@@ -150,7 +154,7 @@ public class GlobalController : MonoBehaviour
         {
             case BoneState.ShowAll:
                 {
-                    adjustedBones[6].SetActive(false);
+                    //adjustedBones[6].SetActive(false);
                     foreach (TextMeshPro tmp in texts)
                     {
                         tmp.text = "Hide Adjustments";
@@ -160,8 +164,8 @@ public class GlobalController : MonoBehaviour
                 }
             case BoneState.HidePlates:
                 {
-                    adjustedBones[6].SetActive(true);
-                    adjustedBones[0].SetActive(false);
+                    //adjustedBones[6].SetActive(true);
+                    //adjustedBones[0].SetActive(false);
                     foreach (TextMeshPro tmp in texts)
                     {
                         tmp.text = "Show Adjustments";
@@ -171,7 +175,7 @@ public class GlobalController : MonoBehaviour
                 }
             case BoneState.HideAll:
                 {
-                    adjustedBones[0].SetActive(true);
+                    //adjustedBones[0].SetActive(true);
                     foreach (TextMeshPro tmp in texts)
                     {
                         tmp.text = "Hide Bone Plates";
@@ -196,7 +200,7 @@ public class GlobalController : MonoBehaviour
                 tmp.text = "Show Slider";
             }
             ResetPositions();
-            ResetColorForAll();
+            //ResetColorForAll();
         }
         else
         {
@@ -209,6 +213,7 @@ public class GlobalController : MonoBehaviour
         }
     }
 
+    /*
     public void ChangeColoringMode()
     {
         gColorState = 1 - gColorState;
@@ -221,6 +226,7 @@ public class GlobalController : MonoBehaviour
                 tmp.text = "Fix Opacity";
         }
     }
+    */
 
     public void ScaleUpStep()
     {
