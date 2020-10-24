@@ -600,9 +600,9 @@ PlayerSettings:
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: DefaultCompany
-  metroCertificateIssuer: DefaultCompany
-  metroCertificateNotAfter: 803f3026a19dd601
+  metroCertificateSubject: MRLab
+  metroCertificateIssuer: MRLab
+  metroCertificateNotAfter: 00ae9da223c9d701
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: MR Surgery
