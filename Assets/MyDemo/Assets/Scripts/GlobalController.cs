@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using TMPro;
-using System.Diagnostics;
 using Debug = UnityEngine.Debug;
+using BoundingBox = Microsoft.MixedReality.Toolkit.UI.BoundingBox;
+using ManipulationHandler = Microsoft.MixedReality.Toolkit.UI.ManipulationHandler;
 
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
@@ -22,7 +21,6 @@ public class GlobalController : MonoBehaviour
 
     private static List<GameObject> bones = new List<GameObject>();
     private static List<TransformInfo> originalTransform = new List<TransformInfo>();
-    //private static List<GameObject> adjustedBones = new List<GameObject>();
     private static List<TransformInfo> originalTransformAdjusted = new List<TransformInfo>();
 
 
@@ -36,6 +34,13 @@ public class GlobalController : MonoBehaviour
     // Slider
     private static GameObject slider, slider2;
 
+    // Menu
+    private static GameObject nearMenu, handMenu;
+
+    // Bone handlers
+    private static BoundingBox boneBoundingBox;
+    private static ManipulationHandler manipulationHandler;
+
     // Scale
     public static ScaleState gScaleState { get; set; }
 
@@ -43,32 +48,7 @@ public class GlobalController : MonoBehaviour
     void Start()
     {
 
-        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/MyDemo/Assets/Meshes");
-        //FileInfo[] fis = di.GetFiles();
-
-        //foreach (FileInfo fi in fis)
-        //{
-        //    // File Name Convensions : 
-        //    // Bone_1.obj for base bones,
-        //    // Bone_#.obj for fragments,
-        //    // Bone_#_aligned.obj for adjusted fragments,
-        //    // Bone_{#+1}_aligned.obj for addition artifitial structures.
-
-        //    //Debug.Log(fi.Name);
-        //    if (fi.Extension.Contains("obj"))
-        //    {
-        //        if (fi.Name.Contains("aligned"))
-        //            numberOfAdjustedBones++;
-        //        else
-        //            numberOfBones++;
-        //    }
-        //}
-
         numberOfBones = 6;
-        //numberOfAdjustedBones = 7;
-
-        Debug.Log("Number of bones loaded: " + numberOfBones);
-        //Debug.Log("Number of adjusted bones loaded: " + numberOfAdjustedBones);
 
         // init bone references
         for (int i = 1; i <= numberOfBones; i++)
@@ -85,26 +65,7 @@ public class GlobalController : MonoBehaviour
             originalTransform.Add(ti);
         }
 
-        /*
-        for (int i = 1; i <= numberOfAdjustedBones; i++)
-        {
-            GameObject t = GameObject.Find("Bone_" + i + "_aligned");
-            adjustedBones.Add(t);
-            Transform tr = t.GetComponent<Transform>();
-            TransformInfo ti = new TransformInfo
-            {
-                pos = tr.localPosition,
-                rotate = tr.localRotation,
-                scale = tr.localScale
-            };
-            originalTransformAdjusted.Add(ti);
-        }
-        */
-
         gBoneState = BoneState.ShowAll;
-
-        // color mode init
-        //gColorState = ColorState.Select;
 
         // slider enable/disable
         slider = GameObject.Find("PinchSlider");
@@ -113,11 +74,68 @@ public class GlobalController : MonoBehaviour
         // scale functions
         gScaleState = ScaleState.Original;
 
+        // menus
+        nearMenu = GameObject.Find("NearMenu");
+        handMenu = GameObject.Find("HandMenu");
+
+        boneBoundingBox = GameObject.Find("Bone_1").GetComponent<BoundingBox>();
+        manipulationHandler = GameObject.Find("Bone_1").GetComponent<ManipulationHandler>();
+        
+        handMenu.SetActive(false);
+
+    }
+
+    public void EnableBoundingBox()
+    {
+        Debug.Log("Enable Bounding Box pressed");
+
+        TextMeshPro[] texts = GameObject.Find("EnableBoundingBox").GetComponentsInChildren<TextMeshPro>();
+
+        if (boneBoundingBox.enabled)
+        {
+            boneBoundingBox.enabled = false;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Enable BoundingBox";
+            }
+        }
+        else
+        {
+            boneBoundingBox.enabled = true;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Disable BoundingBox";
+            }
+        }
+    }
+
+    public void EnableManipulation()
+    {
+        Debug.Log("Enable Manipulation pressed");
+
+        TextMeshPro[] texts = GameObject.Find("EnableManipulation").GetComponentsInChildren<TextMeshPro>();
+
+        if (manipulationHandler.enabled)
+        {
+            manipulationHandler.enabled = false;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Enable Manipulation";
+            }
+        }
+        else
+        {
+            manipulationHandler.enabled = true;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Disable Manipulation";
+            }
+        }
     }
 
     public void ChangeHandness()
     {
-        Debug.Log("Change Handness Pressed");
+        Debug.Log("Change Handness pressed");
 
         TextMeshPro[] texts = GameObject.Find("ChangeHandness").GetComponentsInChildren<TextMeshPro>();
         HandSlice ctplane = GameObject.Find("CTPlane3").GetComponent<HandSlice>();
@@ -187,16 +205,6 @@ public class GlobalController : MonoBehaviour
         bones[0].transform.localScale = localScale;
     }
 
-    /*
-    public void ResetColorForAll()
-    {
-        foreach (GameObject o in bones)
-        {
-            o.GetComponent<AdjustBoneColor>().ResetColor();
-        }
-    }
-    */
-
     public void ShowOrHideAdjustments()
     {
         TextMeshPro[] texts = GameObject.Find("ShowAdjustment").GetComponentsInChildren<TextMeshPro>();
@@ -237,6 +245,23 @@ public class GlobalController : MonoBehaviour
         }
     }
 
+    public void ChangeMenuType()
+    {
+        Debug.Log("Change Menu Type Pressed");
+
+
+        if (nearMenu.activeInHierarchy)
+        {
+            nearMenu.SetActive(false);
+            handMenu.SetActive(true);
+        }
+        else
+        {
+            nearMenu.SetActive(true);
+            handMenu.SetActive(false);
+        }
+    }
+
     public void ShowOrHideSlider()
     {
         TextMeshPro[] texts = GameObject.Find("ShowSlider").GetComponentsInChildren<TextMeshPro>();
@@ -265,21 +290,6 @@ public class GlobalController : MonoBehaviour
             }
         }
     }
-
-    /*
-    public void ChangeColoringMode()
-    {
-        gColorState = 1 - gColorState;
-        TextMeshPro[] texts = GameObject.Find("EditOpacityButton").GetComponentsInChildren<TextMeshPro>();
-        foreach (TextMeshPro tmp in texts)
-        {
-            if (gColorState == ColorState.Select)
-                tmp.text = "Edit Opacity";
-            else
-                tmp.text = "Fix Opacity";
-        }
-    }
-    */
 
     public void ScaleUpStep()
     {

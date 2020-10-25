@@ -9,7 +9,8 @@ public class LogScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        textMesh = gameObject.GetComponentInChildren<TextMesh>();
+        textMesh = GameObject.Find("LogWindow").GetComponent<TextMesh>();
+        //textMesh = gameObject.GetComponentInChildren<TextMesh>();
     }
 
     void OnEnable()

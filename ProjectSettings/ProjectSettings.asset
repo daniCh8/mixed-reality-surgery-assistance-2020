@@ -262,7 +262,14 @@ PlayerSettings:
   androidGamepadSupportLevel: 0
   AndroidValidateAppBundleSize: 1
   AndroidAppBundleSizeToValidate: 150
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 04e482eedcf6d414db10a89ed741c05b, type: 3}
+      m_Width: 128
+      m_Height: 128
+      m_Kind: 0
   m_BuildTargetPlatformIcons: []
   m_BuildTargetBatching:
   - m_BuildTarget: Standalone
@@ -604,7 +611,11 @@ PlayerSettings:
   metroCertificateIssuer: MRLab
   metroCertificateNotAfter: 00ae9da223c9d701
   metroApplicationDescription: Template_3D
-  wsaImages: {}
+  wsaImages:
+    2031816: Assets/Icon/logo88.png
+    2097352: Assets/Icon/logo142.png
+    2162888: Assets/Icon/logo300.png
+    2228424: Assets/Icon/logo620.png
   metroTileShortName: MR Surgery
   metroTileShowName: 0
   metroMediumTileShowName: 1
