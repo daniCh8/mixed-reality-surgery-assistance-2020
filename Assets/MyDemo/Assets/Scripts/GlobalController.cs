@@ -140,6 +140,31 @@ public class GlobalController : MonoBehaviour
         }
     }
 
+    public void ChangeHandSlicerState()
+    {
+        Debug.Log("Change Hand State Pressed");
+
+        TextMeshPro[] texts = GameObject.Find("ChangeHandState").GetComponentsInChildren<TextMeshPro>();
+        HandSlice ctplane = GameObject.Find("CTPlane3").GetComponent<HandSlice>();
+
+        if (ctplane.active == true)
+        {
+            ctplane.active = false;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Activate Hand Slicer";
+            }
+        }
+        else
+        {
+            ctplane.active = true;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Deactivate Hand Slicer";
+            }
+        }
+    }
+
     public void ResetPositions()
     {
         Debug.Log("Reset Button Pressed");

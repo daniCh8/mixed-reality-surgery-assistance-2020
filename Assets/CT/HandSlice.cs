@@ -1,5 +1,6 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
+using System.Net.Mime;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -10,12 +11,15 @@ public class HandSlice : MonoBehaviour {
 
     public bool enableReferencePlane;
     public bool leftHanded;
+    public bool active = false;
 
     Texture2D tex;
     GameObject referencePlane;
     LogScript log;
 
     int curInterval = 0;
+
+    int curIteration = 0;
 
     void Start() {
         tex = new Texture2D(width, height);
@@ -24,6 +28,7 @@ public class HandSlice : MonoBehaviour {
     }
 
     void Update() {
+        if (!active) return;
         if (curInterval++ < interval) return;
         curInterval = 0;
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po1) &&
@@ -35,8 +40,16 @@ public class HandSlice : MonoBehaviour {
             var p3 = ct.TransformWorldCoords(po3.Position);
             var p4 = ct.TransformWorldCoords(po4.Position);
 
-            log.saySomething("thumbtip: " + p4.ToString());
-            log.saySomething("indexknuckle: " + p1.ToString());
+            if(++curIteration == 10)
+            {
+                float deltaX = p4.x - p1.x;
+                float deltaY = p4.y - p1.y;
+                float deltaZ = p4.z - p1.z;
+                float distance = (float)System.Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+                log.saySomething("distance: " + distance);
+                curIteration = 0;
+            }
 
             if (p1.x < -0.5 || 0.5 < p1.x ||
                 p1.y < -0.5 || 0.5 < p1.y ||
