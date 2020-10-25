@@ -143,7 +143,6 @@ public class GlobalController : MonoBehaviour
     public void ResetPositions()
     {
         Debug.Log("Reset Button Pressed");
-        Debug.Log(originalTransform.Count);
 
         for (int i = 1; i < originalTransform.Count; i++)
         {
@@ -217,6 +216,8 @@ public class GlobalController : MonoBehaviour
     {
         TextMeshPro[] texts = GameObject.Find("ShowSlider").GetComponentsInChildren<TextMeshPro>();
 
+        Debug.Log("Slider Button Pressed");
+
 
         if (slider.activeInHierarchy)
         {
@@ -274,6 +275,9 @@ public class GlobalController : MonoBehaviour
     public void ChangeScaleMode()
     {
         TextMeshPro[] texts = GameObject.Find("ScaleButton").GetComponentsInChildren<TextMeshPro>();
+
+        Debug.Log("Change Scale Button Pressed");
+
         Vector3 scale = originalTransform[0].scale;
         //Vector3 pos = bones[0].transform.localPosition;
         //Vector3 scaledPosition = new Vector3(pos.x / scale.x, pos.y / scale.y, pos.z / scale.z);

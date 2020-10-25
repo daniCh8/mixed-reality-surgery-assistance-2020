@@ -1,6 +1,7 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class HandSlice : MonoBehaviour {
     public CTReader ct;
@@ -12,12 +13,14 @@ public class HandSlice : MonoBehaviour {
 
     Texture2D tex;
     GameObject referencePlane;
+    LogScript log;
 
     int curInterval = 0;
 
     void Start() {
         tex = new Texture2D(width, height);
         GetComponent<Renderer>().material.mainTexture = tex;
+        log = GameObject.Find("LogWindow").GetComponent<LogScript>();
     }
 
     void Update() {
@@ -25,10 +28,16 @@ public class HandSlice : MonoBehaviour {
         curInterval = 0;
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po1) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po2) &&
-            HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po3)) {
+            HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po3) &&
+            HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbTip, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po4)) {
             var p1 = ct.TransformWorldCoords(po1.Position);
             var p2 = ct.TransformWorldCoords(po2.Position);
             var p3 = ct.TransformWorldCoords(po3.Position);
+            var p4 = ct.TransformWorldCoords(po4.Position);
+
+            log.saySomething("thumbtip: " + p4.ToString());
+            log.saySomething("indexknuckle: " + p1.ToString());
+
             if (p1.x < -0.5 || 0.5 < p1.x ||
                 p1.y < -0.5 || 0.5 < p1.y ||
                 p1.z < -0.5 || 0.5 < p1.z ||
