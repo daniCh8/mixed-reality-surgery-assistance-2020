@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using TMPro;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
@@ -113,9 +115,34 @@ public class GlobalController : MonoBehaviour
 
     }
 
+    public void ChangeHandness()
+    {
+        Debug.Log("Change Handness Pressed");
+
+        TextMeshPro[] texts = GameObject.Find("ChangeHandness").GetComponentsInChildren<TextMeshPro>();
+        HandSlice ctplane = GameObject.Find("CTPlane3").GetComponent<HandSlice>();
+
+        if (ctplane.leftHanded == true)
+        {
+            ctplane.leftHanded = false;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Use Left Hand";
+            }
+        }
+        else
+        {
+            ctplane.leftHanded = true;
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Use Right Hand";
+            }
+        }
+    }
+
     public void ResetPositions()
     {
-        Debug.Log("Reset Botton Pressed");
+        Debug.Log("Reset Button Pressed");
         Debug.Log(originalTransform.Count);
 
         for (int i = 1; i < originalTransform.Count; i++)
