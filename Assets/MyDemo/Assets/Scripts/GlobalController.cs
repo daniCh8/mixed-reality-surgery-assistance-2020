@@ -4,12 +4,18 @@ using TMPro;
 using Debug = UnityEngine.Debug;
 using BoundingBox = Microsoft.MixedReality.Toolkit.UI.BoundingBox;
 using ManipulationHandler = Microsoft.MixedReality.Toolkit.UI.ManipulationHandler;
+using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
+using System;
+using System.Linq;
 
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
 public enum BoneState { ShowAll, HidePlates, HideAll };
 
-public class GlobalController : MonoBehaviour
+public enum MenuState { Hand, Near }
+
+public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 {
     // Transform and positions
     class TransformInfo
@@ -158,30 +164,57 @@ public class GlobalController : MonoBehaviour
         }
     }
 
+    public void DeactivateHandSlicer()
+    {
+        TextMeshPro[] texts = GameObject.Find("ChangeHandState").GetComponentsInChildren<TextMeshPro>();
+        HandSlice ctplane = GameObject.Find("CTPlane3").GetComponent<HandSlice>();
+        ctplane.active = false;
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Activate Hand Slicer";
+        }
+    }
+
+    public void ActivateHandSlicer()
+    {
+        TextMeshPro[] texts = GameObject.Find("ChangeHandState").GetComponentsInChildren<TextMeshPro>();
+        HandSlice ctplane = GameObject.Find("CTPlane3").GetComponent<HandSlice>();
+        ctplane.active = true;
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Deactivate Hand Slicer";
+        }
+    }
+
     public void ChangeHandSlicerState()
     {
         Debug.Log("Change Hand State Pressed");
 
-        TextMeshPro[] texts = GameObject.Find("ChangeHandState").GetComponentsInChildren<TextMeshPro>();
         HandSlice ctplane = GameObject.Find("CTPlane3").GetComponent<HandSlice>();
 
         if (ctplane.active == true)
         {
-            ctplane.active = false;
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Activate Hand Slicer";
-            }
+            DeactivateHandSlicer();
         }
         else
         {
-            ctplane.active = true;
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Deactivate Hand Slicer";
-            }
+            ActivateHandSlicer();
         }
     }
+
+    /*
+    void IMixedRealitySpeechHandler.OnSpeechKeywordRecognized(SpeechEventData eventData)
+    {
+        if (eventData.Command.Keyword == "Stop Tracking")
+        {
+            DeactivateHandSlicer();
+        }
+        else if (eventData.Command.Keyword == "Track My Hand")
+        {
+            ActivateHandSlicer();
+        }
+    }
+    */
 
     public void ResetPositions()
     {
@@ -194,10 +227,6 @@ public class GlobalController : MonoBehaviour
             bones[i].transform.localScale = originalTransform[i].scale;
         }
 
-        //adjustedBones[0].transform.localPosition = originalTransformAdjusted[0].pos;
-        //adjustedBones[0].transform.localRotation = originalTransformAdjusted[0].rotate;
-        //adjustedBones[0].transform.localScale = originalTransformAdjusted[0].scale;
-
 
         Vector3 scale = originalTransform[0].scale;
         Vector3 localScale = (gScaleState == ScaleState.Original) ? scale :
@@ -205,43 +234,35 @@ public class GlobalController : MonoBehaviour
         bones[0].transform.localScale = localScale;
     }
 
-    public void ShowOrHideAdjustments()
+    private bool isASharedButton(PressableButton button)
     {
-        TextMeshPro[] texts = GameObject.Find("ShowAdjustment").GetComponentsInChildren<TextMeshPro>();
+        return button.name != "ButtonPin" && button.name != "ChangeMenuType";
+    }
 
-        switch (gBoneState)
+    private void resetButtonTexts(MenuState oldMenu)
+    {
+        PressableButton[] nearButtons = Array.FindAll(nearMenu.GetComponentsInChildren<PressableButton>(true), isASharedButton).ToArray();
+        PressableButton[] handButtons = Array.FindAll(handMenu.GetComponentsInChildren<PressableButton>(true), isASharedButton).ToArray();
+
+        IDictionary<string, string> buttonsText = new Dictionary<string, string>();
+        PressableButton[] oldButtons;
+        PressableButton[] newButtons;
+
+        oldButtons = oldMenu == MenuState.Hand ? handButtons : nearButtons;
+        newButtons = oldMenu == MenuState.Hand ? nearButtons : handButtons;
+
+        foreach (var button in oldButtons)
         {
-            case BoneState.ShowAll:
-                {
-                    //adjustedBones[6].SetActive(false);
-                    foreach (TextMeshPro tmp in texts)
-                    {
-                        tmp.text = "Hide Adjustments";
-                    }
-                    gBoneState = BoneState.HidePlates;
-                    break;
-                }
-            case BoneState.HidePlates:
-                {
-                    //adjustedBones[6].SetActive(true);
-                    //adjustedBones[0].SetActive(false);
-                    foreach (TextMeshPro tmp in texts)
-                    {
-                        tmp.text = "Show Adjustments";
-                    }
-                    gBoneState = BoneState.HideAll;
-                    break;
-                }
-            case BoneState.HideAll:
-                {
-                    //adjustedBones[0].SetActive(true);
-                    foreach (TextMeshPro tmp in texts)
-                    {
-                        tmp.text = "Hide Bone Plates";
-                    }
-                    gBoneState = BoneState.ShowAll;
-                    break;
-                }
+            buttonsText.Add(button.name, button.GetComponentInChildren<ButtonConfigHelper>().MainLabelText);
+        }
+
+        foreach (var button in newButtons)
+        {
+            TextMeshPro[] texts = button.GetComponentsInChildren<TextMeshPro>();
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = buttonsText[button.name]; ;
+            }
         }
     }
 
@@ -254,11 +275,13 @@ public class GlobalController : MonoBehaviour
         {
             nearMenu.SetActive(false);
             handMenu.SetActive(true);
+            resetButtonTexts(MenuState.Near);
         }
         else
         {
             nearMenu.SetActive(true);
             handMenu.SetActive(false);
+            resetButtonTexts(MenuState.Hand);
         }
     }
 
@@ -278,7 +301,6 @@ public class GlobalController : MonoBehaviour
                 tmp.text = "Show Slider";
             }
             ResetPositions();
-            //ResetColorForAll();
         }
         else
         {
@@ -314,9 +336,6 @@ public class GlobalController : MonoBehaviour
         Debug.Log("Change Scale Button Pressed");
 
         Vector3 scale = originalTransform[0].scale;
-        //Vector3 pos = bones[0].transform.localPosition;
-        //Vector3 scaledPosition = new Vector3(pos.x / scale.x, pos.y / scale.y, pos.z / scale.z);
-        //bones[0].transform.localPosition = scaledPosition;
         switch (gScaleState)
         {
             case ScaleState.Half:
@@ -326,7 +345,6 @@ public class GlobalController : MonoBehaviour
                     {
                         Invoke("ScaleUpStep", 0.5f * i / 100);
                     }
-                    //bones[0].transform.localScale = scale;
 
                     foreach (TextMeshPro tmp in texts)
                     {

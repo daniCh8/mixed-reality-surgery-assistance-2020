@@ -266,7 +266,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 04e482eedcf6d414db10a89ed741c05b, type: 3}
+      m_Icon: {fileID: 2800000, guid: 266bff4d46149554f913a8ac736b509a, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -612,10 +612,41 @@ PlayerSettings:
   metroCertificateNotAfter: 00ae9da223c9d701
   metroApplicationDescription: Template_3D
   wsaImages:
-    2031816: Assets/Icon/logo88.png
-    2097352: Assets/Icon/logo142.png
-    2162888: Assets/Icon/logo300.png
-    2228424: Assets/Icon/logo620.png
+    65636: Assets/Icon/store_logo/logo_50.png
+    65661: Assets/Icon/store_logo/logo_63.png
+    65686: Assets/Icon/store_logo/logo_75.png
+    65736: Assets/Icon/store_logo/logo_100.png
+    65936: Assets/Icon/store_logo/logo_200.png
+    2031632: Assets/Icon/square_logo/logo_16.png
+    2031640: Assets/Icon/square_logo/logo_24.png
+    2031648: Assets/Icon/square_logo/logo_32.png
+    2031664: Assets/Icon/square_logo/logo_48.png
+    2031716: Assets/Icon/square_logo/logo_44.png
+    2031741: Assets/Icon/square_logo/logo_55.png
+    2031766: Assets/Icon/square_logo/logo_66.png
+    2031816: Assets/Icon/square_logo/logo_88.png
+    2031872: Assets/Icon/square_logo/logo_256.png
+    2032016: Assets/Icon/square_logo/logo_176.png
+    2097252: Assets/Icon/square_logo/logo_71.png
+    2097277: Assets/Icon/square_logo/logo_89.png
+    2097302: Assets/Icon/square_logo/logo_107.png
+    2097352: Assets/Icon/square_logo/logo_142.png
+    2097552: Assets/Icon/square_logo/logo_284.png
+    2162788: Assets/Icon/square_logo/logo_150.png
+    2162813: Assets/Icon/square_logo/logo_188.png
+    2162838: Assets/Icon/square_logo/logo_225.png
+    2162888: Assets/Icon/square_logo/logo_300.png
+    2163088: Assets/Icon/square_logo/logo_600.png
+    2228324: Assets/Icon/square_logo/logo_310.png
+    2228349: Assets/Icon/square_logo/logo_388.png
+    2228374: Assets/Icon/square_logo/logo_465.png
+    2228424: Assets/Icon/square_logo/logo_620.png
+    2228624: Assets/Icon/square_logo/logo_1240.png
+    2293860: Assets/Icon/wide_logo/logo_310.png
+    2293885: Assets/Icon/wide_logo/logo_388.png
+    2293910: Assets/Icon/wide_logo/logo_465.png
+    2293960: Assets/Icon/wide_logo/logo_620.png
+    2294160: Assets/Icon/wide_logo/logo_1240.png
   metroTileShortName: MR Surgery
   metroTileShowName: 0
   metroMediumTileShowName: 1
