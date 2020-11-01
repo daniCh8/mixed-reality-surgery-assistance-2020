@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -13,9 +14,6 @@ public class CTReader : MonoBehaviour {
 
     void Start() {
         var nrrd = new NRRD(ct);
-
-        //GetComponent<Transform>().localPosition = nrrd.origin;
-        //GetComponent<Transform>().localScale = Vector3.Scale(nrrd.scale, new Vector3(nrrd.dims[0], nrrd.dims[1], nrrd.dims[2]));
 
         kernel = slicer.FindKernel("CSMain");
         var buf = new ComputeBuffer(nrrd.data.Length, sizeof(float));
@@ -42,7 +40,7 @@ public class CTReader : MonoBehaviour {
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);
 
         RenderTexture.active = rtex;
-        result.ReadPixels(new Rect(0, 0, rtex.width, rtex.height), 0, 0);
+        result.ReadPixels(new Rect(0, 0, rtex.width-32, rtex.height-32), 16, 16);
         result.Apply();
     }
 
