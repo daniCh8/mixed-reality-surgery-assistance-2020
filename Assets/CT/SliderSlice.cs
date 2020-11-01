@@ -1,4 +1,6 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
+using System.Linq;
 using UnityEngine;
 
 public class SliderSlice : MonoBehaviour {
@@ -9,12 +11,37 @@ public class SliderSlice : MonoBehaviour {
     public enum Axis { X, Y, Z };
     public Axis axis;
 
+    public enum ColorFlag { Emerald, Yellow, Rose }
+    public ColorFlag colorTexture;
+
     Texture2D tex;
     float currentVal = -1;
 
     void Start() {
-        tex = new Texture2D(width, height);
+        Color textureColor = Color.black;
+        switch (colorTexture)
+        {
+            case ColorFlag.Emerald:
+                textureColor = new Color32(37, 160, 149, 1);
+                break;
+            case ColorFlag.Yellow:
+                textureColor = new Color32(175, 162, 54, 1);
+                break;
+            case ColorFlag.Rose:
+                textureColor = new Color32(233, 196, 188, 1);
+                break;
+        }
+        tex = NewTexture(width, height, textureColor);
         GetComponent<Renderer>().material.mainTexture = tex;
+    }
+
+    private Texture2D NewTexture(int width, int height, Color color)
+    {
+        var texture = new Texture2D(width, height);
+        Color[] pixels = Enumerable.Repeat(color, width * height).ToArray();
+        texture.SetPixels(pixels);
+        texture.Apply();
+        return texture;
     }
 
     void Update() {
