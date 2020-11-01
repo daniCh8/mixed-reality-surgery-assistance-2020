@@ -8,11 +8,11 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Linq;
+using Microsoft.MixedReality.Toolkit;
 
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
 public enum BoneState { ShowAll, HidePlates, HideAll };
-
 public enum MenuState { Hand, Near }
 
 public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
@@ -33,7 +33,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     // Colors and opacities
     public static ColorState gColorState { get; set; }
 
-    public static int numberOfBones = 0;//, numberOfAdjustedBones = 1;
+    public static int numberOfBones = 0;
     // adjusted bones
     public static BoneState gBoneState { get; set; }
 
@@ -45,7 +45,15 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     // Bone handlers
     private static BoundingBox boneBoundingBox;
-    private static ManipulationHandler manipulationHandler;
+    private static ManipulationHandler boneManipulationHandler;
+
+    // CT handlers
+    private static BoundingBox ctBoundingBox;
+    private static ManipulationHandler ctManipulationHandler;
+
+    // Group handlers
+    private static BoundingBox allBoundingBox;
+    private static ManipulationHandler allManipulationHandler;
 
     // Scale
     public static ScaleState gScaleState { get; set; }
@@ -84,59 +92,199 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         nearMenu = GameObject.Find("NearMenu");
         handMenu = GameObject.Find("HandMenu");
 
-        boneBoundingBox = GameObject.Find("Bone_1").GetComponent<BoundingBox>();
-        manipulationHandler = GameObject.Find("Bone_1").GetComponent<ManipulationHandler>();
-        
-        handMenu.SetActive(false);
+        GameObject bone_1_ref = GameObject.Find("Bone_1");
 
+        // bone manipulation components
+        boneBoundingBox = bone_1_ref.transform.Find("BoneGroup").gameObject.GetComponent<BoundingBox>();
+        boneManipulationHandler = bone_1_ref.transform.Find("BoneGroup").gameObject.GetComponent<ManipulationHandler>();
+
+        // CT manipulation components
+        ctBoundingBox = bone_1_ref.transform.Find("CTGroup").gameObject.GetComponent<BoundingBox>();
+        ctManipulationHandler = bone_1_ref.transform.Find("CTGroup").gameObject.GetComponent<ManipulationHandler>();
+
+        // group manipulation components
+        allBoundingBox = bone_1_ref.GetComponent<BoundingBox>();
+        allManipulationHandler = bone_1_ref.GetComponent<ManipulationHandler>();
+
+        handMenu.SetActive(false);
     }
 
-    public void EnableBoundingBox()
+    public void SwitchGroupManipulation()
     {
-        Debug.Log("Enable Bounding Box pressed");
+        Debug.Log("All Manipulation Button pressed");
+        TextMeshPro[] texts = GameObject.Find("AllManipulationButton").GetComponentsInChildren<TextMeshPro>();
 
-        TextMeshPro[] texts = GameObject.Find("EnableBoundingBox").GetComponentsInChildren<TextMeshPro>();
+        if (allBoundingBox.enabled)
+        {
+            DisableGroupManipulation(texts);
+        }
+        else
+        {
+            if (boneBoundingBox.enabled)
+            {
+                TextMeshPro[] boneTexts = GameObject.Find("BoneManipulationButton").GetComponentsInChildren<TextMeshPro>();
+                DisableBoneManipulation(boneTexts);
+            }
+
+            if (ctBoundingBox.enabled)
+            {
+                TextMeshPro[] ctTexts = GameObject.Find("ScansManipulationButton").GetComponentsInChildren<TextMeshPro>();
+                DisableScansManipulation(ctTexts);
+            }
+
+            EnableGroupManipulation(texts);
+        }
+    }
+
+    private void EnableGroupManipulation(TextMeshPro[] texts)
+    {
+        allBoundingBox.enabled = true;
+        allManipulationHandler.enabled = true;
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Disable All Manipulation";
+        }
+    }
+
+    private void DisableGroupManipulation(TextMeshPro[] texts)
+    {
+        allBoundingBox.enabled = false;
+        allManipulationHandler.enabled = false;
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Enable All Manipulation";
+        }
+    }
+
+    public void SwitchScansManipulation()
+    {
+        Debug.Log("Scans Manipulation Button pressed");
+        TextMeshPro[] texts = GameObject.Find("ScansManipulationButton").GetComponentsInChildren<TextMeshPro>();
+
+        if (ctBoundingBox.enabled)
+        {
+            DisableScansManipulation(texts);
+        }
+        else
+        {
+            if(allBoundingBox.enabled)
+            {
+                TextMeshPro[] allTexts = GameObject.Find("AllManipulationButton").GetComponentsInChildren<TextMeshPro>();
+                DisableGroupManipulation(allTexts);
+            }
+
+            EnableScansManipulation(texts);
+        }
+    }
+
+    private void EnableScansManipulation(TextMeshPro[] texts)
+    {
+        ctBoundingBox.enabled = true;
+        ctManipulationHandler.enabled = true;
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Disable Planes Manipulation";
+        }
+    }
+
+    private void DisableScansManipulation(TextMeshPro[] texts)
+    {
+        ctBoundingBox.enabled = false;
+        ctManipulationHandler.enabled = false;
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Enable Planes Manipulation";
+        }
+    }
+
+    public void SwitchBoneManipulation()
+    {
+        Debug.Log("Bone Manipulation Button pressed");
+        TextMeshPro[] texts = GameObject.Find("BoneManipulationButton").GetComponentsInChildren<TextMeshPro>();
 
         if (boneBoundingBox.enabled)
         {
-            boneBoundingBox.enabled = false;
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Enable BoundingBox";
-            }
+            DisableBoneManipulation(texts);
         }
         else
         {
-            boneBoundingBox.enabled = true;
-            foreach (TextMeshPro tmp in texts)
+            if (allBoundingBox.enabled)
             {
-                tmp.text = "Disable BoundingBox";
+                TextMeshPro[] allTexts = GameObject.Find("AllManipulationButton").GetComponentsInChildren<TextMeshPro>();
+                DisableGroupManipulation(allTexts);
             }
+
+            EnableBoneManipulation(texts);
         }
     }
 
-    public void EnableManipulation()
+    private void EnableBoneManipulation(TextMeshPro[] texts)
     {
-        Debug.Log("Enable Manipulation pressed");
-
-        TextMeshPro[] texts = GameObject.Find("EnableManipulation").GetComponentsInChildren<TextMeshPro>();
-
-        if (manipulationHandler.enabled)
+        boneBoundingBox.enabled = true;
+        boneManipulationHandler.enabled = true;
+        foreach (TextMeshPro tmp in texts)
         {
-            manipulationHandler.enabled = false;
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Enable Manipulation";
-            }
+            tmp.text = "Disable Bone Manipulation";
+        }
+    }
+
+    private void DisableBoneManipulation(TextMeshPro[] texts)
+    {
+        boneBoundingBox.enabled = false;
+        boneManipulationHandler.enabled = false;
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Enable Bone Manipulation";
+        }
+    }
+
+    public void ManageManipulation()
+    {
+        Debug.Log("Manage Manipulation pressed");
+        
+        if(nearMenu.activeInHierarchy)
+        {
+            EnableManipulationMenu(nearMenu);
         }
         else
         {
-            manipulationHandler.enabled = true;
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Disable Manipulation";
-            }
+            EnableManipulationMenu(handMenu);
         }
+    }
+
+    private void EnableManipulationMenu(GameObject menu)
+    {
+        GameObject buttonCollection = menu.transform.Find("ButtonCollection").gameObject;
+        GameObject mainMenuCollection = buttonCollection.transform.Find("MainMenuCollection").gameObject;
+        GameObject manipulationMenuCollection = buttonCollection.transform.Find("ManipulationMenuCollection").gameObject;
+
+        mainMenuCollection.SetActive(false);
+        manipulationMenuCollection.SetActive(true);
+    }
+
+    public void GoBackToMainMenu()
+    {
+        Debug.Log("Back to Main pressed");
+
+        if (nearMenu.activeInHierarchy)
+        {
+            DisableManipulationMenu(nearMenu);
+        }
+        else
+        {
+            DisableManipulationMenu(handMenu);
+        }
+
+    }
+
+    private void DisableManipulationMenu(GameObject menu)
+    {
+        GameObject buttonCollection = menu.transform.Find("ButtonCollection").gameObject;
+        GameObject mainMenuCollection = buttonCollection.transform.Find("MainMenuCollection").gameObject;
+        GameObject manipulationMenuCollection = buttonCollection.transform.Find("ManipulationMenuCollection").gameObject;
+
+        manipulationMenuCollection.SetActive(false);
+        mainMenuCollection.SetActive(true);
     }
 
     public void ChangeHandness()
@@ -261,7 +409,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
             TextMeshPro[] texts = button.GetComponentsInChildren<TextMeshPro>();
             foreach (TextMeshPro tmp in texts)
             {
-                tmp.text = buttonsText[button.name]; ;
+                tmp.text = buttonsText[button.name];
             }
         }
     }
@@ -275,12 +423,20 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         {
             nearMenu.SetActive(false);
             handMenu.SetActive(true);
+
+            handMenu.SetChildrenActive(true);
+            handMenu.transform.Find("ButtonCollection").Find("ManipulationMenuCollection").gameObject.SetActive(false);
+            
             resetButtonTexts(MenuState.Near);
         }
         else
         {
             nearMenu.SetActive(true);
             handMenu.SetActive(false);
+
+            nearMenu.SetChildrenActive(true);
+            nearMenu.transform.Find("ButtonCollection").Find("ManipulationMenuCollection").gameObject.SetActive(false);
+
             resetButtonTexts(MenuState.Hand);
         }
     }
