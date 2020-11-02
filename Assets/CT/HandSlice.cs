@@ -75,7 +75,7 @@ public class HandSlice : MonoBehaviour {
                 var normal = plane.normal;
                 var center = (p1 + p2 + p3) / 3;
                 var p = plane.ClosestPointOnPlane(center);
-                plane = Plane.Translate(plane, p - center);
+                plane = Plane.Translate(plane, center - p);
             }
 
             var orig = plane.ClosestPointOnPlane(Vector3.zero);
