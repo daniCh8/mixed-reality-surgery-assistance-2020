@@ -72,7 +72,6 @@ public class HandSlice : MonoBehaviour {
                 plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
             } else { 
                 // Otherwise translate current plane towards center of hand
-                var normal = plane.normal;
                 var center = (p1 + p2 + p3) / 3;
                 var p = plane.ClosestPointOnPlane(center);
                 plane = Plane.Translate(plane, center - p);
