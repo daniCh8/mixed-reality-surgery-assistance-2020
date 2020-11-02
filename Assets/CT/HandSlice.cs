@@ -11,7 +11,7 @@ public class HandSlice : MonoBehaviour {
     public int width, height;
     public int interval;
 
-    private Plane plane = new Plane(new Vector3(1,1,1), 0);
+    private Plane plane = new Plane(new Vector3(0,1,0), 0.5);
 
     public bool enableReferencePlane;
     public bool leftHanded;
@@ -70,11 +70,14 @@ public class HandSlice : MonoBehaviour {
             if (!locked) { 
                 // If not locked, just get new plane from hand position
                 plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
-            } else { 
+            } else {
                 // Otherwise translate current plane towards center of hand
-                var center = (p1 + p2 + p3) / 3;
-                var p = plane.ClosestPointOnPlane(center);
-                plane = Plane.Translate(plane, center - p);
+                
+                //var center = (p1 + p2 + p3) / 3;
+                //var p = plane.ClosestPointOnPlane(center);
+                //plane = Plane.Translate(plane, center - p);
+
+                plane.SetNormalAndPosition(plane.normal, p3)
             }
 
             var orig = plane.ClosestPointOnPlane(Vector3.zero);
