@@ -2,6 +2,7 @@
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Net.Mime;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -25,7 +26,13 @@ public class HandSlice : MonoBehaviour {
     int curInterval = 0;
 
     void Start() {
+
+        Color textureColor = new Color32(233, 196, 188, 1);
         tex = new Texture2D(width, height);
+        Color[] pixels = Enumerable.Repeat(textureColor, width * height).ToArray();
+        tex.SetPixels(pixels);
+        tex.Apply();
+
         GetComponent<Renderer>().material.mainTexture = tex;
         log = GameObject.Find("LogWindow").GetComponent<LogScript>();
     }
