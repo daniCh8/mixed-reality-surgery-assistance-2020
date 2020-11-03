@@ -1,8 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
-using System;
-using System.Collections.Specialized;
-using System.Linq;
 using System.Net.Mime;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -12,12 +9,9 @@ public class HandSlice : MonoBehaviour {
     public int width, height;
     public int interval;
 
-    private Plane plane = new Plane(new Vector3(0,0,0), new Vector3(1, 0, 0), new Vector3(0, 0, 1));
-
     public bool enableReferencePlane;
     public bool leftHanded;
     public bool active = false;
-    public bool locked = false;
 
     Texture2D tex;
     GameObject referencePlane;
@@ -26,13 +20,7 @@ public class HandSlice : MonoBehaviour {
     int curInterval = 0;
 
     void Start() {
-
-        Color textureColor = new Color32(233, 196, 188, 1);
         tex = new Texture2D(width, height);
-        Color[] pixels = Enumerable.Repeat(textureColor, width * height).ToArray();
-        tex.SetPixels(pixels);
-        tex.Apply();
-
         GetComponent<Renderer>().material.mainTexture = tex;
         log = GameObject.Find("LogWindow").GetComponent<LogScript>();
     }
@@ -62,7 +50,7 @@ public class HandSlice : MonoBehaviour {
 
             float angle = Vector3.Angle(p4 - p5, p1 - p5);
             
-            if (//angle > 70 ||
+            if (angle > 70 ||
                 p1.x < -0.5 || 0.5 < p1.x ||
                 p1.y < -0.5 || 0.5 < p1.y ||
                 p1.z < -0.5 || 0.5 < p1.z ||
@@ -73,19 +61,7 @@ public class HandSlice : MonoBehaviour {
                 p3.y < -0.5 || 0.5 < p3.y ||
                 p3.z < -0.5 || 0.5 < p3.z) return;
 
-            locked = angle < 70;
-            if (!locked) { 
-                // If not locked, just get new plane from hand position
-                plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
-            } else {
-                // Otherwise translate current plane towards center of hand
-
-                //var center = (p1 + p2 + p3) / 3;
-                //var p = plane.ClosestPointOnPlane(center);
-                //plane = Plane.Translate(plane, center - p);
-
-                plane.SetNormalAndPosition(plane.normal, p3);
-            }
+            var plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
 
             var orig = plane.ClosestPointOnPlane(Vector3.zero);
             var dy = (p2 - p1).normalized;
