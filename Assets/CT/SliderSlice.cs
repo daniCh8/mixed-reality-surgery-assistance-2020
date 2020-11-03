@@ -11,7 +11,7 @@ public class SliderSlice : MonoBehaviour {
     public enum Axis { X, Y, Z };
     public Axis axis;
 
-    public enum ColorFlag { Emerald, Yellow, Rose }
+    public enum ColorFlag { Emerald, Yellow, None }
     public ColorFlag colorTexture;
 
     Texture2D tex;
@@ -27,8 +27,8 @@ public class SliderSlice : MonoBehaviour {
             case ColorFlag.Yellow:
                 textureColor = new Color32(175, 162, 54, 1);
                 break;
-            case ColorFlag.Rose:
-                textureColor = new Color32(233, 196, 188, 1);
+            case ColorFlag.None:
+                textureColor = Color.black;
                 break;
         }
         tex = NewTexture(width, height, textureColor);
