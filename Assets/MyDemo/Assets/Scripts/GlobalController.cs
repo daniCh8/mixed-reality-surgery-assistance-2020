@@ -55,6 +55,9 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     private static BoundingBox allBoundingBox;
     private static ManipulationHandler allManipulationHandler;
 
+    //Document slate
+    private static GameObject docSlate;
+
     // Scale
     public static ScaleState gScaleState { get; set; }
 
@@ -91,6 +94,9 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         // menus
         nearMenu = GameObject.Find("NearMenu");
         handMenu = GameObject.Find("HandMenu");
+
+        //document slate
+        docSlate = GameObject.Find("Slate");
 
         GameObject bone_1_ref = GameObject.Find("Bone_1");
 
@@ -438,6 +444,32 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
             nearMenu.transform.Find("ButtonCollection").Find("ManipulationMenuCollection").gameObject.SetActive(false);
 
             resetButtonTexts(MenuState.Hand);
+        }
+    }
+
+    public void VisualizeDocuments()
+    {
+        TextMeshPro[] texts = GameObject.Find("VisualizeDocuments").GetComponentsInChildren<TextMeshPro>();
+
+        Debug.Log("Visualize Documents Pressed");
+
+        if (docSlate.activeInHierarchy)
+        {
+            docSlate.SetActive(false);
+
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Visualize Documents";
+            }
+        }
+        else
+        {
+            docSlate.SetActive(true);
+
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Hide Documents";
+            }
         }
     }
 
