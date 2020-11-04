@@ -1656,6 +1656,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 915644437865616628, guid: 937ce507dd7ee334ba569554e24adbdd,
+        type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915644437865616628, guid: 937ce507dd7ee334ba569554e24adbdd,
+        type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 326163310}
+    - target: {fileID: 915644437865616628, guid: 937ce507dd7ee334ba569554e24adbdd,
+        type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: VisualizeDocuments
+      objectReference: {fileID: 0}
+    - target: {fileID: 915644437865616628, guid: 937ce507dd7ee334ba569554e24adbdd,
+        type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582801026706855010, guid: 937ce507dd7ee334ba569554e24adbdd,
+        type: 3}
+      propertyPath: constraintsManager
+      value: 
+      objectReference: {fileID: 821013429}
     - target: {fileID: 5373150653584304409, guid: 937ce507dd7ee334ba569554e24adbdd,
         type: 3}
       propertyPath: m_Mesh
@@ -3593,6 +3618,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 816641769}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &821013427 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7779420037177669556, guid: 937ce507dd7ee334ba569554e24adbdd,
+    type: 3}
+  m_PrefabInstance: {fileID: 383492449}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &821013429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821013427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98de877dee5fc341b4eb59dfdab266c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoConstraintSelection: 1
+  selectedConstraints: []
 --- !u!1 &832021281
 GameObject:
   m_ObjectHideFlags: 0
