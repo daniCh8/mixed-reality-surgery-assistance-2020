@@ -97,6 +97,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         //document slate
         docSlate = GameObject.Find("Slate");
+        docSlate.SetActive(false);
 
         GameObject bone_1_ref = GameObject.Find("Bone_1");
 
