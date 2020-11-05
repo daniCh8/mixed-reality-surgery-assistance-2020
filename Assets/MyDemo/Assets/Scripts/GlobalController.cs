@@ -97,6 +97,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         //document slate
         docSlate = GameObject.Find("Slate");
+        Material firstPage = docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Pages>().getMat();
+        docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = firstPage;
         docSlate.SetActive(false);
 
         GameObject bone_1_ref = GameObject.Find("Bone_1");
@@ -570,5 +572,17 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
             default:
                 break;
         }
+    }
+
+    public void NextSlatePage()
+    {
+        Material nextPage = docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Pages>().nextMat();
+        docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = nextPage;
+    }
+
+    public void PrevSlatePage()
+    {
+        Material prevPage = docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Pages>().prevMat();
+        docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = prevPage;
     }
 }
