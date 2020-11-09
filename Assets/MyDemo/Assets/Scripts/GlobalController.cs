@@ -61,6 +61,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     // Scale
     public static ScaleState gScaleState { get; set; }
 
+    public GameObject screwScene, manipulationScene;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -359,20 +361,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         }
     }
 
-    /*
-    void IMixedRealitySpeechHandler.OnSpeechKeywordRecognized(SpeechEventData eventData)
-    {
-        if (eventData.Command.Keyword == "Stop Tracking")
-        {
-            DeactivateHandSlicer();
-        }
-        else if (eventData.Command.Keyword == "Track My Hand")
-        {
-            ActivateHandSlicer();
-        }
-    }
-    */
-
     public void ResetPositions()
     {
         Debug.Log("Reset Button Pressed");
@@ -584,5 +572,21 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     {
         Material prevPage = docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Pages>().prevMat();
         docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = prevPage;
+    }
+
+    public void ChangeScene()
+    {
+        Debug.Log("Change Scene Button Pressed");
+
+        if (screwScene.activeInHierarchy)
+        {
+            screwScene.SetActive(false);
+            manipulationScene.SetActive(true);
+        }
+        else
+        {
+            screwScene.SetActive(true);
+            manipulationScene.SetActive(false);
+        }
     }
 }
