@@ -1,5 +1,6 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
+using System.Diagnostics.Tracing;
 using System.Net.Mime;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -12,6 +13,8 @@ public class HandSlice : MonoBehaviour {
     public bool enableReferencePlane;
     public bool leftHanded;
     public bool active = false;
+
+    public Plane plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
 
     Texture2D tex;
     GameObject referencePlane;
@@ -50,7 +53,7 @@ public class HandSlice : MonoBehaviour {
 
             float angle = Vector3.Angle(p4 - p5, p1 - p5);
             
-            if (angle > 70 ||
+            if (//angle > 70 ||
                 p1.x < -0.5 || 0.5 < p1.x ||
                 p1.y < -0.5 || 0.5 < p1.y ||
                 p1.z < -0.5 || 0.5 < p1.z ||
@@ -61,7 +64,14 @@ public class HandSlice : MonoBehaviour {
                 p3.y < -0.5 || 0.5 < p3.y ||
                 p3.z < -0.5 || 0.5 < p3.z) return;
 
-            var plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
+            bool locked = angle > 60;
+            if (!locked)
+            {
+                plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
+            } else
+            {
+                plane = new Plane(plane.normal.normalized, p5);
+            }
 
             var orig = plane.ClosestPointOnPlane(Vector3.zero);
             var dy = (p2 - p1).normalized;
