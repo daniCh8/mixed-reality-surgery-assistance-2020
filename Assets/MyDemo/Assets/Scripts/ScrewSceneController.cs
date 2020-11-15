@@ -22,7 +22,7 @@ public class ScrewSceneController : MonoBehaviour
     public GameObject screwGroup, plateGroup, boneGroup, allGroup;
 
     // Screws Materials
-    public Material metScrewMaterial, latScrewMaterial, selectedScrewMaterial;
+    public Material medScrewMaterial, latScrewMaterial, selectedScrewMaterial;
 
     // Screw Button Handler
     public GameObject screwButton;
@@ -119,24 +119,32 @@ public class ScrewSceneController : MonoBehaviour
             case PlatesState.Both:
                 latPlate.SetActive(true);
                 medPlate.SetActive(false);
+                SetLatScrewsActive(true);
+                SetMedScrewsActive(false);
                 gPlatesState = PlatesState.Lat;
                 SetTexts(texts, "Show Only Med Plate");
                 break;
             case PlatesState.Lat:
                 latPlate.SetActive(false);
                 medPlate.SetActive(true);
+                SetLatScrewsActive(false);
+                SetMedScrewsActive(true);
                 gPlatesState = PlatesState.Med;
                 SetTexts(texts, "Hide Plates");
                 break;
             case PlatesState.Med:
                 latPlate.SetActive(false);
                 medPlate.SetActive(false);
+                SetLatScrewsActive(true);
+                SetMedScrewsActive(true);
                 gPlatesState = PlatesState.None;
                 SetTexts(texts, "Show Plates");
                 break;
             case PlatesState.None:
                 latPlate.SetActive(true);
                 medPlate.SetActive(true);
+                SetLatScrewsActive(true);
+                SetMedScrewsActive(true);
                 gPlatesState = PlatesState.Both;
                 SetTexts(texts, "Show Only Lat Plate");
                 break;
@@ -145,11 +153,38 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    private bool ScrewIsLat(GameObject screw)
+    {
+        return screw.name.Contains("Lat");
+    }
+
+    private void SetLatScrewsActive(bool active)
+    {
+        foreach (GameObject screw in screws)
+        {
+            if (ScrewIsLat(screw))
+            {
+                screw.SetActive(active);
+            }
+        }
+    }
+
+    private void SetMedScrewsActive(bool active)
+    {
+        foreach (GameObject screw in screws)
+        {
+            if (!ScrewIsLat(screw))
+            {
+                screw.SetActive(active);
+            }
+        }
+    }
+
     public void NextScrew()
     {
         DeactivateScrew(screws[screwIndex]);
 
-        screwIndex = (screwIndex + 1 == screws.Count) ? 0 : (screwIndex + 1);
+        FindNextIndex();
 
         ActivateScrew(screws[screwIndex]);
     }
@@ -158,15 +193,57 @@ public class ScrewSceneController : MonoBehaviour
     {
         DeactivateScrew(screws[screwIndex]);
 
-        screwIndex = (screwIndex == 0) ? (screws.Count-1) : (screwIndex-1);
+        FindPrevIndex();
 
         ActivateScrew(screws[screwIndex]);
+    }
+
+    private void FindNextIndex()
+    {
+        if (gPlatesState == PlatesState.Both || gPlatesState == PlatesState.None)
+        {
+            NextIndex();
+            return;
+        }
+
+        String flag = gPlatesState == PlatesState.Lat ? "Lat" : "Med";
+        NextIndex();
+        while (!screws[screwIndex].name.Contains(flag))
+        {
+            NextIndex();
+        }
+    }
+
+    private void FindPrevIndex()
+    {
+        if (gPlatesState == PlatesState.Both || gPlatesState == PlatesState.None)
+        {
+            PrevIndex();
+            return;
+        }
+
+        String flag = gPlatesState == PlatesState.Lat ? "Lat" : "Med";
+        PrevIndex();
+        while (!screws[screwIndex].name.Contains(flag))
+        {
+            PrevIndex();
+        }
+    }
+
+    private void PrevIndex()
+    {
+        screwIndex = (screwIndex == 0) ? (screws.Count - 1) : (screwIndex - 1);
+    }
+
+    private void NextIndex()
+    {
+        screwIndex = (screwIndex + 1 == screws.Count) ? 0 : (screwIndex + 1);
     }
 
     private void DeactivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
-        screw.GetComponentInChildren<Renderer>().material = screw.GetComponentInChildren<IsLat>().isLat ? latScrewMaterial : metScrewMaterial;
+        screw.GetComponentInChildren<Renderer>().material = screw.GetComponentInChildren<IsLat>().isLat ? latScrewMaterial : medScrewMaterial;
     }
 
     private void ActivateScrew(GameObject screw)
