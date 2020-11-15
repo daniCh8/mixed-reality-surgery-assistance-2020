@@ -148,6 +148,31 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    public void ChangeBoundsControlState()
+    {
+        TextMeshPro[] texts = GameObject.Find("ChangeBoundsControl").GetComponentsInChildren<TextMeshPro>();
+        BoundsControl boundsControl = allGroup.GetComponentInChildren<BoundsControl>(true);
+
+        if (boundsControl.enabled)
+        {
+            boundsControl.enabled = false;
+
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Allow Manipulation";
+            }
+        }
+        else
+        {
+            boundsControl.enabled = true;   
+
+            foreach (TextMeshPro tmp in texts)
+            {
+                tmp.text = "Disallow Manipulation";
+            }
+        }
+    }
+
     private bool isASharedButton(PressableButton button)
     {
         return button.name != "ButtonPin" && button.name != "ChangeMenuType";

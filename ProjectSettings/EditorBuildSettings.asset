@@ -7,11 +7,11 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 0
     path: 
-    guid: 3dd4a396b5225f8469b9a1eb608bfa57
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/MyDemo/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/MyDemo/SampleSceneScrews.unity
-    guid: eab2bfcf4bceb0444ac73e82da6a06d3
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects: {}
