@@ -170,9 +170,10 @@ MonoBehaviour:
   plateGroup: {fileID: 1666660677}
   boneGroup: {fileID: 1186986303}
   allGroup: {fileID: 189440779}
-  metScrewMaterial: {fileID: 0}
-  latScrewMaterial: {fileID: 0}
-  selectedScrewMaterial: {fileID: 0}
+  medScrewMaterial: {fileID: 0}
+  latScrewMaterial: {fileID: 2100000, guid: 05cef62e9328f4b4d96ab075c7ff162d, type: 2}
+  selectedScrewMaterial: {fileID: 2100000, guid: e77761899785b6248abd6af5b30270c9,
+    type: 2}
   screwButton: {fileID: 1397392969}
 --- !u!1001 &2342293
 PrefabInstance:
@@ -1296,7 +1297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &104295576
 Transform:
   m_ObjectHideFlags: 0
@@ -4850,7 +4851,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &345277761
 Transform:
   m_ObjectHideFlags: 0
