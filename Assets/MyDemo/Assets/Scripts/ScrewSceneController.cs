@@ -9,6 +9,12 @@ using UnityEngine;
 
 public class ScrewSceneController : MonoBehaviour
 {
+    // Menu State
+    public enum MenuState { Hand, Near }
+
+    //Plates Visibility State
+    public enum PlatesState { Both, Lat, Med, None }
+
     // Menus
     public GameObject nearMenu, handMenu;
 
@@ -16,25 +22,27 @@ public class ScrewSceneController : MonoBehaviour
     public GameObject screwGroup, plateGroup, boneGroup, allGroup;
 
     // Screws Materials
-    public List<Material> screwMaterials;
+    public Material metScrewMaterial, latScrewMaterial, selectedScrewMaterial;
 
     // Screw Button Handler
     public GameObject screwButton;
 
     // Lists
-    public static List<GameObject> screws, bones, plates;
+    public static List<GameObject> screws, bones;
 
     // Screw List Index
     private static int screwIndex;
 
-    // Menu State
-    public enum MenuState { Hand, Near }
+    // Slate state
+    private static PlatesState gPlatesState { get; set; }
+
+    // Slates Characterized
+    private GameObject latPlate, medPlate;
 
     void Start()
     {
         screws = new List<GameObject>();
         bones = new List<GameObject>();
-        plates = new List<GameObject>();
 
         // Initialize Screw List
         foreach (Transform screw in screwGroup.transform)
@@ -45,10 +53,27 @@ public class ScrewSceneController : MonoBehaviour
         // Initialize Plate List
         foreach (Transform plate in plateGroup.transform)
         {
-            plates.Add(plate.gameObject);
+            if (plate.gameObject.name.StartsWith("Lat"))
+            {
+                latPlate = plate.gameObject;
+            }
+            else
+            {
+                medPlate = plate.gameObject;
+            }
         }
 
         screwIndex = 0;
+
+        gPlatesState = PlatesState.Both;
+    }
+
+    private void SetTexts(TextMeshPro[] texts, String text)
+    {
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = text;
+        }
     }
 
     public void ChangeMenuType()
@@ -76,18 +101,47 @@ public class ScrewSceneController : MonoBehaviour
         if (boneGroup.activeInHierarchy)
         {
             boneGroup.SetActive(false);
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Show Bone";
-            }
+            SetTexts(texts, "Show Bone");
         }
         else
         {
             boneGroup.SetActive(true);
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Hide Bone";
-            }
+            SetTexts(texts, "Hide Bone");
+        }
+    }
+
+    public void ChangePlatesVisibility()
+    {
+        TextMeshPro[] texts = GameObject.Find("ChangePlatesVisibility").GetComponentsInChildren<TextMeshPro>();
+
+        switch (gPlatesState)
+        {
+            case PlatesState.Both:
+                latPlate.SetActive(true);
+                medPlate.SetActive(false);
+                gPlatesState = PlatesState.Lat;
+                SetTexts(texts, "Show Only Med Plate");
+                break;
+            case PlatesState.Lat:
+                latPlate.SetActive(false);
+                medPlate.SetActive(true);
+                gPlatesState = PlatesState.Med;
+                SetTexts(texts, "Hide Plates");
+                break;
+            case PlatesState.Med:
+                latPlate.SetActive(false);
+                medPlate.SetActive(false);
+                gPlatesState = PlatesState.None;
+                SetTexts(texts, "Show Plates");
+                break;
+            case PlatesState.None:
+                latPlate.SetActive(true);
+                medPlate.SetActive(true);
+                gPlatesState = PlatesState.Both;
+                SetTexts(texts, "Show Only Lat Plate");
+                break;
+            default:
+                break;
         }
     }
 
@@ -112,13 +166,13 @@ public class ScrewSceneController : MonoBehaviour
     private void DeactivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
-        screw.GetComponentInChildren<Renderer>().material = screwMaterials[0];
+        screw.GetComponentInChildren<Renderer>().material = screw.GetComponentInChildren<IsLat>().isLat ? latScrewMaterial : metScrewMaterial;
     }
 
     private void ActivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<BoundsControl>(true).enabled = true;
-        screw.GetComponentInChildren<Renderer>().material = screwMaterials[1];
+        screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
     }
 
     public void ChangeScrewState()
@@ -132,19 +186,13 @@ public class ScrewSceneController : MonoBehaviour
             {
                 DeactivateScrew(screw);
             }
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Manipulate Screws";
-            }
+            SetTexts(texts, "Manipulate Screws");
         }
         else
         {
             screwButton.SetActive(true);
             ActivateScrew(screws[screwIndex]);
-        }
-        foreach (TextMeshPro tmp in texts)
-        {
-            tmp.text = "Stop Manipulating Screws";
+            SetTexts(texts, "Stop Manipulationg Screws");
         }
     }
 
@@ -156,20 +204,12 @@ public class ScrewSceneController : MonoBehaviour
         if (boundsControl.enabled)
         {
             boundsControl.enabled = false;
-
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Allow Manipulation";
-            }
+            SetTexts(texts, "Allow Manipulation");
         }
         else
         {
-            boundsControl.enabled = true;   
-
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Disallow Manipulation";
-            }
+            boundsControl.enabled = true;
+            SetTexts(texts, "Disallow Manipulation");
         }
     }
 
