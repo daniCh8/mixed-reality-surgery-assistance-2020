@@ -170,9 +170,9 @@ MonoBehaviour:
   plateGroup: {fileID: 1666660677}
   boneGroup: {fileID: 1186986303}
   allGroup: {fileID: 189440779}
-  medScrewMaterial: {fileID: 0}
+  medScrewMaterial: {fileID: 2100000, guid: 4006b9df923db1d4aa5af5d9f3b11379, type: 2}
   latScrewMaterial: {fileID: 2100000, guid: 05cef62e9328f4b4d96ab075c7ff162d, type: 2}
-  selectedScrewMaterial: {fileID: 2100000, guid: e77761899785b6248abd6af5b30270c9,
+  selectedScrewMaterial: {fileID: 2100000, guid: fe191538d84eb3d47b0a6ad47cb0e184,
     type: 2}
   screwButton: {fileID: 1397392969}
 --- !u!1 &4907508
@@ -1315,7 +1315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &104295576
 Transform:
   m_ObjectHideFlags: 0
@@ -4182,7 +4182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e415674c384175a44ab6e2750ea79dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ct: {fileID: 4900000, guid: f53e88d2d5e9b8440ade832d703557a0, type: 3}
+  ct: {fileID: 4900000, guid: fa1fee3e3177267409ed74fb2761d0b4, type: 3}
   slicer: {fileID: 7200000, guid: ea9a1b7e79a1e044d88a72a42e6e8a4c, type: 3}
 --- !u!65 &278603714
 BoxCollider:
@@ -4984,7 +4984,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &345277761
 Transform:
   m_ObjectHideFlags: 0
