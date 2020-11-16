@@ -243,12 +243,19 @@ public class ScrewSceneController : MonoBehaviour
     private void DeactivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
+        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = false;
+        screw.GetComponentInChildren<PositionConstraint>(true).enabled = false;
         screw.GetComponentInChildren<Renderer>().material = screw.GetComponentInChildren<IsLat>().isLat ? latScrewMaterial : medScrewMaterial;
     }
 
     private void ActivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<BoundsControl>(true).enabled = true;
+        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = true;
+        PositionConstraint posConstr = screw.GetComponentInChildren<PositionConstraint>(true);
+        posConstr.enabled = true;
+        posConstr.screwPosition = screw.transform.position;
+       
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
     }
 

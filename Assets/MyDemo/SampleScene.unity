@@ -189,6 +189,8 @@ GameObject:
   - component: {fileID: 4907512}
   - component: {fileID: 4907511}
   - component: {fileID: 4907510}
+  - component: {fileID: 4907516}
+  - component: {fileID: 4907515}
   m_Layer: 0
   m_Name: Screw_15
   m_TagString: Untagged
@@ -334,6 +336,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4907508}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4907515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4907508}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &4907516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4907508}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &25109143
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,7 +1315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &104295576
 Transform:
   m_ObjectHideFlags: 0
@@ -1412,6 +1441,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 106584479}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &112800888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 240d9483db94993408ff1d02335ea212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxMaterial: {fileID: 0}
+  boxGrabbedMaterial: {fileID: 0}
+  flattenAxisDisplayScale: 0
 --- !u!1 &120826628
 GameObject:
   m_ObjectHideFlags: 0
@@ -3386,6 +3430,8 @@ GameObject:
   - component: {fileID: 224321309}
   - component: {fileID: 224321308}
   - component: {fileID: 224321307}
+  - component: {fileID: 224321313}
+  - component: {fileID: 224321312}
   m_Layer: 0
   m_Name: Screw_10
   m_TagString: Untagged
@@ -3531,6 +3577,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 224321305}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &224321312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224321305}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &224321313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224321305}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &224483942
 GameObject:
   m_ObjectHideFlags: 0
@@ -4316,6 +4389,8 @@ GameObject:
   - component: {fileID: 294768766}
   - component: {fileID: 294768765}
   - component: {fileID: 294768764}
+  - component: {fileID: 294768770}
+  - component: {fileID: 294768769}
   m_Layer: 0
   m_Name: Screw_11
   m_TagString: Untagged
@@ -4461,6 +4536,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294768762}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &294768769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294768762}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &294768770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294768762}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &299966427
 GameObject:
   m_ObjectHideFlags: 0
@@ -4882,7 +4984,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &345277761
 Transform:
   m_ObjectHideFlags: 0
@@ -4916,6 +5018,8 @@ GameObject:
   - component: {fileID: 351032931}
   - component: {fileID: 351032930}
   - component: {fileID: 351032929}
+  - component: {fileID: 351032935}
+  - component: {fileID: 351032934}
   m_Layer: 0
   m_Name: Screw_5
   m_TagString: Untagged
@@ -5061,6 +5165,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351032927}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &351032934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351032927}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &351032935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351032927}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &361876495
 GameObject:
   m_ObjectHideFlags: 0
@@ -5930,6 +6061,8 @@ GameObject:
   - component: {fileID: 467930812}
   - component: {fileID: 467930811}
   - component: {fileID: 467930810}
+  - component: {fileID: 467930816}
+  - component: {fileID: 467930815}
   m_Layer: 0
   m_Name: Screw_8
   m_TagString: Untagged
@@ -6075,6 +6208,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467930808}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &467930815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467930808}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &467930816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467930808}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1001 &489214072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7620,6 +7780,8 @@ GameObject:
   - component: {fileID: 697409752}
   - component: {fileID: 697409751}
   - component: {fileID: 697409750}
+  - component: {fileID: 697409756}
+  - component: {fileID: 697409755}
   m_Layer: 0
   m_Name: Screw_2
   m_TagString: Untagged
@@ -7765,6 +7927,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 697409748}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &697409755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697409748}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &697409756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697409748}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1001 &699567611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12554,6 +12743,8 @@ GameObject:
   - component: {fileID: 1084364984}
   - component: {fileID: 1084364983}
   - component: {fileID: 1084364982}
+  - component: {fileID: 1084364988}
+  - component: {fileID: 1084364987}
   m_Layer: 0
   m_Name: Screw_9
   m_TagString: Untagged
@@ -12699,6 +12890,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084364980}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1084364987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084364980}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1084364988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084364980}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &1089518468
 GameObject:
   m_ObjectHideFlags: 0
@@ -15918,8 +16136,8 @@ MonoBehaviour:
   handleMaterial: {fileID: 0}
   handleGrabbedMaterial: {fileID: 0}
   handlePrefab: {fileID: 0}
-  handleSize: 0.016
-  colliderPadding: {x: 0.016, y: 0.016, z: 0.016}
+  handleSize: 0.008
+  colliderPadding: {x: 0.008, y: 0.008, z: 0.008}
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
   handleSlatePrefab: {fileID: 0}
@@ -16273,6 +16491,8 @@ GameObject:
   - component: {fileID: 1447307993}
   - component: {fileID: 1447307992}
   - component: {fileID: 1447307991}
+  - component: {fileID: 1447307997}
+  - component: {fileID: 1447307996}
   m_Layer: 0
   m_Name: Screw_12
   m_TagString: Untagged
@@ -16418,6 +16638,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1447307989}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1447307996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447307989}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1447307997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447307989}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &1458235113
 GameObject:
   m_ObjectHideFlags: 0
@@ -18864,6 +19111,8 @@ GameObject:
   - component: {fileID: 1639709816}
   - component: {fileID: 1639709815}
   - component: {fileID: 1639709814}
+  - component: {fileID: 1639709820}
+  - component: {fileID: 1639709819}
   m_Layer: 0
   m_Name: Screw_17
   m_TagString: Untagged
@@ -19009,6 +19258,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1639709812}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1639709819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639709812}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1639709820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639709812}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1001 &1654909596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22362,6 +22638,8 @@ GameObject:
   - component: {fileID: 1804843163}
   - component: {fileID: 1804843162}
   - component: {fileID: 1804843161}
+  - component: {fileID: 1804843167}
+  - component: {fileID: 1804843166}
   m_Layer: 0
   m_Name: Screw_18
   m_TagString: Untagged
@@ -22507,6 +22785,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1804843159}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1804843166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804843159}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1804843167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804843159}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &1806272896
 GameObject:
   m_ObjectHideFlags: 0
@@ -22685,6 +22990,8 @@ GameObject:
   - component: {fileID: 1817356970}
   - component: {fileID: 1817356969}
   - component: {fileID: 1817356968}
+  - component: {fileID: 1817356974}
+  - component: {fileID: 1817356973}
   m_Layer: 0
   m_Name: Screw_7
   m_TagString: Untagged
@@ -22830,6 +23137,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1817356966}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1817356973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817356966}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1817356974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817356966}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &1826342268
 GameObject:
   m_ObjectHideFlags: 0
@@ -22844,6 +23178,8 @@ GameObject:
   - component: {fileID: 1826342272}
   - component: {fileID: 1826342271}
   - component: {fileID: 1826342270}
+  - component: {fileID: 1826342276}
+  - component: {fileID: 1826342275}
   m_Layer: 0
   m_Name: Screw_16
   m_TagString: Untagged
@@ -22989,6 +23325,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1826342268}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1826342275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826342268}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1826342276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826342268}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!4 &1827786802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2204069623020599746, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
@@ -23015,9 +23378,9 @@ MonoBehaviour:
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
   handlePrefabColliderType: 1
-  showHandleForX: 1
-  showHandleForY: 1
-  showHandleForZ: 1
+  showHandleForX: 0
+  showHandleForY: 0
+  showHandleForZ: 0
 --- !u!114 &1839077494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23382,6 +23745,8 @@ GameObject:
   - component: {fileID: 1893920556}
   - component: {fileID: 1893920555}
   - component: {fileID: 1893920554}
+  - component: {fileID: 1893920560}
+  - component: {fileID: 1893920559}
   m_Layer: 0
   m_Name: Screw_3
   m_TagString: Untagged
@@ -23527,6 +23892,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1893920552}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1893920559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893920552}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1893920560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893920552}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &1905538189
 GameObject:
   m_ObjectHideFlags: 0
@@ -23697,6 +24089,8 @@ GameObject:
   - component: {fileID: 1917252169}
   - component: {fileID: 1917252168}
   - component: {fileID: 1917252167}
+  - component: {fileID: 1917252173}
+  - component: {fileID: 1917252172}
   m_Layer: 0
   m_Name: Screw_13
   m_TagString: Untagged
@@ -23842,6 +24236,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1917252165}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1917252172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917252165}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1917252173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917252165}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &1941259037
 GameObject:
   m_ObjectHideFlags: 0
@@ -24923,6 +25344,8 @@ GameObject:
   - component: {fileID: 2022866788}
   - component: {fileID: 2022866787}
   - component: {fileID: 2022866786}
+  - component: {fileID: 2022866791}
+  - component: {fileID: 2022866792}
   m_Layer: 0
   m_Name: Screw_1
   m_TagString: Untagged
@@ -24962,7 +25385,7 @@ MonoBehaviour:
   activation: 0
   flattenAxis: 0
   boxPadding: {x: 0, y: 0, z: 0}
-  boxDisplayConfiguration: {fileID: 0}
+  boxDisplayConfiguration: {fileID: 112800888}
   linksConfiguration: {fileID: 0}
   scaleHandlesConfiguration: {fileID: 1409811778}
   rotationHandlesConfiguration: {fileID: 1839077494}
@@ -25007,7 +25430,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoConstraintSelection: 1
-  selectedConstraints: []
+  selectedConstraints:
+  - {fileID: 0}
 --- !u!114 &2022866788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25068,6 +25492,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2022866784}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2022866791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2022866784}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
+--- !u!114 &2022866792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2022866784}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &2026957103 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7ed29f687cf788841b395fceaca9c8be,
@@ -25679,6 +26130,8 @@ GameObject:
   - component: {fileID: 2062647295}
   - component: {fileID: 2062647294}
   - component: {fileID: 2062647293}
+  - component: {fileID: 2062647299}
+  - component: {fileID: 2062647298}
   m_Layer: 0
   m_Name: Screw_6
   m_TagString: Untagged
@@ -25824,6 +26277,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062647291}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2062647298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062647291}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &2062647299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062647291}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &2066914360
 GameObject:
   m_ObjectHideFlags: 0
@@ -25931,6 +26411,8 @@ GameObject:
   - component: {fileID: 2083646451}
   - component: {fileID: 2083646450}
   - component: {fileID: 2083646449}
+  - component: {fileID: 2083646455}
+  - component: {fileID: 2083646454}
   m_Layer: 0
   m_Name: Screw_14
   m_TagString: Untagged
@@ -26076,6 +26558,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083646447}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2083646454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083646447}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &2083646455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083646447}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &2095220964
 GameObject:
   m_ObjectHideFlags: 0
@@ -26169,6 +26678,8 @@ GameObject:
   - component: {fileID: 2098555585}
   - component: {fileID: 2098555584}
   - component: {fileID: 2098555583}
+  - component: {fileID: 2098555589}
+  - component: {fileID: 2098555588}
   m_Layer: 0
   m_Name: Screw_4
   m_TagString: Untagged
@@ -26314,6 +26825,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098555581}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2098555588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098555581}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &2098555589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098555581}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
 --- !u!1 &2102651226
 GameObject:
   m_ObjectHideFlags: 0
