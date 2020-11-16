@@ -275,6 +275,7 @@ public class ScrewSceneController : MonoBehaviour
         else
         {
             screwButton.SetActive(true);
+            FindNextIndex();
             ActivateScrew(screws[screwIndex]);
             SetTexts(texts, "Stop Manipulationg Screws");
         }
