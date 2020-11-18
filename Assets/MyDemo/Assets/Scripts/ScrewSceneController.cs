@@ -285,15 +285,18 @@ public class ScrewSceneController : MonoBehaviour
     {
         TextMeshPro[] texts = GameObject.Find("ChangeBoundsControl").GetComponentsInChildren<TextMeshPro>();
         BoundsControl boundsControl = allGroup.GetComponentInChildren<BoundsControl>(true);
+        ObjectManipulator objectManipulator = allGroup.GetComponentInChildren<ObjectManipulator>(true);
 
         if (boundsControl.enabled)
         {
             boundsControl.enabled = false;
+            objectManipulator.enabled = false;
             SetTexts(texts, "Allow Manipulation");
         }
         else
         {
             boundsControl.enabled = true;
+            objectManipulator.enabled = true;
             SetTexts(texts, "Disallow Manipulation");
         }
     }
