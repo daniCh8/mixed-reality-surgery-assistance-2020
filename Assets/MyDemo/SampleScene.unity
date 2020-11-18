@@ -2256,8 +2256,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177341738}
   m_LocalRotation: {x: -0, y: -0.5889425, z: -0, w: 0.8081749}
-  m_LocalPosition: {x: 54.15644, y: -382.0001, z: -14.319157}
-  m_LocalScale: {x: 3000.0002, y: 3000, z: 3000.0002}
+  m_LocalPosition: {x: 38.8, y: -338.9, z: -118.7}
+  m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_Children:
   - {fileID: 120826629}
   - {fileID: 221765225}
@@ -2833,6 +2833,7 @@ GameObject:
   - component: {fileID: 189440780}
   - component: {fileID: 189440782}
   - component: {fileID: 189440781}
+  - component: {fileID: 189440783}
   m_Layer: 0
   m_Name: BoneMix
   m_TagString: Untagged
@@ -2922,6 +2923,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoConstraintSelection: 1
   selectedConstraints: []
+--- !u!114 &189440783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189440779}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181cd563a8349c34ea8978b0bc8d9c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hostTransform: {fileID: 189440780}
+  manipulationType: 1
+  twoHandedManipulationType: 7
+  allowFarManipulation: 1
+  useForcesForNearManipulation: 0
+  oneHandRotationModeNear: 1
+  oneHandRotationModeFar: 1
+  releaseBehavior: 3
+  smoothingFar: 1
+  smoothingNear: 1
+  moveLerpTime: 0.001
+  rotateLerpTime: 0.001
+  scaleLerpTime: 0.001
+  enableConstraints: 1
+  constraintsManager: {fileID: 189440782}
+  elasticsManager: {fileID: 0}
+  onManipulationStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onManipulationEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &191355157
 GameObject:
   m_ObjectHideFlags: 0
@@ -21312,8 +21353,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1772926633}
   m_LocalRotation: {x: -0, y: -0.5889399, z: -0, w: 0.8081768}
-  m_LocalPosition: {x: 6.7000194, y: -382.00006, z: -161.70001}
-  m_LocalScale: {x: 3000.0002, y: 3000, z: 3000.0002}
+  m_LocalPosition: {x: 23.200024, y: -338.9, z: -167.00003}
+  m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_Children:
   - {fileID: 1077054753}
   - {fileID: 373694447}
