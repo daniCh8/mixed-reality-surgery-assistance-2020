@@ -253,9 +253,17 @@ public class ScrewSceneController : MonoBehaviour
         screw.GetComponentInChildren<BoundsControl>(true).enabled = true;
         screw.GetComponentInChildren<ScaleConstraint>(true).enabled = true;
         PositionConstraint posConstr = screw.GetComponentInChildren<PositionConstraint>(true);
+
+        foreach (Transform child in screw.transform)
+        {
+            if (child.name.Contains("Screw"))
+            {
+                posConstr.screwPosition = child.position;
+            }
+        }
+
         posConstr.enabled = true;
-        posConstr.screwPosition = screw.transform.position;
-       
+
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
     }
 
