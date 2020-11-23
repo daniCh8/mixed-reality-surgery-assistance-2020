@@ -45,6 +45,9 @@ public class ScrewSceneController : MonoBehaviour
     // Slates Characterized
     private GameObject latPlate, medPlate;
 
+    // Manipulating Screws
+    private bool manipulating;
+
     void Start()
     {
         screws = new List<GameObject>();
@@ -75,6 +78,8 @@ public class ScrewSceneController : MonoBehaviour
         screwIndex = 0;
 
         gPlatesState = PlatesState.Both;
+
+        manipulating = false;
     }
 
     private void SetTexts(TextMeshPro[] texts, String text)
@@ -256,10 +261,6 @@ public class ScrewSceneController : MonoBehaviour
 
     private void DeactivateScrew(GameObject screw)
     {
-        screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
-        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = false;
-        screw.GetComponentInChildren<PositionConstraint>(true).enabled = false;
-
         switch (screw.tag)
         {
             case Constants.LAT:
@@ -272,17 +273,18 @@ public class ScrewSceneController : MonoBehaviour
                 screw.GetComponentInChildren<Renderer>().material = newScrewMaterial;
                 break;
         }
+
+        SetCurrObjectManipulator(screw, false);
+        screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
+        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = false;
+        screw.GetComponentInChildren<PositionConstraint>(true).enabled = false;
     }
 
     private void ActivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<BoundsControl>(true).enabled = true;
-        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = true;
-        PositionConstraint posConstr = screw.GetComponentInChildren<PositionConstraint>(true);
-
-        posConstr.screwPosition = screw.transform.position;
-        posConstr.enabled = true;
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
+        SetCurrObjectManipulator(screw, manipulating);
     }
 
     public void ChangeScrewState()
@@ -364,11 +366,17 @@ public class ScrewSceneController : MonoBehaviour
         var newScrew = CreateCylinderBetweenPoints(screwFrontEnd.GetComponentInChildren<Renderer>(true).bounds.center,
                                                     screwBackEnd.GetComponentInChildren<Renderer>(true).bounds.center);
         newScrew.tag = Constants.NEW;
-        newScrew.name = $"Screw_{screws.Count}";
+        newScrew.name = $"Screw_{screws.Count+1}";
+
         screws.Add(newScrew);
+        newScrew.transform.parent = screwGroup.transform;
         DeactivateScrew(screws[screwIndex]);
         screwIndex = screws.Count - 1;
         ActivateScrew(screws[screwIndex]);
+
+        // For some reason, this is the only way to get the BoundsControl going the first time. 
+        screws[screwIndex].GetComponentInChildren<BoundsControl>(true).enabled = false;
+        screws[screwIndex].GetComponentInChildren<BoundsControl>(true).enabled = true;
     }
 
     private GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end)
@@ -383,6 +391,31 @@ public class ScrewSceneController : MonoBehaviour
         cylinder.transform.localScale = scale;
 
         return cylinder;
+    }
+
+    public void ManipulateScrew()
+    {
+        ButtonConfigHelper buttonConfig = GameObject.Find(Constants.SCREW_MANIPULATE_BUTTON).GetComponentInChildren<ButtonConfigHelper>();
+        if(manipulating)
+        {
+            manipulating = false;
+            buttonConfig.SetQuadIconByName(Constants.ICON_HAND_GESTURE);
+        }
+        else
+        {
+            manipulating = true;
+            buttonConfig.SetQuadIconByName(Constants.ICON_STOP_HAND_GESTURE);
+        }
+
+        SetCurrObjectManipulator(screws[screwIndex], manipulating);
+    }
+
+    private void SetCurrObjectManipulator(GameObject screw, bool activate)
+    {
+        screw.GetComponentInChildren<ObjectManipulator>(true).enabled = activate;
+        screw.GetComponentInChildren<WholeScaleConstraint>(true).enabled = activate;
+        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = !activate;
+        screw.GetComponentInChildren<PositionConstraint>(true).enabled = !activate;
     }
 }
 
@@ -408,4 +441,7 @@ static class Constants
     public const String BONE_VISIBILITY_BUTTON = "ChangeBoneVisibility";
     public const String SHOW_BONE = "Show Bone";
     public const String HIDE_BONE = "Hide Bone";
+    public const String SCREW_MANIPULATE_BUTTON = "ManipulateButton";
+    public const String ICON_HAND_GESTURE = "hand-gest";
+    public const String ICON_STOP_HAND_GESTURE = "stop-hand-gest";
 }

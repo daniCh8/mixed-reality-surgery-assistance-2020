@@ -10,4 +10,9 @@ public class PositionConstraint : MonoBehaviour
     {
         transform.position = screwPosition;
     }
+
+    private void OnEnable()
+    {
+        screwPosition = transform.position;
+    }
 }
