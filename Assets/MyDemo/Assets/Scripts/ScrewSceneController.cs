@@ -12,8 +12,14 @@ public class ScrewSceneController : MonoBehaviour
     // Menu State
     public enum MenuState { Hand, Near }
 
-    //Plates Visibility State
+    // Plates Visibility State
     public enum PlatesState { Both, Lat, Med, None }
+
+    // Screw Prefab to Instantiate
+    public GameObject screwPrefab;
+
+    // New Screw Ends
+    public GameObject screwFrontEnd, screwBackEnd;
 
     // Menus
     public GameObject nearMenu, handMenu;
@@ -22,7 +28,7 @@ public class ScrewSceneController : MonoBehaviour
     public GameObject screwGroup, plateGroup, boneGroup, allGroup;
 
     // Screws Materials
-    public Material medScrewMaterial, latScrewMaterial, selectedScrewMaterial;
+    public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, selectedScrewMaterial;
 
     // Screw Button Handler
     public GameObject screwButton;
@@ -47,13 +53,16 @@ public class ScrewSceneController : MonoBehaviour
         // Initialize Screw List
         foreach (Transform screw in screwGroup.transform)
         {
-            screws.Add(screw.gameObject);
+            foreach(Transform real_screw in screw.gameObject.transform)
+            {
+                screws.Add(real_screw.gameObject);
+            }
         }
 
         // Initialize Plate List
         foreach (Transform plate in plateGroup.transform)
         {
-            if (plate.gameObject.name.StartsWith("Lat"))
+            if (plate.gameObject.name.StartsWith(Constants.LAT))
             {
                 latPlate = plate.gameObject;
             }
@@ -78,7 +87,7 @@ public class ScrewSceneController : MonoBehaviour
 
     public void ChangeMenuType()
     {
-        Debug.Log("Change Menu Button pressed");
+        Debug.Log(Constants.CHANGE_MENU_BUTTON);
 
         if (nearMenu.activeInHierarchy)
         {
@@ -96,23 +105,23 @@ public class ScrewSceneController : MonoBehaviour
 
     public void ChangeBoneVisibility()
     {
-        TextMeshPro[] texts = GameObject.Find("ChangeBoneVisibility").GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = GameObject.Find(Constants.BONE_VISIBILITY_BUTTON).GetComponentsInChildren<TextMeshPro>();
 
         if (boneGroup.activeInHierarchy)
         {
             boneGroup.SetActive(false);
-            SetTexts(texts, "Show Bone");
+            SetTexts(texts, Constants.SHOW_BONE);
         }
         else
         {
             boneGroup.SetActive(true);
-            SetTexts(texts, "Hide Bone");
+            SetTexts(texts, Constants.HIDE_BONE);
         }
     }
 
     public void ChangePlatesVisibility()
     {
-        TextMeshPro[] texts = GameObject.Find("ChangePlatesVisibility").GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = GameObject.Find(Constants.CHANGE_PLATES_VISIBILITY).GetComponentsInChildren<TextMeshPro>();
 
         switch (gPlatesState)
         {
@@ -122,7 +131,7 @@ public class ScrewSceneController : MonoBehaviour
                 SetLatScrewsActive(true);
                 SetMedScrewsActive(false);
                 gPlatesState = PlatesState.Lat;
-                SetTexts(texts, "Show Only Med Plate");
+                SetTexts(texts, Constants.SHOW_MED_PLATE);
                 break;
             case PlatesState.Lat:
                 latPlate.SetActive(false);
@@ -130,7 +139,7 @@ public class ScrewSceneController : MonoBehaviour
                 SetLatScrewsActive(false);
                 SetMedScrewsActive(true);
                 gPlatesState = PlatesState.Med;
-                SetTexts(texts, "Hide Plates");
+                SetTexts(texts, Constants.SHOW_NO_PLATES);
                 break;
             case PlatesState.Med:
                 latPlate.SetActive(false);
@@ -138,7 +147,7 @@ public class ScrewSceneController : MonoBehaviour
                 SetLatScrewsActive(true);
                 SetMedScrewsActive(true);
                 gPlatesState = PlatesState.None;
-                SetTexts(texts, "Show Plates");
+                SetTexts(texts, Constants.SHOW_BOTH_PLATES);
                 break;
             case PlatesState.None:
                 latPlate.SetActive(true);
@@ -146,23 +155,28 @@ public class ScrewSceneController : MonoBehaviour
                 SetLatScrewsActive(true);
                 SetMedScrewsActive(true);
                 gPlatesState = PlatesState.Both;
-                SetTexts(texts, "Show Only Lat Plate");
+                SetTexts(texts, Constants.SHOW_LAT_PLATE);
                 break;
             default:
                 break;
         }
     }
 
-    private bool ScrewIsLat(GameObject screw)
+    private bool ScrewIsNotFlag(GameObject screw, String flag)
     {
-        return screw.name.Contains("Lat");
+        return !ScrewIsFlag(screw, flag);
+    }
+
+    private bool ScrewIsFlag(GameObject screw, String flag)
+    {
+        return screw.name.Contains(flag);
     }
 
     private void SetLatScrewsActive(bool active)
     {
         foreach (GameObject screw in screws)
         {
-            if (ScrewIsLat(screw))
+            if (ScrewIsFlag(screw, Constants.LAT))
             {
                 screw.SetActive(active);
             }
@@ -173,7 +187,7 @@ public class ScrewSceneController : MonoBehaviour
     {
         foreach (GameObject screw in screws)
         {
-            if (!ScrewIsLat(screw))
+            if (ScrewIsFlag(screw, Constants.MED))
             {
                 screw.SetActive(active);
             }
@@ -206,9 +220,9 @@ public class ScrewSceneController : MonoBehaviour
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? "Lat" : "Med";
+        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT : Constants.MED;
         NextIndex();
-        while (!screws[screwIndex].name.Contains(flag))
+        while (ScrewIsNotFlag(screws[screwIndex], flag))
         {
             NextIndex();
         }
@@ -222,9 +236,9 @@ public class ScrewSceneController : MonoBehaviour
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? "Lat" : "Med";
+        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT : Constants.MED;
         PrevIndex();
-        while (!screws[screwIndex].name.Contains(flag))
+        while (ScrewIsNotFlag(screws[screwIndex], flag))
         {
             PrevIndex();
         }
@@ -245,7 +259,19 @@ public class ScrewSceneController : MonoBehaviour
         screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
         screw.GetComponentInChildren<ScaleConstraint>(true).enabled = false;
         screw.GetComponentInChildren<PositionConstraint>(true).enabled = false;
-        screw.GetComponentInChildren<Renderer>().material = screw.GetComponentInChildren<IsLat>().isLat ? latScrewMaterial : medScrewMaterial;
+
+        switch (screw.tag)
+        {
+            case Constants.LAT:
+                screw.GetComponentInChildren<Renderer>().material = latScrewMaterial;
+                break;
+            case Constants.MED:
+                screw.GetComponentInChildren<Renderer>().material = medScrewMaterial;
+                break;
+            case Constants.NEW:
+                screw.GetComponentInChildren<Renderer>().material = newScrewMaterial;
+                break;
+        }
     }
 
     private void ActivateScrew(GameObject screw)
@@ -254,22 +280,14 @@ public class ScrewSceneController : MonoBehaviour
         screw.GetComponentInChildren<ScaleConstraint>(true).enabled = true;
         PositionConstraint posConstr = screw.GetComponentInChildren<PositionConstraint>(true);
 
-        foreach (Transform child in screw.transform)
-        {
-            if (child.name.Contains("Screw"))
-            {
-                posConstr.screwPosition = child.position;
-            }
-        }
-
+        posConstr.screwPosition = screw.transform.position;
         posConstr.enabled = true;
-
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
     }
 
     public void ChangeScrewState()
     {
-        TextMeshPro[] texts = GameObject.Find("ChangeScrewState").GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = GameObject.Find(Constants.SCREW_STATE_BUTTON).GetComponentsInChildren<TextMeshPro>();
 
         if (screwButton.activeInHierarchy)
         {
@@ -278,20 +296,20 @@ public class ScrewSceneController : MonoBehaviour
             {
                 DeactivateScrew(screw);
             }
-            SetTexts(texts, "Manipulate Screws");
+            SetTexts(texts, Constants.START_MANIPULATING_SCREWS);
         }
         else
         {
             screwButton.SetActive(true);
             FindNextIndex();
             ActivateScrew(screws[screwIndex]);
-            SetTexts(texts, "Stop Manipulationg Screws");
+            SetTexts(texts, Constants.STOP_MANIPULATING_SCREWS);
         }
     }
 
     public void ChangeBoundsControlState()
     {
-        TextMeshPro[] texts = GameObject.Find("ChangeBoundsControl").GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = GameObject.Find(Constants.CHANGE_BOUNDS_CONTROL).GetComponentsInChildren<TextMeshPro>();
         BoundsControl boundsControl = allGroup.GetComponentInChildren<BoundsControl>(true);
         ObjectManipulator objectManipulator = allGroup.GetComponentInChildren<ObjectManipulator>(true);
 
@@ -299,19 +317,19 @@ public class ScrewSceneController : MonoBehaviour
         {
             boundsControl.enabled = false;
             objectManipulator.enabled = false;
-            SetTexts(texts, "Allow Manipulation");
+            SetTexts(texts, Constants.ALLOW_MANIPULATION);
         }
         else
         {
             boundsControl.enabled = true;
             objectManipulator.enabled = true;
-            SetTexts(texts, "Disallow Manipulation");
+            SetTexts(texts, Constants.DISALLOW_MANIPULATION);
         }
     }
 
     private bool isASharedButton(PressableButton button)
     {
-        return button.name != "ButtonPin" && button.name != "ChangeMenuType";
+        return button.name != Constants.BUTTON_PIN_NAME && button.name != Constants.CHANGE_MENU_BUTTON_NAME;
     }
 
     private void resetButtonTexts(MenuState oldMenu)
@@ -341,4 +359,53 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    public void NewScrew()
+    {
+        var newScrew = CreateCylinderBetweenPoints(screwFrontEnd.GetComponentInChildren<Renderer>(true).bounds.center,
+                                                    screwBackEnd.GetComponentInChildren<Renderer>(true).bounds.center);
+        newScrew.tag = Constants.NEW;
+        newScrew.name = $"Screw_{screws.Count}";
+        screws.Add(newScrew);
+        DeactivateScrew(screws[screwIndex]);
+        screwIndex = screws.Count - 1;
+        ActivateScrew(screws[screwIndex]);
+    }
+
+    private GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end)
+    {
+        var offset = end - start;
+        var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
+        var position = start + (offset / 2.0f);
+
+        var cylinder = Instantiate(screwPrefab, position, Quaternion.identity);
+        
+        cylinder.transform.up = offset;
+        cylinder.transform.localScale = scale;
+
+        return cylinder;
+    }
+}
+
+static class Constants
+{
+    public const String LAT = "Lat";
+    public const String MED = "Med";
+    public const String NEW = "New";
+    public const String CHANGE_MENU_BUTTON = "Change Menu Button pressed";
+    public const String CHANGE_MENU_BUTTON_NAME = "ChangeMenuType";
+    public const String BUTTON_PIN_NAME = "ButtonPin";
+    public const String DISALLOW_MANIPULATION = "Disallow Manipulation";
+    public const String ALLOW_MANIPULATION = "Allow Manipulation";
+    public const String CHANGE_BOUNDS_CONTROL = "ChangeBoundsControl";
+    public const String STOP_MANIPULATING_SCREWS = "Stop Manipulating Screws";
+    public const String START_MANIPULATING_SCREWS = "Manipulate Screws";
+    public const String SCREW_STATE_BUTTON = "ChangeScrewState";
+    public const String CHANGE_PLATES_VISIBILITY = "ChangePlatesVisibility";
+    public const String SHOW_MED_PLATE = "Show Only Med Plate";
+    public const String SHOW_LAT_PLATE = "Show Only Lat Plate";
+    public const String SHOW_NO_PLATES = "Hide Plates";
+    public const String SHOW_BOTH_PLATES = "Show Plates";
+    public const String BONE_VISIBILITY_BUTTON = "ChangeBoneVisibility";
+    public const String SHOW_BONE = "Show Bone";
+    public const String HIDE_BONE = "Hide Bone";
 }
