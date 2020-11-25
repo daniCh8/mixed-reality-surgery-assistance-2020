@@ -48,10 +48,11 @@ public class ScrewSceneController : MonoBehaviour
     // Manipulating Screws
     private bool manipulating;
 
-    // Original Screw Positions and Scales
+    // Original Screw transforms
     private Dictionary<String, Vector3> originalScrewPositions, originalScrewScales;
+    private Dictionary<String, Quaternion> originalScrewRotations;
 
-    // All Group Starting Transform
+    // All Group Starting transform
     private Vector3 allGroupStartingPosition, allGroupStartingScale;
     private Quaternion allGroupStartingRotation;
 
@@ -62,6 +63,7 @@ public class ScrewSceneController : MonoBehaviour
 
         originalScrewPositions = new Dictionary<string, Vector3>();
         originalScrewScales = new Dictionary<string, Vector3>();
+        originalScrewRotations = new Dictionary<string, Quaternion>();
 
         allGroupStartingPosition = allGroup.transform.position;
         allGroupStartingScale = allGroup.transform.localScale;
@@ -75,6 +77,7 @@ public class ScrewSceneController : MonoBehaviour
                 screws.Add(real_screw.gameObject);
                 originalScrewPositions.Add(real_screw.gameObject.name, real_screw.position);
                 originalScrewScales.Add(real_screw.gameObject.name, real_screw.localScale);
+                originalScrewRotations.Add(real_screw.gameObject.name, real_screw.rotation);
             }
         }
 
@@ -411,6 +414,7 @@ public class ScrewSceneController : MonoBehaviour
                 
                 screw.transform.position = originalScrewPositions[screw.name];
                 screw.transform.localScale = originalScrewScales[screw.name];
+                screw.transform.rotation = originalScrewRotations[screw.name];
             }
         }
 
