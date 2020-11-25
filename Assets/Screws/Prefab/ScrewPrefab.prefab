@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -204587220742175584}
   - component: {fileID: -8503025961728210015}
   - component: {fileID: -8851742554300735506}
+  - component: {fileID: 1826355368676703827}
   m_Layer: 0
   m_Name: ScrewPrefab
   m_TagString: New
@@ -236,3 +237,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   elasticsManager: {fileID: 0}
+--- !u!114 &1826355368676703827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609933443147746813}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0

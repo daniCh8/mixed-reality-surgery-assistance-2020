@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using System;
 using System.Collections;
@@ -500,6 +501,7 @@ public class ScrewSceneController : MonoBehaviour
     private void SetCurrObjectManipulator(GameObject screw, bool activate)
     {
         screw.GetComponentInChildren<ObjectManipulator>(true).enabled = activate;
+        screw.GetComponentInChildren<NearInteractionGrabbable>(true).enabled = activate;
         screw.GetComponentInChildren<WholeScaleConstraint>(true).enabled = activate;
         screw.GetComponentInChildren<ScaleConstraint>(true).enabled = !activate;
         screw.GetComponentInChildren<PositionConstraint>(true).enabled = !activate;

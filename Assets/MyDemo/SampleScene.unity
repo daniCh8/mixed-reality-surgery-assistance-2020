@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: 4907515}
   - component: {fileID: 4907512}
   - component: {fileID: 4907517}
+  - component: {fileID: 4907518}
   m_Layer: 0
   m_Name: Screw_15
   m_TagString: Med
@@ -410,6 +411,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &4907518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4907508}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &25109143
 GameObject:
   m_ObjectHideFlags: 0
@@ -3806,6 +3821,7 @@ GameObject:
   - component: {fileID: 224321312}
   - component: {fileID: 224321309}
   - component: {fileID: 224321314}
+  - component: {fileID: 224321315}
   m_Layer: 0
   m_Name: Screw_10
   m_TagString: Lat
@@ -4019,6 +4035,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &224321315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224321305}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &224483942
 GameObject:
   m_ObjectHideFlags: 0
@@ -5271,6 +5301,7 @@ GameObject:
   - component: {fileID: 294768769}
   - component: {fileID: 294768766}
   - component: {fileID: 294768771}
+  - component: {fileID: 294768772}
   m_Layer: 0
   m_Name: Screw_11
   m_TagString: Med
@@ -5484,6 +5515,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &294768772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294768762}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &295758816
 GameObject:
   m_ObjectHideFlags: 0
@@ -6151,6 +6196,7 @@ GameObject:
   - component: {fileID: 351032934}
   - component: {fileID: 351032931}
   - component: {fileID: 351032936}
+  - component: {fileID: 351032937}
   m_Layer: 0
   m_Name: Screw_5
   m_TagString: Lat
@@ -6364,6 +6410,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &351032937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351032927}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &361876495
 GameObject:
   m_ObjectHideFlags: 0
@@ -8114,6 +8174,7 @@ GameObject:
   - component: {fileID: 467930815}
   - component: {fileID: 467930812}
   - component: {fileID: 467930817}
+  - component: {fileID: 467930818}
   m_Layer: 0
   m_Name: Screw_8
   m_TagString: Lat
@@ -8327,6 +8388,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &467930818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467930808}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1001 &489214072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10719,6 +10794,7 @@ GameObject:
   - component: {fileID: 697409755}
   - component: {fileID: 697409752}
   - component: {fileID: 697409757}
+  - component: {fileID: 697409758}
   m_Layer: 0
   m_Name: Screw_2
   m_TagString: Lat
@@ -10932,6 +11008,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &697409758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697409748}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1001 &699567611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16420,6 +16510,7 @@ GameObject:
   - component: {fileID: 1084364987}
   - component: {fileID: 1084364984}
   - component: {fileID: 1084364989}
+  - component: {fileID: 1084364990}
   m_Layer: 0
   m_Name: Screw_9
   m_TagString: Lat
@@ -16633,6 +16724,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1084364990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084364980}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1089518468
 GameObject:
   m_ObjectHideFlags: 0
@@ -22426,6 +22531,7 @@ GameObject:
   - component: {fileID: 1447307996}
   - component: {fileID: 1447307993}
   - component: {fileID: 1447307998}
+  - component: {fileID: 1447307999}
   m_Layer: 0
   m_Name: Screw_12
   m_TagString: Med
@@ -22639,6 +22745,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1447307999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447307989}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1452563442
 GameObject:
   m_ObjectHideFlags: 0
@@ -25812,6 +25932,7 @@ GameObject:
   - component: {fileID: 1639709819}
   - component: {fileID: 1639709816}
   - component: {fileID: 1639709821}
+  - component: {fileID: 1639709822}
   m_Layer: 0
   m_Name: Screw_17
   m_TagString: Med
@@ -26025,6 +26146,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1639709822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639709812}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1654415066
 GameObject:
   m_ObjectHideFlags: 0
@@ -29745,6 +29880,7 @@ GameObject:
   - component: {fileID: 1804843166}
   - component: {fileID: 1804843163}
   - component: {fileID: 1804843168}
+  - component: {fileID: 1804843169}
   m_Layer: 0
   m_Name: Screw_18
   m_TagString: Med
@@ -29958,6 +30094,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1804843169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804843159}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1806272896
 GameObject:
   m_ObjectHideFlags: 0
@@ -30220,6 +30370,7 @@ GameObject:
   - component: {fileID: 1817356973}
   - component: {fileID: 1817356970}
   - component: {fileID: 1817356975}
+  - component: {fileID: 1817356976}
   m_Layer: 0
   m_Name: Screw_7
   m_TagString: Lat
@@ -30433,6 +30584,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1817356976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817356966}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1826342268
 GameObject:
   m_ObjectHideFlags: 0
@@ -30450,6 +30615,7 @@ GameObject:
   - component: {fileID: 1826342275}
   - component: {fileID: 1826342272}
   - component: {fileID: 1826342277}
+  - component: {fileID: 1826342278}
   m_Layer: 0
   m_Name: Screw_16
   m_TagString: Med
@@ -30663,6 +30829,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1826342278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826342268}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!4 &1827786802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2204069623020599746, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
@@ -31233,6 +31413,7 @@ GameObject:
   - component: {fileID: 1893920559}
   - component: {fileID: 1893920556}
   - component: {fileID: 1893920561}
+  - component: {fileID: 1893920562}
   m_Layer: 0
   m_Name: Screw_3
   m_TagString: Lat
@@ -31446,6 +31627,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1893920562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893920552}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1905538189
 GameObject:
   m_ObjectHideFlags: 0
@@ -31640,6 +31835,7 @@ GameObject:
   - component: {fileID: 1917252172}
   - component: {fileID: 1917252169}
   - component: {fileID: 1917252174}
+  - component: {fileID: 1917252175}
   m_Layer: 0
   m_Name: Screw_13
   m_TagString: Med
@@ -31853,6 +32049,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &1917252175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917252165}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1941259037
 GameObject:
   m_ObjectHideFlags: 0
@@ -33236,6 +33446,7 @@ GameObject:
   - component: {fileID: 2022866792}
   - component: {fileID: 2022866788}
   - component: {fileID: 2022866793}
+  - component: {fileID: 2022866794}
   m_Layer: 0
   m_Name: Screw_1
   m_TagString: Lat
@@ -33450,6 +33661,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &2022866794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2022866784}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &2033263657
 GameObject:
   m_ObjectHideFlags: 0
@@ -34562,6 +34787,7 @@ GameObject:
   - component: {fileID: 2062647298}
   - component: {fileID: 2062647295}
   - component: {fileID: 2062647300}
+  - component: {fileID: 2062647301}
   m_Layer: 0
   m_Name: Screw_6
   m_TagString: Lat
@@ -34775,6 +35001,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &2062647301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062647291}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &2066914360
 GameObject:
   m_ObjectHideFlags: 0
@@ -34885,6 +35125,7 @@ GameObject:
   - component: {fileID: 2083646454}
   - component: {fileID: 2083646451}
   - component: {fileID: 2083646456}
+  - component: {fileID: 2083646457}
   m_Layer: 0
   m_Name: Screw_14
   m_TagString: Med
@@ -35098,6 +35339,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &2083646457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083646447}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &2095220964
 GameObject:
   m_ObjectHideFlags: 0
@@ -35194,6 +35449,7 @@ GameObject:
   - component: {fileID: 2098555588}
   - component: {fileID: 2098555585}
   - component: {fileID: 2098555590}
+  - component: {fileID: 2098555591}
   m_Layer: 0
   m_Name: Screw_4
   m_TagString: Lat
@@ -35407,6 +35663,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 3
   proximityType: 3
+--- !u!114 &2098555591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098555581}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &2102651226
 GameObject:
   m_ObjectHideFlags: 0
