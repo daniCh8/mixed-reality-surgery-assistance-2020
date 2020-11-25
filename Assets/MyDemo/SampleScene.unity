@@ -297,7 +297,7 @@ MonoBehaviour:
   hostTransform: {fileID: 4907509}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -3906,7 +3906,7 @@ MonoBehaviour:
   hostTransform: {fileID: 224321306}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -4952,7 +4952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e415674c384175a44ab6e2750ea79dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ct: {fileID: 4900000, guid: 875965916d8d00e44915981819b93e66, type: 3}
+  ct: {fileID: 4900000, guid: fa1fee3e3177267409ed74fb2761d0b4, type: 3}
   slicer: {fileID: 7200000, guid: ea9a1b7e79a1e044d88a72a42e6e8a4c, type: 3}
 --- !u!65 &278603714
 BoxCollider:
@@ -5371,7 +5371,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -5988,7 +5988,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &326163310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6251,7 +6251,7 @@ MonoBehaviour:
   hostTransform: {fileID: 351032928}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -6655,7 +6655,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2319737}
-        m_MethodName: ResetScrew
+        m_MethodName: ResetScrews
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8214,7 +8214,7 @@ MonoBehaviour:
   hostTransform: {fileID: 467930809}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -8225,7 +8225,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 467930811}
+  constraintsManager: {fileID: 4907511}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -10819,7 +10819,7 @@ MonoBehaviour:
   hostTransform: {fileID: 697409749}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -16520,7 +16520,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -22526,7 +22526,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -25912,7 +25912,7 @@ MonoBehaviour:
   hostTransform: {fileID: 1639709813}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -29845,7 +29845,7 @@ MonoBehaviour:
   hostTransform: {fileID: 1804843160}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -30320,7 +30320,7 @@ MonoBehaviour:
   hostTransform: {fileID: 1817356967}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -30331,7 +30331,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1817356969}
+  constraintsManager: {fileID: 4907511}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -30550,7 +30550,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -31333,7 +31333,7 @@ MonoBehaviour:
   hostTransform: {fileID: 1893920553}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -31740,7 +31740,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -33337,7 +33337,7 @@ MonoBehaviour:
   hostTransform: {fileID: 2022866785}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -33348,7 +33348,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 2022866787}
+  constraintsManager: {fileID: 4907511}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -34662,7 +34662,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -34985,7 +34985,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0
@@ -35294,7 +35294,7 @@ MonoBehaviour:
   hostTransform: {fileID: 0}
   manipulationType: 1
   twoHandedManipulationType: 7
-  allowFarManipulation: 0
+  allowFarManipulation: 1
   useForcesForNearManipulation: 0
   oneHandRotationModeNear: 0
   oneHandRotationModeFar: 0

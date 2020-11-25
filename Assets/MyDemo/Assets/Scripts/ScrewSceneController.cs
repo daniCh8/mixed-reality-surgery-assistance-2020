@@ -51,6 +51,9 @@ public class ScrewSceneController : MonoBehaviour
     // Original Screw Positions and Scales
     private Dictionary<String, Vector3> originalScrewPositions, originalScrewScales;
 
+    // All Group Starting Position
+    private Vector3 allGroupStartingPosition;
+
     void Start()
     {
         screws = new List<GameObject>();
@@ -58,6 +61,8 @@ public class ScrewSceneController : MonoBehaviour
 
         originalScrewPositions = new Dictionary<string, Vector3>();
         originalScrewScales = new Dictionary<string, Vector3>();
+
+        allGroupStartingPosition = allGroup.transform.position;
 
         // Initialize Screw List
         foreach (Transform screw in screwGroup.transform)
@@ -377,8 +382,11 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
-    public void ResetScrew()
+    public void ResetScrews()
     {
+        Vector3 allGroupPositionBackup = allGroup.transform.position;
+        allGroup.transform.position = allGroupStartingPosition;
+
         foreach (GameObject screw in screws)
         {
             if(IsOriginalScrew(screw))
@@ -397,6 +405,8 @@ public class ScrewSceneController : MonoBehaviour
                 screw.transform.localScale = originalScrewScales[screw.name];
             }
         }
+
+        allGroup.transform.position = allGroupPositionBackup;
     }
 
     private bool IsDeletedScrew(GameObject screw)
