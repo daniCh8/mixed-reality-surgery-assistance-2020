@@ -48,10 +48,16 @@ public class ScrewSceneController : MonoBehaviour
     // Manipulating Screws
     private bool manipulating;
 
+    // Original Screw Positions and Scales
+    private Dictionary<String, Vector3> originalScrewPositions, originalScrewScales;
+
     void Start()
     {
         screws = new List<GameObject>();
         bones = new List<GameObject>();
+
+        originalScrewPositions = new Dictionary<string, Vector3>();
+        originalScrewScales = new Dictionary<string, Vector3>();
 
         // Initialize Screw List
         foreach (Transform screw in screwGroup.transform)
@@ -59,6 +65,8 @@ public class ScrewSceneController : MonoBehaviour
             foreach(Transform real_screw in screw.gameObject.transform)
             {
                 screws.Add(real_screw.gameObject);
+                originalScrewPositions.Add(real_screw.gameObject.name, real_screw.position);
+                originalScrewScales.Add(real_screw.gameObject.name, real_screw.localScale);
             }
         }
 
@@ -174,7 +182,7 @@ public class ScrewSceneController : MonoBehaviour
 
     private bool ScrewIsFlag(GameObject screw, String flag)
     {
-        return screw.name.Contains(flag);
+        return screw.CompareTag(flag);
     }
 
     private void SetLatScrewsActive(bool active)
@@ -359,6 +367,41 @@ public class ScrewSceneController : MonoBehaviour
                 tmp.text = buttonsText[button.name];
             }
         }
+    }
+
+    public void ResetScrew()
+    {
+        foreach (GameObject screw in screws)
+        {
+            if(IsOriginalScrew(screw))
+            {
+                if(ShouldBeActiveScrew(screw))
+                {
+                    screw.SetActive(true);
+                }
+                
+                screw.transform.position = originalScrewPositions[screw.name];
+                screw.transform.localScale = originalScrewScales[screw.name];
+            }
+        }
+    }
+
+    private bool ShouldBeActiveScrew(GameObject screw)
+    {
+        switch (gPlatesState)
+        {
+            case PlatesState.Lat:
+                return ScrewIsFlag(screw, Constants.LAT);
+            case PlatesState.Med:
+                return ScrewIsFlag(screw, Constants.MED);
+            default:
+                return true;
+        }
+    }
+
+    private bool IsOriginalScrew(GameObject screw)
+    {
+        return screw.tag != Constants.NEW;
     }
 
     public void NewScrew()
