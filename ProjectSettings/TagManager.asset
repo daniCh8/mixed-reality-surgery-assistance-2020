@@ -7,6 +7,9 @@ TagManager:
   - Lat
   - Med
   - New
+  - LatDeleted
+  - MedDeleted
+  - NewDeleted
   layers:
   - Default
   - TransparentFX
