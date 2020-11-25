@@ -73,7 +73,7 @@ public class ScrewSceneController : MonoBehaviour
         // Initialize Plate List
         foreach (Transform plate in plateGroup.transform)
         {
-            if (plate.gameObject.name.StartsWith(Constants.LAT))
+            if (plate.gameObject.name.StartsWith(Constants.LAT_SCREW_TAG))
             {
                 latPlate = plate.gameObject;
             }
@@ -175,12 +175,12 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
-    private bool ScrewIsNotFlag(GameObject screw, String flag)
+    private bool ScrewIsNotTag(GameObject screw, String flag)
     {
-        return !ScrewIsFlag(screw, flag);
+        return !ScrewIsTag(screw, flag);
     }
 
-    private bool ScrewIsFlag(GameObject screw, String flag)
+    private bool ScrewIsTag(GameObject screw, String flag)
     {
         return screw.CompareTag(flag);
     }
@@ -189,7 +189,7 @@ public class ScrewSceneController : MonoBehaviour
     {
         foreach (GameObject screw in screws)
         {
-            if (ScrewIsFlag(screw, Constants.LAT))
+            if (ScrewIsTag(screw, Constants.LAT_SCREW_TAG))
             {
                 screw.SetActive(active);
             }
@@ -200,7 +200,7 @@ public class ScrewSceneController : MonoBehaviour
     {
         foreach (GameObject screw in screws)
         {
-            if (ScrewIsFlag(screw, Constants.MED))
+            if (ScrewIsTag(screw, Constants.MED_SCREW_TAG))
             {
                 screw.SetActive(active);
             }
@@ -230,12 +230,16 @@ public class ScrewSceneController : MonoBehaviour
         if (gPlatesState == PlatesState.Both || gPlatesState == PlatesState.None)
         {
             NextIndex();
+            while(IsDeletedScrew(screws[screwIndex]))
+            {
+                NextIndex();
+            }
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT : Constants.MED;
+        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT_SCREW_TAG : Constants.MED_SCREW_TAG;
         NextIndex();
-        while (ScrewIsNotFlag(screws[screwIndex], flag))
+        while (ScrewIsNotTag(screws[screwIndex], flag) || IsDeletedScrew(screws[screwIndex]))
         {
             NextIndex();
         }
@@ -246,12 +250,16 @@ public class ScrewSceneController : MonoBehaviour
         if (gPlatesState == PlatesState.Both || gPlatesState == PlatesState.None)
         {
             PrevIndex();
+            while(IsDeletedScrew(screws[screwIndex]))
+            {
+                PrevIndex();
+            }
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT : Constants.MED;
+        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT_SCREW_TAG : Constants.MED_SCREW_TAG;
         PrevIndex();
-        while (ScrewIsNotFlag(screws[screwIndex], flag))
+        while (ScrewIsNotTag(screws[screwIndex], flag) || IsDeletedScrew(screws[screwIndex]))
         {
             PrevIndex();
         }
@@ -271,13 +279,13 @@ public class ScrewSceneController : MonoBehaviour
     {
         switch (screw.tag)
         {
-            case Constants.LAT:
+            case Constants.LAT_SCREW_TAG:
                 screw.GetComponentInChildren<Renderer>().material = latScrewMaterial;
                 break;
-            case Constants.MED:
+            case Constants.MED_SCREW_TAG:
                 screw.GetComponentInChildren<Renderer>().material = medScrewMaterial;
                 break;
-            case Constants.NEW:
+            case Constants.NEW_SCREW_TAG:
                 screw.GetComponentInChildren<Renderer>().material = newScrewMaterial;
                 break;
         }
@@ -375,6 +383,11 @@ public class ScrewSceneController : MonoBehaviour
         {
             if(IsOriginalScrew(screw))
             {
+                if(IsDeletedScrew(screw))
+                {
+                    ChangeDeleteScrewTag(screw);
+                }
+
                 if(ShouldBeActiveScrew(screw))
                 {
                     screw.SetActive(true);
@@ -386,14 +399,21 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    private bool IsDeletedScrew(GameObject screw)
+    {
+        return screw.CompareTag(Constants.LAT_DELETED_SCREW_TAG) ||
+               screw.CompareTag(Constants.MED_DELETED_SCREW_TAG) ||
+               screw.CompareTag(Constants.NEW_DELETED_SCREW_TAG);
+    }
+
     private bool ShouldBeActiveScrew(GameObject screw)
     {
         switch (gPlatesState)
         {
             case PlatesState.Lat:
-                return ScrewIsFlag(screw, Constants.LAT);
+                return ScrewIsTag(screw, Constants.LAT_SCREW_TAG);
             case PlatesState.Med:
-                return ScrewIsFlag(screw, Constants.MED);
+                return ScrewIsTag(screw, Constants.MED_SCREW_TAG);
             default:
                 return true;
         }
@@ -401,14 +421,14 @@ public class ScrewSceneController : MonoBehaviour
 
     private bool IsOriginalScrew(GameObject screw)
     {
-        return screw.tag != Constants.NEW;
+        return screw.tag != Constants.NEW_SCREW_TAG;
     }
 
     public void NewScrew()
     {
         var newScrew = CreateCylinderBetweenPoints(screwFrontEnd.GetComponentInChildren<Renderer>(true).bounds.center,
                                                     screwBackEnd.GetComponentInChildren<Renderer>(true).bounds.center);
-        newScrew.tag = Constants.NEW;
+        newScrew.tag = Constants.NEW_SCREW_TAG;
         newScrew.name = $"Screw_{screws.Count+1}";
 
         screws.Add(newScrew);
@@ -460,13 +480,48 @@ public class ScrewSceneController : MonoBehaviour
         screw.GetComponentInChildren<ScaleConstraint>(true).enabled = !activate;
         screw.GetComponentInChildren<PositionConstraint>(true).enabled = !activate;
     }
+
+    public void DeleteScrew()
+    {
+        GameObject screwToDelete = screws[screwIndex];
+        NextScrew();
+        ChangeDeleteScrewTag(screwToDelete);
+        screwToDelete.SetActive(false);
+    }
+
+    private void ChangeDeleteScrewTag(GameObject screw)
+    {
+        switch (screw.tag)
+        {
+            case Constants.LAT_SCREW_TAG:
+                screw.tag = Constants.LAT_DELETED_SCREW_TAG;
+                break;
+            case Constants.MED_SCREW_TAG:
+                screw.tag = Constants.MED_DELETED_SCREW_TAG;
+                break;
+            case Constants.NEW_SCREW_TAG:
+                screw.tag = Constants.NEW_DELETED_SCREW_TAG;
+                break;
+            case Constants.LAT_DELETED_SCREW_TAG:
+                screw.tag = Constants.LAT_SCREW_TAG;
+                break;
+            case Constants.MED_DELETED_SCREW_TAG:
+                screw.tag = Constants.MED_SCREW_TAG;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 static class Constants
 {
-    public const String LAT = "Lat";
-    public const String MED = "Med";
-    public const String NEW = "New";
+    public const String LAT_SCREW_TAG = "Lat";
+    public const String MED_SCREW_TAG = "Med";
+    public const String NEW_SCREW_TAG = "New";
+    public const String NEW_DELETED_SCREW_TAG = "NewDeleted";
+    public const String LAT_DELETED_SCREW_TAG = "LatDeleted";
+    public const String MED_DELETED_SCREW_TAG = "MedDeleted";
     public const String CHANGE_MENU_BUTTON = "Change Menu Button pressed";
     public const String CHANGE_MENU_BUTTON_NAME = "ChangeMenuType";
     public const String BUTTON_PIN_NAME = "ButtonPin";
