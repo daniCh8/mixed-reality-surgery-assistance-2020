@@ -9,12 +9,17 @@ using Microsoft.MixedReality.Toolkit.Utilities;
 public class HandPlaneMove : MonoBehaviour
 {
     public HandSlice hs;
+    public Vector3 pos = new Vector3(0, 0, 0);
+    public bool locked = false;
+
+    private Vector3 normal = new Vector3(0, 1, 0);
+    private Plane plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
 
     // Start is called before the first frame update
     void Start()
     {
-        //GameObject handSlicer = GameObject.Find("CTPlane3");
-        //HandSlice handSlicerScript = handSlicer.GetComponent<HandSlice>();
+        GameObject handSlicer = GameObject.Find("CTPlane3");
+        HandSlice hs = handSlicer.GetComponent<HandSlice>();
     }
 
     // Update is called once per frame
@@ -25,16 +30,22 @@ public class HandPlaneMove : MonoBehaviour
             HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyKnuckle, hs.leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po3) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbTip, hs.leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po4) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbProximalJoint, hs.leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po5)){
-            
-            // Set plane position to hand
-            transform.position = po1.Position;
+            locked = hs.locked;
+            if (!locked) {
+                // Set plane position to hand
+                pos = po1.Position;
+                transform.position = pos;
+                // Set rotation of plane
+                Vector3 a = po2.Position - po1.Position;
+                Vector3 b = po3.Position - po1.Position;
+                normal = Vector3.Cross(a, b).normalized;
+                transform.up = normal;
+                plane = new Plane(normal, pos);
+            } else {
+                
+                transform.position = pos + plane.GetDistanceToPoint(po1.Position) * normal.normalized;
+            }
 
-            // Set rotation of plane
-            Vector3 a = po2.Position - po1.Position;
-            Vector3 b = po3.Position - po1.Position;
-            Vector3 normal = Vector3.Cross(a, b).normalized;
-            Debug.Log(normal);
-            transform.up = normal;
         }
     }
 }
