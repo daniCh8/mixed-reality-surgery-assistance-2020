@@ -57,6 +57,14 @@ public class ScrewSceneController : MonoBehaviour
     private Vector3 allGroupStartingPosition, allGroupStartingScale;
     private Quaternion allGroupStartingRotation;
 
+
+    // Screw Adding p
+    public static bool AddingScrewFirstIndicator = false;
+    public static bool AddingScrewSecondIndicator = false;
+    public static Vector3 AddScrewPoint;
+    private GameObject PointIndicator;
+
+
     void Start()
     {
         screws = new List<GameObject>();
@@ -449,10 +457,55 @@ public class ScrewSceneController : MonoBehaviour
         return screw.tag != Constants.NEW_SCREW_TAG;
     }
 
+
     public void NewScrew()
     {
-        var newScrew = CreateCylinderBetweenPoints(screwFrontEnd.GetComponentInChildren<Renderer>(true).bounds.center,
-                                                    screwBackEnd.GetComponentInChildren<Renderer>(true).bounds.center);
+        AddingScrewFirstIndicator = true;
+        boneGroup.GetComponent<PointerHandler>().enabled = true;
+        AddingScrewSecondIndicator = false;
+    }
+
+    public void AddScrewFirstPoint(MixedRealityPointerEventData eventData)
+    {
+        Debug.Log(AddingScrewSecondIndicator);
+        if (AddingScrewFirstIndicator){
+            Debug.Log(AddScrewPoint);
+            Vector3 pos = eventData.Pointer.Result.Details.Point;
+            PointIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            PointIndicator.transform.localScale = Vector3.one * 0.01f;
+            Color translucentred = Color.red;
+            translucentred.a = 0.3f;
+            PointIndicator.GetComponent<Renderer>().material.color = translucentred;
+            PointIndicator.transform.position = pos;
+            PointIndicator.SetActive(true);
+            AddScrewPoint = pos;
+            AddingScrewSecondIndicator = true;
+            AddingScrewFirstIndicator = false;
+        }
+        else if (AddingScrewSecondIndicator)
+        {
+            Vector3 pos = eventData.Pointer.Result.Details.Point;
+            Vector3 p1 = LerpByDistance(AddScrewPoint, pos, -0.1f);
+            Vector3 p2 = LerpByDistance(pos, AddScrewPoint, -0.1f);
+
+            NewScrewregister(p1, p2);
+            Debug.Log("New Screw Added");
+            AddingScrewFirstIndicator = false;
+            AddingScrewSecondIndicator = false;
+            PointIndicator.SetActive(false);
+        }
+
+        // boneGroup.GetComponent<PointerHandler>().enabled = false;
+    }
+    public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
+    {
+        Vector3 P = x * (B - A) + A;
+        return P;
+    }
+
+    public void NewScrewregister(Vector3 pos1, Vector3 pos2)
+    {
+        var newScrew = CreateCylinderBetweenPoints(pos1,pos2);
         newScrew.tag = Constants.NEW_SCREW_TAG;
         newScrew.name = $"Screw_{screws.Count+1}";
 
