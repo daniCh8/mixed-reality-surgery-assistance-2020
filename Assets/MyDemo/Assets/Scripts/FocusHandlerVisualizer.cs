@@ -21,7 +21,7 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
     }   
 
     private void Update() {
-        Debug.Log(onfocus);
+        //Debug.Log(onfocus);
         if (onfocus== true)
         {
             ScrewVisualizer.SetActive(true);

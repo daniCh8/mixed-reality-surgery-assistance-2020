@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3066,6 +3066,7 @@ GameObject:
   - component: {fileID: 189440782}
   - component: {fileID: 189440781}
   - component: {fileID: 189440783}
+  - component: {fileID: 189440784}
   m_Layer: 0
   m_Name: BoneMix
   m_TagString: Untagged
@@ -3106,7 +3107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 189440779}
-  boundsOverride: {fileID: 0}
+  boundsOverride: {fileID: 189440784}
   boundsCalculationMethod: 0
   activation: 0
   flattenAxis: 0
@@ -3197,6 +3198,19 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &189440784
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189440779}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 125.51193, y: 120.26612, z: 387.2128}
+  m_Center: {x: -10.5828495, y: -251.85399, z: -241.98677}
 --- !u!1 &191355157
 GameObject:
   m_ObjectHideFlags: 0
@@ -6035,7 +6049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &326163310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48095,7 +48109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &4650336336155544438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55165,7 +55179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!23 &7779420038953342121
 MeshRenderer:
   m_ObjectHideFlags: 0
