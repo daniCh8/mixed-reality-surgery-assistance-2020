@@ -13,6 +13,7 @@ public class HandSlice : MonoBehaviour {
     public bool enableReferencePlane;
     public bool leftHanded;
     public bool active = false;
+    public bool locked = false;
 
     public Plane plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
     GameObject pinchSlider;
