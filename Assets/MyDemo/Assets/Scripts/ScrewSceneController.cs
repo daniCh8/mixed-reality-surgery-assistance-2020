@@ -29,7 +29,7 @@ public class ScrewSceneController : MonoBehaviour
     public GameObject screwGroup, plateGroup, boneGroup, allGroup;
 
     // Screws Materials
-    public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, selectedScrewMaterial;
+    public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, selectedScrewMaterial, boneMaterial;
 
     // Screw Button Handler
     public GameObject screwButton;
@@ -460,6 +460,7 @@ public class ScrewSceneController : MonoBehaviour
 
     public void NewScrew()
     {
+        boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
         AddingScrewFirstIndicator = true;
         boneGroup.GetComponent<PointerHandler>().enabled = true;
         boneGroup.GetComponent<FocusHandler>().enabled = true;
@@ -494,25 +495,12 @@ public class ScrewSceneController : MonoBehaviour
             AddingScrewFirstIndicator = false;
             AddingScrewSecondIndicator = false;
             PointIndicator.SetActive(false);
-            // boneGroup.GetComponent<FocusHandler>().enabled = false;
-        }
-
-        // boneGroup.GetComponent<PointerHandler>().enabled = false;
-    }
-
-    public void FocusHandlerAddPointonfocus(FocusEventData eventData)
-    {
-        if (AddingScrewFirstIndicator == false && AddingScrewSecondIndicator == true){
-
-
+            boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            boneGroup.GetComponent<PointerHandler>().enabled = false;
+            boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
 
     }
-
-    public void FocusHandlerAddPointofffocus(FocusEventData eventData)
-    {
-    }
-
 
     public static Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
     {
