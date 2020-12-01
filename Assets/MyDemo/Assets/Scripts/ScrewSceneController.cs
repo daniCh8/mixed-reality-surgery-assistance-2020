@@ -462,6 +462,7 @@ public class ScrewSceneController : MonoBehaviour
     {
         AddingScrewFirstIndicator = true;
         boneGroup.GetComponent<PointerHandler>().enabled = true;
+        boneGroup.GetComponent<FocusHandler>().enabled = true;
         AddingScrewSecondIndicator = false;
     }
 
@@ -493,11 +494,27 @@ public class ScrewSceneController : MonoBehaviour
             AddingScrewFirstIndicator = false;
             AddingScrewSecondIndicator = false;
             PointIndicator.SetActive(false);
+            // boneGroup.GetComponent<FocusHandler>().enabled = false;
         }
 
         // boneGroup.GetComponent<PointerHandler>().enabled = false;
     }
-    public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
+
+    public void FocusHandlerAddPointonfocus(FocusEventData eventData)
+    {
+        if (AddingScrewFirstIndicator == false && AddingScrewSecondIndicator == true){
+
+
+        }
+
+    }
+
+    public void FocusHandlerAddPointofffocus(FocusEventData eventData)
+    {
+    }
+
+
+    public static Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
     {
         Vector3 P = x * (B - A) + A;
         return P;
@@ -520,7 +537,7 @@ public class ScrewSceneController : MonoBehaviour
         screws[screwIndex].GetComponentInChildren<BoundsControl>(true).enabled = true;
     }
 
-    private GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end)
+    public GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end)
     {
         var offset = end - start;
         var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
