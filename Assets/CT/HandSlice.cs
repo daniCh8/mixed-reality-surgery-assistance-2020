@@ -15,6 +15,9 @@ public class HandSlice : MonoBehaviour {
     public bool active = false;
 
     public Plane plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
+    GameObject pinchSlider;
+    GameObject pinchSliderHor;
+    GameObject handPlane;
 
     Texture2D tex;
     GameObject referencePlane;
@@ -26,16 +29,31 @@ public class HandSlice : MonoBehaviour {
         tex = new Texture2D(width, height);
         GetComponent<Renderer>().material.mainTexture = tex;
         log = GameObject.Find("LogWindow").GetComponent<LogScript>();
+        pinchSlider = GameObject.Find("PinchSlider");
+        pinchSliderHor = GameObject.Find("PinchSliderHor");
+        handPlane = GameObject.Find("HandPlane");
     }
 
     void Update() {
-        if (!active || ++curInterval < interval) return;
+        if (!active) {
+            pinchSlider.SetActive(true);
+            pinchSliderHor.SetActive(true);
+            handPlane.SetActive(false);
+            return;
+        }
+        if (++curInterval < interval) {
+            return;
+        }
         curInterval = 0;
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po1) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po2) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po3) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbTip, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po4) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbProximalJoint, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po5)) {
+            
+            pinchSlider.SetActive(false);
+            pinchSliderHor.SetActive(false);
+            handPlane.SetActive(true);
 
             var p1 = ct.TransformWorldCoords(po1.Position);
             var p2 = ct.TransformWorldCoords(po2.Position);
@@ -65,12 +83,13 @@ public class HandSlice : MonoBehaviour {
                 p3.z < -0.5 || 0.5 < p3.z) return;
 
             bool locked = angle > 60;
+            locked = false;
             if (!locked)
             {
                 plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
             } else
             {
-                plane = new Plane(plane.normal.normalized, p5);
+                plane = new Plane(plane.normal.normalized, p1);
             }
 
             var orig = plane.ClosestPointOnPlane(Vector3.zero);
