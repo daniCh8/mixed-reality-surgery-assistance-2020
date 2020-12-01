@@ -83,7 +83,7 @@ public class HandSlice : MonoBehaviour {
                 p3.y < -0.5 || 0.5 < p3.y ||
                 p3.z < -0.5 || 0.5 < p3.z) return;
 
-            bool locked = angle > 60;
+            locked = angle > 60;
             if (!locked)
             {
                 plane = leftHanded ? new Plane(p1, p3, p2) : new Plane(p1, p2, p3);
