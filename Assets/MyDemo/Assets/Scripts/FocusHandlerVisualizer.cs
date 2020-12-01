@@ -42,9 +42,10 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
                         {
                             var pos = p.Result.Details.Point;
                             Vector3 p1 = ScrewSceneController.LerpByDistance(ScrewSceneController.AddScrewPoint, pos, -0.1f);
-                            Vector3 p2 = ScrewSceneController.LerpByDistance(pos, ScrewSceneController.AddScrewPoint, 0.0005f);
+                            Vector3 p2 = ScrewSceneController.LerpByDistance(pos, ScrewSceneController.AddScrewPoint, -0.1f);
                             ScrewVisualizer = CreateCylinderBetweenPoints(p1, p2, create);
                             create = false;
+                            // Debug.Log("Collider state" + ScrewVisualizer.GetComponent<Collider>().enabled);
                         }
                     }
                 }
@@ -52,7 +53,7 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
         }
         else
         {
-            ScrewVisualizer.SetActive(false);
+            // ScrewVisualizer.SetActive(false);
 
         }
     }
@@ -62,18 +63,25 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
         if (ScrewSceneController.AddingScrewFirstIndicator == false && ScrewSceneController.AddingScrewSecondIndicator == true)
         {
             onfocus = true;
-            Debug.Log("On Bone Focus");
-        // ScrewVisualizer.SetActive(true);
+            // Debug.Log("On Bone Focus");
+            ScrewVisualizer.SetActive(true);
         }
     }
 
     void IMixedRealityFocusHandler.OnFocusExit(FocusEventData eventData)
     {
-        onfocus = false;
-        Debug.Log("Leaving Bone Focus");
-        if (ScrewSceneController.AddingScrewFirstIndicator == false && ScrewSceneController.AddingScrewSecondIndicator == false)
+        if (ScrewSceneController.AddingScrewFirstIndicator == false && ScrewSceneController.AddingScrewSecondIndicator == false && onfocus == true)
         {
+            // Debug.Log("Leaving Bone Focus");
             create = true;
+            onfocus = false;
+            ScrewVisualizer.SetActive(false);
+
+        }
+        else 
+        {
+            onfocus = false;
+            // ScrewVisualizer.SetActive(false);
         }
 
         // ScrewVisualizer.SetActive(false);
@@ -90,6 +98,8 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
             var cylinder = Instantiate(screwPrefab, position, Quaternion.identity);
             cylinder.transform.up = offset;
             cylinder.transform.localScale = scale;
+            cylinder.GetComponent<Collider>().enabled = false;
+
         return cylinder;
         }
         else
@@ -97,6 +107,8 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
             ScrewVisualizer.transform.up = offset;
             ScrewVisualizer.transform.localScale = scale;
             ScrewVisualizer.transform.position = position;
+            ScrewVisualizer.GetComponent<Collider>().enabled = false;
+
             return ScrewVisualizer;
         }
     }
