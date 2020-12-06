@@ -19,9 +19,6 @@ public class ScrewSceneController : MonoBehaviour
     // Screw Prefab to Instantiate
     public GameObject screwPrefab;
 
-    // New Screw Ends
-    public GameObject screwFrontEnd, screwBackEnd;
-
     // Menus
     public GameObject nearMenu, handMenu;
 
@@ -33,6 +30,12 @@ public class ScrewSceneController : MonoBehaviour
 
     // Screw Button Handler
     public GameObject screwButton;
+
+    // Scene
+    public GameObject scene;
+
+    // Screw Size Window
+    public GameObject screwSizeWindow;
 
     // Lists
     public static List<GameObject> screws, bones;
@@ -57,12 +60,14 @@ public class ScrewSceneController : MonoBehaviour
     private Vector3 allGroupStartingPosition, allGroupStartingScale;
     private Quaternion allGroupStartingRotation;
 
-
     // Screw Adding p
     public static bool AddingScrewFirstIndicator = false;
     public static bool AddingScrewSecondIndicator = false;
     public static Vector3 AddScrewPoint;
     private GameObject PointIndicator;
+
+    // Screw Size text
+    private TextMesh screwSizeText;
 
 
     void Start()
@@ -108,6 +113,8 @@ public class ScrewSceneController : MonoBehaviour
         gPlatesState = PlatesState.Both;
 
         manipulating = false;
+
+        screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
     }
 
     private void SetTexts(TextMeshPro[] texts, String text)
@@ -321,6 +328,18 @@ public class ScrewSceneController : MonoBehaviour
         screw.GetComponentInChildren<BoundsControl>(true).enabled = true;
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
         SetCurrObjectManipulator(screw, manipulating);
+        SetScrewSizeText(screw);
+    }
+
+    private void SetScrewSizeText(GameObject screw)
+    {
+        screwSizeText.text = Constants.SCREW_SIZE_STUB_START + ComputeScrewSize(screw) + Constants.SCREW_SIZE_STUB_END;
+    }
+
+    private double ComputeScrewSize(GameObject screw)
+    {
+        float scale = screw.transform.localScale.y * scene.transform.localScale.y * 100;
+        return Math.Round(scale, 2);
     }
 
     public void ChangeScrewState()
@@ -629,4 +648,6 @@ static class Constants
     public const String SCREW_MANIPULATE_BUTTON = "ManipulateButton";
     public const String ICON_HAND_GESTURE = "hand-gest";
     public const String ICON_STOP_HAND_GESTURE = "stop-hand-gest";
+    public const String SCREW_SIZE_STUB_START = "The length of the selected screw is: ";
+    public const String SCREW_SIZE_STUB_END = " cm.";
 }
