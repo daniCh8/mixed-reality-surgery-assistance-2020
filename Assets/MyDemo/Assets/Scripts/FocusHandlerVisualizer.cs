@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+﻿using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 
@@ -12,8 +8,7 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
     public GameObject screwPrefab;
     private bool onfocus = false;
     public GameObject ScrewVisualizer;
-    private bool create ;
-    private bool check;
+    private bool create;
 
     private void Awake()
     {

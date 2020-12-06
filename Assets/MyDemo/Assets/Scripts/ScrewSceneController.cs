@@ -485,7 +485,6 @@ public class ScrewSceneController : MonoBehaviour
         boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
         AddingScrewFirstIndicator = true;
         boneGroup.GetComponent<PointerHandler>().enabled = true;
-        boneGroup.GetComponent<FocusHandler>().enabled = true;
         AddingScrewSecondIndicator = false;
     }
 
@@ -505,6 +504,7 @@ public class ScrewSceneController : MonoBehaviour
             AddScrewPoint = pos;
             AddingScrewSecondIndicator = true;
             AddingScrewFirstIndicator = false;
+            boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = true;
         }
         else if (AddingScrewSecondIndicator)
         {
@@ -512,14 +512,15 @@ public class ScrewSceneController : MonoBehaviour
             Vector3 p1 = LerpByDistance(AddScrewPoint, pos, -0.1f);
             Vector3 p2 = LerpByDistance(pos, AddScrewPoint, -0.1f);
 
-            NewScrewregister(p1, p2);
             Debug.Log("New Screw Added");
             AddingScrewFirstIndicator = false;
             AddingScrewSecondIndicator = false;
-            PointIndicator.SetActive(false);
+            Destroy(PointIndicator);
             boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             boneGroup.GetComponent<PointerHandler>().enabled = false;
+            boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = false;
             boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            NewScrewregister(p1, p2);
         }
 
     }
