@@ -482,7 +482,6 @@ public class ScrewSceneController : MonoBehaviour
 
     public void NewScrew()
     {
-        boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
         AddingScrewFirstIndicator = true;
         boneGroup.GetComponent<PointerHandler>().enabled = true;
         AddingScrewSecondIndicator = false;
@@ -505,6 +504,7 @@ public class ScrewSceneController : MonoBehaviour
             AddingScrewSecondIndicator = true;
             AddingScrewFirstIndicator = false;
             boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = true;
+            boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
         }
         else if (AddingScrewSecondIndicator)
         {
@@ -516,7 +516,6 @@ public class ScrewSceneController : MonoBehaviour
             AddingScrewFirstIndicator = false;
             AddingScrewSecondIndicator = false;
             Destroy(PointIndicator);
-            boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             boneGroup.GetComponent<PointerHandler>().enabled = false;
             boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = false;
             boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
