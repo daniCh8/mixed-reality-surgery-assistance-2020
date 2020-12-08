@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -23281,6 +23281,8 @@ MonoBehaviour:
   hs: {fileID: 1293588174}
   pos: {x: 0, y: 0, z: 0}
   locked: 0
+  unlockedMaterial: {fileID: 2100000, guid: 163c37494bc2d0540b3488a9d901ee07, type: 2}
+  lockedMaterial: {fileID: 2100000, guid: 635a27f13b7b26b4483bc1283d04803e, type: 2}
 --- !u!136 &1482425390
 CapsuleCollider:
   m_ObjectHideFlags: 0
