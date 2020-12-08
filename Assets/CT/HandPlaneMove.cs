@@ -12,6 +12,9 @@ public class HandPlaneMove : MonoBehaviour
     public Vector3 pos = new Vector3(0, 0, 0);
     public bool locked = false;
 
+    public Material unlockedMaterial;
+    public Material lockedMaterial;
+
     private Vector3 normal = new Vector3(0, 1, 0);
     private Plane plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
 
@@ -32,6 +35,8 @@ public class HandPlaneMove : MonoBehaviour
             HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbProximalJoint, hs.leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po5)){
             locked = hs.locked;
             if (!locked) {
+                // Set to green material (unlocked)
+                GetComponent<MeshRenderer>().material = unlockedMaterial;
                 // Set plane position to hand
                 pos = po1.Position;
                 transform.position = pos;
@@ -42,7 +47,8 @@ public class HandPlaneMove : MonoBehaviour
                 transform.up = normal;
                 plane = new Plane(normal, pos);
             } else {
-                
+                // Set to red material (locked)
+                GetComponent<MeshRenderer>().material = lockedMaterial;
                 transform.position = pos + plane.GetDistanceToPoint(po1.Position) * normal.normalized;
             }
 
