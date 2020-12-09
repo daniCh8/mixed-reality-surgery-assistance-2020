@@ -27,7 +27,6 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
                 {
                     foreach (var p in source.Pointers)
                     {
-
                         if (p is IMixedRealityNearPointer)
                         {
                             // Ignore near pointers, we only want the rays
@@ -46,6 +45,8 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
                 }
             }
         }
+
+        
         else
         {
             // ScrewVisualizer.SetActive(false);
@@ -55,7 +56,7 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
 
     void IMixedRealityFocusHandler.OnFocusEnter(FocusEventData eventData)
     {
-        if (ScrewSceneController.AddingScrewFirstIndicator == false && ScrewSceneController.AddingScrewSecondIndicator == true)
+        if (ScrewSceneController.AddingScrewFirstIndicator == false && ScrewSceneController.AddingScrewSecondIndicator == true && ScrewSceneController.ScrewAddModePlanar == false)
         {
             onfocus = true;
             // Debug.Log("On Bone Focus");
@@ -65,7 +66,7 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
 
     void IMixedRealityFocusHandler.OnFocusExit(FocusEventData eventData)
     {
-        if (ScrewSceneController.AddingScrewFirstIndicator == false && ScrewSceneController.AddingScrewSecondIndicator == false && onfocus == true)
+        if (ScrewSceneController.AddingScrewFirstIndicator == false && ScrewSceneController.AddingScrewSecondIndicator == false && onfocus == true && ScrewSceneController.ScrewAddModePlanar==false)
         {
             // Debug.Log("Leaving Bone Focus");
             create = true;
