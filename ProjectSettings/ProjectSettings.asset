@@ -40,7 +40,8 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos: []
-  m_VirtualRealitySplashScreen: {fileID: 0}
+  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: c39c62f347fceec4e90a6029336a03d5,
+    type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
@@ -266,7 +267,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 266bff4d46149554f913a8ac736b509a, type: 3}
+      m_Icon: {fileID: 2800000, guid: 8209a79d96ffb734491ddc43788b1251, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -618,36 +619,41 @@ PlayerSettings:
     65686: Assets/Icon/store_logo/logo_75.png
     65736: Assets/Icon/store_logo/logo_100.png
     65936: Assets/Icon/store_logo/logo_200.png
-    2031632: Assets/Icon/square_logo/logo_16.png
-    2031640: Assets/Icon/square_logo/logo_24.png
-    2031648: Assets/Icon/square_logo/logo_32.png
-    2031664: Assets/Icon/square_logo/logo_48.png
-    2031716: Assets/Icon/square_logo/logo_44.png
-    2031741: Assets/Icon/square_logo/logo_55.png
-    2031766: Assets/Icon/square_logo/logo_66.png
-    2031816: Assets/Icon/square_logo/logo_88.png
-    2031872: Assets/Icon/square_logo/logo_256.png
-    2032016: Assets/Icon/square_logo/logo_176.png
-    2097252: Assets/Icon/square_logo/logo_71.png
-    2097277: Assets/Icon/square_logo/logo_89.png
-    2097302: Assets/Icon/square_logo/logo_107.png
-    2097352: Assets/Icon/square_logo/logo_142.png
-    2097552: Assets/Icon/square_logo/logo_284.png
-    2162788: Assets/Icon/square_logo/logo_150.png
-    2162813: Assets/Icon/square_logo/logo_188.png
-    2162838: Assets/Icon/square_logo/logo_225.png
-    2162888: Assets/Icon/square_logo/logo_300.png
-    2163088: Assets/Icon/square_logo/logo_600.png
-    2228324: Assets/Icon/square_logo/logo_310.png
-    2228349: Assets/Icon/square_logo/logo_388.png
-    2228374: Assets/Icon/square_logo/logo_465.png
-    2228424: Assets/Icon/square_logo/logo_620.png
-    2228624: Assets/Icon/square_logo/logo_1240.png
-    2293860: Assets/Icon/wide_logo/logo_310.png
-    2293885: Assets/Icon/wide_logo/logo_388.png
-    2293910: Assets/Icon/wide_logo/logo_465.png
-    2293960: Assets/Icon/wide_logo/logo_620.png
-    2294160: Assets/Icon/wide_logo/logo_1240.png
+    131172: Assets/Logo/wide/custom-surg-splash-620.png
+    131197: Assets/Logo/splash/custom-surg-splash-775.png
+    131222: Assets/Logo/splash/custom-surg-splash-930.png
+    131272: Assets/Logo/splash/custom-surg-splash-1240.png
+    131472: Assets/Logo/splash/custom-surg-splash-2480.png
+    2031632: Assets/Logo/square/custom-surg-16.png
+    2031640: Assets/Logo/square/custom-surg-24.png
+    2031648: Assets/Logo/square/custom-surg-32.png
+    2031664: Assets/Logo/square/custom-surg-48.png
+    2031716: Assets/Logo/square/custom-surg-44.png
+    2031741: Assets/Logo/square/custom-surg-55.png
+    2031766: Assets/Logo/square/custom-surg-66.png
+    2031816: Assets/Logo/square/custom-surg-88.png
+    2031872: Assets/Logo/square/custom-surg-256.png
+    2032016: Assets/Logo/square/custom-surg-176.png
+    2097252: Assets/Logo/square/custom-surg-71.png
+    2097277: Assets/Logo/square/custom-surg-89.png
+    2097302: Assets/Logo/square/custom-surg-107.png
+    2097352: Assets/Logo/square/custom-surg-142.png
+    2097552: Assets/Logo/square/custom-surg-284.png
+    2162788: Assets/Logo/square/custom-surg-150.png
+    2162813: Assets/Logo/square/custom-surg-188.png
+    2162838: Assets/Logo/square/custom-surg-225.png
+    2162888: Assets/Logo/square/custom-surg-300.png
+    2163088: Assets/Logo/square/custom-surg-600.png
+    2228324: Assets/Logo/square/custom-surg-310.png
+    2228349: Assets/Logo/square/custom-surg-388.png
+    2228374: Assets/Logo/square/custom-surg-465.png
+    2228424: Assets/Logo/square/custom-surg-620.png
+    2228624: 
+    2293860: 
+    2293885: 
+    2293910: Assets/Logo/wide/custom-surg-splash-465.png
+    2293960: Assets/Logo/wide/custom-surg-splash-620.png
+    2294160: Assets/Logo/wide/custom-surg-splash-1240.png
   metroTileShortName: MR Surgery
   metroTileShowName: 0
   metroMediumTileShowName: 1
