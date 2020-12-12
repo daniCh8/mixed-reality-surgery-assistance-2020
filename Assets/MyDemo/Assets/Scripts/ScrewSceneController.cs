@@ -65,7 +65,7 @@ public class ScrewSceneController : MonoBehaviour
     public static bool AddingScrewSecondIndicator = false;
     public static Vector3 AddScrewPoint;
     private GameObject PointIndicator;
-
+    public static bool ScrewAddModePlanar = false;
     // Screw Size text
     private TextMesh screwSizeText;
 
@@ -485,44 +485,115 @@ public class ScrewSceneController : MonoBehaviour
         AddingScrewFirstIndicator = true;
         boneGroup.GetComponent<PointerHandler>().enabled = true;
         AddingScrewSecondIndicator = false;
+        ScrewAddModePlanar = false;
     }
 
-    public void AddScrewFirstPoint(MixedRealityPointerEventData eventData)
+    public void NewScrewPlanar()
     {
-        Debug.Log(AddingScrewSecondIndicator);
-        if (AddingScrewFirstIndicator){
-            Debug.Log(AddScrewPoint);
-            Vector3 pos = eventData.Pointer.Result.Details.Point;
+        AddingScrewFirstIndicator = true;
+        boneGroup.GetComponent<PointerHandler>().enabled = true;
+        AddingScrewSecondIndicator = false;
+        ScrewAddModePlanar = true;
+
+    }
+
+    public void Screwpointregister(MixedRealityPointerEventData eventData)
+    {
+        if(AddingScrewFirstIndicator && !AddingScrewSecondIndicator)
+        {
+            ScrewAddfirstpoint(eventData);
+            AddingScrewSecondIndicator = true;
+            AddingScrewFirstIndicator = false;
+            boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = true;
+            if(!ScrewAddModePlanar)
+            {
+                boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = true;
+            }
+            else
+            {
+                boneGroup.GetComponent<FocusHandlerOrientation>().enabled = true;
+                allGroup.transform.Find("HandPlaneScrew").gameObject.SetActive(true);
+            }
+        }
+        else if(AddingScrewSecondIndicator && !AddingScrewFirstIndicator && !ScrewAddModePlanar)
+        {
+            ScrewAddsecondpoint(eventData);
+            AddingScrewFirstIndicator = false;
+            AddingScrewSecondIndicator = false;
+        }
+    }
+
+    private void ScrewAddfirstpoint(MixedRealityPointerEventData eventData)
+    {
+        {
             PointIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             PointIndicator.transform.localScale = Vector3.one * 0.01f;
             Color translucentred = Color.red;
             translucentred.a = 0.3f;
             PointIndicator.GetComponent<Renderer>().material.color = translucentred;
+
+            Vector3 pos = eventData.Pointer.Result.Details.Point;
             PointIndicator.transform.position = pos;
             PointIndicator.SetActive(true);
             AddScrewPoint = pos;
-            AddingScrewSecondIndicator = true;
-            AddingScrewFirstIndicator = false;
-            boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = true;
+
             boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
+
         }
-        else if (AddingScrewSecondIndicator)
+    }
+    private void ScrewAddsecondpoint(MixedRealityPointerEventData eventData)
+    {
+        if(AddingScrewSecondIndicator && !AddingScrewFirstIndicator)
         {
             Vector3 pos = eventData.Pointer.Result.Details.Point;
             Vector3 p1 = LerpByDistance(AddScrewPoint, pos, -0.1f);
             Vector3 p2 = LerpByDistance(pos, AddScrewPoint, -0.1f);
 
             Debug.Log("New Screw Added");
-            AddingScrewFirstIndicator = false;
-            AddingScrewSecondIndicator = false;
+
             Destroy(PointIndicator);
             boneGroup.GetComponent<PointerHandler>().enabled = false;
             boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = false;
             boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             NewScrewregister(p1, p2);
         }
+    } 
+    // public void AddScrewFirstPoint(MixedRealityPointerEventData eventData)
+    // {
+    //     Debug.Log(AddingScrewSecondIndicator);
+    //     if (AddingScrewFirstIndicator){
+    //         Debug.Log(AddScrewPoint);
+    //         Vector3 pos = eventData.Pointer.Result.Details.Point;
+    //         PointIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    //         PointIndicator.transform.localScale = Vector3.one * 0.01f;
+    //         Color translucentred = Color.red;
+    //         translucentred.a = 0.3f;
+    //         PointIndicator.GetComponent<Renderer>().material.color = translucentred;
+    //         PointIndicator.transform.position = pos;
+    //         PointIndicator.SetActive(true);
+    //         AddScrewPoint = pos;
+    //         AddingScrewSecondIndicator = true;
+    //         AddingScrewFirstIndicator = false;
+    //         boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = true;
+    //         boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
+    //     }
+    //     else if (AddingScrewSecondIndicator)
+    //     {
+    //         Vector3 pos = eventData.Pointer.Result.Details.Point;
+    //         Vector3 p1 = LerpByDistance(AddScrewPoint, pos, -0.1f);
+    //         Vector3 p2 = LerpByDistance(pos, AddScrewPoint, -0.1f);
 
-    }
+    //         Debug.Log("New Screw Added");
+    //         AddingScrewFirstIndicator = false;
+    //         AddingScrewSecondIndicator = false;
+    //         Destroy(PointIndicator);
+    //         boneGroup.GetComponent<PointerHandler>().enabled = false;
+    //         boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = false;
+    //         boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+    //         NewScrewregister(p1, p2);
+    //     }
+
+    // }
 
     public static Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
     {
