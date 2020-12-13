@@ -127,7 +127,7 @@ You can click on the GIF above to see the full demo-video.
 
 ## Logo
 
-The official logo of the application is given by CustomSurg. It is used both as app menù icon and splash screen. 
+The official logo of the application is given by CustomSurg. It is used both as app menu icon and splash screen. 
 
 [![logo](./doc/gif/logo.gif)](./doc/video/_logo.mp4)
 
