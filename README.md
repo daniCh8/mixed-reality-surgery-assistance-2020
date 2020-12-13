@@ -5,16 +5,16 @@
   - [Project Description](#project-description)
   - [Features](#features)
     - [CT Scene](#ct-scene)
-      - [Manipulation](#manipulation)
-      - [Plane Slicers](#plane-slicers)
-      - [Hand Slicer](#hand-slicer)
-      - [Hand or Near Menu](#hand-or-near-menu)
-      - [Right-Left Hand](#right-left-hand)
-      - [Document Viewer](#document-viewer)
-      - [Change Scene](#change-scene)
+      - [**Manipulation**](#manipulation)
+      - [**Plane Slicers**](#plane-slicers)
+      - [**Hand Slicer**](#hand-slicer)
+      - [**Hand or Near Menu**](#hand-or-near-menu)
+      - [**Right-Left Hand**](#right-left-hand)
+      - [**Document Viewer**](#document-viewer)
+      - [**Change Scene**](#change-scene)
     - [Screw Manipulation Scene](#screw-manipulation-scene)
-      - [Hide Bone](#hide-bone)
-      - [Focus on Plates](#focus-on-plates)
+      - [**Hide Bone**](#hide-bone)
+      - [**Focus on Plates**](#focus-on-plates)
   - [Logo](#logo)
   - [CT-Scans](#ct-scans)
   - [Importing Document in Slate](#importing-document-in-slate)
@@ -43,7 +43,7 @@ Below is a list of the features that are available right now in the app.
 
 We distinguish between *CT Scene* and *Screw Manipulation Scene*. This first scene allows the user to create and view slices of the bone in different ways.
 
-#### Manipulation
+#### **Manipulation**
 
 We allow different ways of manipulating the object in the scene. The user can choose whether to move all the objects together locking the relative position within them, or to move just the bone group or the scans group. 
 
@@ -51,7 +51,7 @@ We allow different ways of manipulating the object in the scene. The user can ch
 
 You can click on the GIF above to see the full demo-video.
 
-#### Plane Slicers
+#### **Plane Slicers**
 
 The plane slicers can be used to visualize a section of the bone on the windows above it. The two sliders allow to create either a horizontal or a vertical slice of the bone. The colour of the borders of the windows matches the colour of the sliders' squares.
 
@@ -59,7 +59,7 @@ The plane slicers can be used to visualize a section of the bone on the windows 
 
 You can click on the GIF above to see the full demo-video.
 
-#### Hand Slicer
+#### **Hand Slicer**
 
 One of the main feature of the application is to use the hand as a bone slicer. Putting the hand on top of the bone allows to create a section of it with more freedom than using the plane slicers. Moreover, we developed a plane-locking mechanism that allows the user to lock the plane at a given position. The mechanism works in the following way: keeping the thumb aligned with the other fingers will keep slicing the bone, and raising the thumb perpendicular to the other fingers will lock the plane position and only allow movement in the normal direction of the locked plane. 
 
@@ -69,7 +69,7 @@ The plane locking mechanism can also be activated using voice-commands. The keyp
 
 You can click on the GIF above to see the full demo-video.
 
-#### Hand or Near Menu
+#### **Hand or Near Menu**
 
 For controlling the scene, we provide the user with a menu that allows him to have much freedom inside the application. This menu exists in two form, the [near menu](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_NearMenu.html) and the [hand menu](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_HandMenu.html). Both the menu are synchronized in terms of button-states. The default menu is the near one, and the user can then decide which one to use pressing the *Switch to Hand Menu* button. Likewise, the user can toggle the near menu back pressing the *Switch to Near Menu* button inside the hand menu.
 
@@ -77,7 +77,7 @@ For controlling the scene, we provide the user with a menu that allows him to ha
 
 You can click on the GIF above to see the full demo-video.
 
-#### Right-Left Hand
+#### **Right-Left Hand**
 
 The hand slicer can be used either with the right hand or with the left hand. To allow a better precision when tracking the hand slicer, we separate the two cases. By default, the hand slicer uses the right hand. If the user wants to use the left hand, he should first press the relative button on the menu.
 
@@ -85,7 +85,7 @@ The hand slicer can be used either with the right hand or with the left hand. To
 
 You can click on the GIF above to see the full demo-video.
 
-#### Document Viewer
+#### **Document Viewer**
 
 We provide the user of a document viewer to visualize pre-uploaded documents. This may be useful in a real-world scenario, giving to the surgeon the possibility of visualizing memos and notes about the operation. See the [Importing Document in Slate](#importing-document-in-slate) section to know how to learn documents into the project.
 
@@ -93,7 +93,7 @@ We provide the user of a document viewer to visualize pre-uploaded documents. Th
 
 You can click on the GIF above to see the full demo-video.
 
-#### Change Scene
+#### **Change Scene**
 
 To switch between the *CT Scene* and the *Screw Manipulation Scene*, we placed a button in the menus. The relative positions of each scene are kept between the switches.
 
@@ -105,7 +105,7 @@ You can click on the GIF above to see the full demo-video.
 
 In this scene, the user can see, fix and tweak the screws that should be placed during the fracture surgery.
 
-#### Hide Bone
+#### **Hide Bone**
 
 The first basic functionality of this scene is the possibility of hiding the bone to only view the screws and the plates.
 
@@ -113,7 +113,7 @@ The first basic functionality of this scene is the possibility of hiding the bon
 
 You can click on the GIF above to see the full demo-video.
 
-#### Focus on Plates
+#### **Focus on Plates**
 
 This functionality allows the user to change the viewing of the plates and the screws. The possible modalities are:
 - View each plate and all the screws (default).
