@@ -7,6 +7,8 @@ public class FocusHandlerOrientation : MonoBehaviour
 {
     public GameObject screwPrefab;
     private bool onfocus = false;
+    public ScrewSceneController ScrewSceneCtrl;
+
     public GameObject ScrewVisualizer;
     private bool create;
     public GameObject HandPlaneScrew;
@@ -18,14 +20,29 @@ public class FocusHandlerOrientation : MonoBehaviour
 
     private void Update() 
     {
-        Vector3 pos = HandPlaneScrew.GetComponent<HandPlaneScrew>().getNormal();
-        Debug.Log(pos);
+        Vector3 norm = HandPlaneScrew.GetComponent<HandPlaneScrew>().getNormal();
+        float angle = HandPlaneScrew.GetComponent<HandPlaneScrew>().getAngle();
+        if(angle > 60)
+        {
+            Vector3 FirstPoint = ScrewSceneController.AddScrewPoint;
+            Vector3 SecondPoint = FirstPoint + 0.1f * norm; 
+            Vector3 p1 = ScrewSceneController.LerpByDistance(FirstPoint, SecondPoint, -0.1f);
+            Vector3 p2 = ScrewSceneController.LerpByDistance(SecondPoint, FirstPoint, -0.1f);
+            ScrewSceneCtrl.GetComponent<ScrewSceneController>().NewScrewregister(p1, p2);
+            ScrewSceneCtrl.GetComponent<ScrewSceneController>().TerminateAddingPoint();
+            HandPlaneScrew.GetComponent<HandPlaneScrew>().resetAngle();
+            Destroy(ScrewVisualizer);
+        }
+        else
+        {
         Vector3 FirstPoint = ScrewSceneController.AddScrewPoint;
-        Vector3 SecondPoint = FirstPoint + 0.1f * pos; 
+        Vector3 SecondPoint = FirstPoint + 0.1f * norm; 
         Vector3 p1 = ScrewSceneController.LerpByDistance(FirstPoint, SecondPoint, -0.1f);
         Vector3 p2 = ScrewSceneController.LerpByDistance(SecondPoint, FirstPoint, -0.1f);
         ScrewVisualizer = CreateCylinderBetweenPoints(p1, p2, create);
         create = false;
+        }
+
     }
 
 

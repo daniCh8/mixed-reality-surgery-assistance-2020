@@ -523,6 +523,16 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    public void TerminateAddingPoint()
+    {
+            Destroy(PointIndicator);
+            boneGroup.GetComponent<PointerHandler>().enabled = false;
+            boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = false;
+            boneGroup.GetComponent<FocusHandlerOrientation>().enabled = false;
+            allGroup.transform.Find("HandPlaneScrew").gameObject.SetActive(false);
+            boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
     private void ScrewAddfirstpoint(MixedRealityPointerEventData eventData)
     {
         {
@@ -719,6 +729,6 @@ static class Constants
     public const String SCREW_MANIPULATE_BUTTON = "ManipulateButton";
     public const String ICON_HAND_GESTURE = "hand-gest";
     public const String ICON_STOP_HAND_GESTURE = "stop-hand-gest";
-    public const String SCREW_SIZE_STUB_START = "The length of the selected screw is: ";
+    public const String SCREW_SIZE_STUB_START = "Screw Length: ";
     public const String SCREW_SIZE_STUB_END = " cm.";
 }
