@@ -14,7 +14,7 @@
       - [Change Scene](#change-scene)
     - [Screw Manipulation Scene](#screw-manipulation-scene)
       - [Hide Bone](#hide-bone)
-    - [Focus on Plates](#focus-on-plates)
+      - [Focus on Plates](#focus-on-plates)
   - [Logo](#logo)
   - [CT-Scans](#ct-scans)
   - [Importing Document in Slate](#importing-document-in-slate)
@@ -113,7 +113,7 @@ The first basic functionality of this scene is the possibility of hiding the bon
 
 You can click on the GIF above to see the full demo-video.
 
-### Focus on Plates
+#### Focus on Plates
 
 This functionality allows the user to change the viewing of the plates and the screws. The possible modalities are:
 - View each plate and all the screws (default).
