@@ -22,17 +22,15 @@ public class HandSlice : MonoBehaviour {
 
     Texture2D tex;
     GameObject referencePlane;
-    LogScript log;
 
     int curInterval = 0;
 
     void Start() {
         tex = new Texture2D(width, height);
         GetComponent<Renderer>().material.mainTexture = tex;
-        log = GameObject.Find("LogWindow").GetComponent<LogScript>();
         pinchSlider = GameObject.Find("PinchSlider");
         pinchSliderHor = GameObject.Find("PinchSliderHor");
-        handPlane = GameObject.Find("HandPlane");
+        handPlane = GameObject.Find("HandPlaneMove");
     }
 
     void Update() {

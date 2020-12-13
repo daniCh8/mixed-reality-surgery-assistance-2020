@@ -12,9 +12,8 @@ public class HandPlaneScrew : MonoBehaviour
     public Material Material;
 
     public Vector3 normal = new Vector3(0, 1, 0);
+    public float angle;
     private Plane plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
-
-    // Start is called before the first frame update
 
     void Update()
     {
@@ -34,12 +33,22 @@ public class HandPlaneScrew : MonoBehaviour
             transform.up = normal;
             // plane = new Plane(normal, ScrewSceneController.AddScrewPoint);
 
-            float angle = Vector3.Angle(po4.Position - po5.Position, po1.Position - po5.Position);
+            angle = Vector3.Angle(po4.Position - po5.Position, po1.Position - po5.Position);
             // FocusHandler.ScrewAngleRegister();
         }
     }
     public Vector3 getNormal()
     {
         return normal;  
+    }
+
+    public float getAngle()
+    {
+        return angle;
+    }
+
+    public void resetAngle()
+    {
+        angle = 0;
     }
 }
