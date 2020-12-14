@@ -25,6 +25,7 @@
   - [Logo](#logo)
   - [CT-Scans](#ct-scans)
   - [Importing Document in Slate](#importing-document-in-slate)
+  - [Building and Deploying the project](#building-and-deploying-the-project)
 
 ## Team 
 - **Dominik Alberto** ([@doalberto](https://github.com/doalberto))<br>doalbert@student.ethz.ch
@@ -206,3 +207,18 @@ The medical scans we are provided with are in DICOM format. The pipeline we foll
 Displaying PDFs using Unity and C# is not a trivial task. Our first solution to this problem has been to convert each page of the pdf into a picture, and then using each picture to create a material that will be displayed on the Slate. An example of this can be found in [`Assets/PDF-Viewer/`](/Assets/PDF-Viewer).
 
 After creating a material per slide, these materials should be placed ordered inside the [`Pages`](/Assets/PDF-Viewer/Pages.cs) component of the ContentQuad inside the Slate hierarchy. The size parameter should be set accordingly. This will allow the view of any document inside the Slate.
+
+## Building and Deploying the project
+After successfully imported the CT-Scans as explained [above](#ct-scans), from Unity go to `File -> Build Settings`. In the window this window, select the following configurations:
+- `Target Device`: `Any device`;
+- `Architecture`: `x64`;
+- `Build Type`: `D3D Project`;
+- `Target SDK Version`: `Latest installed`;
+- `Minimum Platform Version`: `10.0.10240.0`;
+- `Visual Studio Version`: `Latest installed`;
+- `Build and Run on`: `Local Machine`;
+- `Build configuration`: `Release`;
+- `Compression Method`: `Default`;
+- And leave the rest of the options unchecked.
+
+This will create a bunch of files in the selected build folder. Open the solution file `Surgery.sln` with Visual Studio. To deploy it, be sure to select `Release` as `Solution Configuration` and `ARM` as `Solution Platform`. Before clicking play, go to `Project -> Surgery Properties -> Debugging` and insert the HoloLens' IP under `Machine Name`. Be also sure that both the computer and the HoloLens are connected to the same network. Finally, select `Remote Machine` and press play. This will deploy the application to the HoloLens.
