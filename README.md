@@ -15,6 +15,13 @@
     - [Screw Manipulation Scene](#screw-manipulation-scene)
       - [**Hide Bone**](#hide-bone)
       - [**Focus on Plates**](#focus-on-plates)
+      - [**Screw Resize**](#screw-resize)
+      - [**Screw Rotate**](#screw-rotate)
+      - [**Screw Reset**](#screw-reset)
+      - [**Screw Delete**](#screw-delete)
+      - [**New Screw with Hand**](#new-screw-with-hand)
+      - [**New Screw with Hand**](#new-screw-with-hand-1)
+      - [**Screw Length**](#screw-length)
   - [Logo](#logo)
   - [CT-Scans](#ct-scans)
   - [Importing Document in Slate](#importing-document-in-slate)
@@ -121,7 +128,63 @@ This functionality allows the user to change the viewing of the plates and the s
 - View only the medial plate and the medial screws.
 - View no plate and all the screws.
 
-[![hide_bone](./doc/gif/switch-plates.gif)](./doc/video/_switch-plates.mp4)
+[![plates](./doc/gif/switch-plates.gif)](./doc/video/_switch-plates.mp4)
+
+You can click on the GIF above to see the full demo-video.
+
+#### **Screw Resize**
+
+This screw manipulation functionality allows to resize a screw. The only parameter that can be manipulated of the screws is their length. The diameter can't be modified.
+
+[![screw_resize](./doc/gif/screw-resize.gif)](./doc/video/_screw-resize.mp4)
+
+You can click on the GIF above to see the full demo-video.
+
+#### **Screw Rotate**
+
+This screw manipulation functionality allows to rotate or move a screw. The selected screw should be grabbed and moved or rotated with the conventional hand gestures.
+
+[![screw_rotate](./doc/gif/screw-rotate.gif)](./doc/video/_screw-rotate.mp4)
+
+You can click on the GIF above to see the full demo-video.
+
+#### **Screw Reset**
+
+This screw manipulation functionality allows to reset the default screws to their original position and orientation. The selected screw does not get reset. The deleted screws are re-inserted.
+
+[![screw_reset](./doc/gif/screw-reset.gif)](./doc/video/_screw-reset.mp4)
+
+You can click on the GIF above to see the full demo-video.
+
+#### **Screw Delete**
+
+This screw manipulation functionality allows to delete the selected screw. The deletion can be reverted by pressing the reset button - if the screw was a default one. Otherwise, the deletion can't be reverted.
+
+[![screw_delete](./doc/gif/screw-delete.gif)](./doc/video/_screw-delete.mp4)
+
+You can click on the GIF above to see the full demo-video.
+
+#### **New Screw with Hand**
+
+A new screw can be created with the orientation of the hand by pressing the corresponding button. Until the thumb is down, the new screw can be oriented with the right hand. Once the thumb is raised, the new screw will be created. After selecting the first end-point, the color of the bone will get transparent to see better if the new screw may collide with other screws or not.
+
+[![new_screw_hand](./doc/gif/new-screw-hand.gif)](./doc/video/_new-screw-hand.mp4)
+
+You can click on the GIF above to see the full demo-video.
+
+#### **New Screw with Hand**
+
+A new screw can be created selecting the two end-points on the bone by pressing the corresponding button. After selecting the first end-point, the color of the bone will get transparent to see better if the new screw may collide with other screws or not.
+
+[![new_screw_endpoints](./doc/gif/new-screw-endpoints.gif)](./doc/video/_new-screw-endpoints.mp4)
+
+You can click on the GIF above to see the full demo-video.
+
+#### **Screw Length**
+
+The length of the selected screw is always visualized above the bone. To measure the distance between two points of the bone, just create a new screw selecting these two points (the new created screw can then be deleted as shown above). 
+
+[![screw_length](./doc/gif/screw-length.gif)](./doc/video/_screw-length.mp4)
 
 You can click on the GIF above to see the full demo-video.
 
