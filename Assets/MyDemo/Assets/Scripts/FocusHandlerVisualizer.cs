@@ -20,7 +20,7 @@ public class FocusHandlerVisualizer : MonoBehaviour, IMixedRealityFocusHandler
         if (onfocus== true)
         {
             ScrewVisualizer.SetActive(true);
-            foreach(var source in MixedRealityToolkit.InputSystem.DetectedInputSources)
+            foreach(var source in CoreServices.InputSystem.DetectedInputSources)
             {
                 // Ignore anything that is not a hand because we want articulated hands
                 if (source.SourceType == Microsoft.MixedReality.Toolkit.Input.InputSourceType.Hand)

@@ -6,7 +6,6 @@ using Microsoft.MixedReality.Toolkit;
 public class FocusHandlerOrientation : MonoBehaviour
 {
     public GameObject screwPrefab;
-    private bool onfocus = false;
     public ScrewSceneController ScrewSceneCtrl;
 
     public GameObject ScrewVisualizer;

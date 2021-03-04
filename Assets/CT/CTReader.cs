@@ -22,7 +22,23 @@ public class CTReader : MonoBehaviour {
         slicer.SetInts("dims", nrrd.dims);
     }
 
-    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
+    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result)
+    {
+#if !UNITY_EDITOR
+        ulong limit = Windows.System.MemoryManager.AppMemoryUsageLimit;
+        ulong usage = Windows.System.MemoryManager.AppMemoryUsage;
+        ulong headroom = limit - usage;
+        ulong room_treshold = 600000000;
+        if (headroom > room_treshold)
+        {
+            SliceHelper(orig, dx, dy, result);
+        }
+#else
+        SliceHelper(orig, dx, dy, result);
+#endif
+    }
+
+    private void SliceHelper(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
