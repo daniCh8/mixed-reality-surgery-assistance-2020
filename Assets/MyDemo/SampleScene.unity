@@ -6048,6 +6048,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef56f30048804c45b2cae9b7b6867d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 5033725049482210053}
+  slider2: {fileID: 2033263657}
+  nearMenu: {fileID: 7545364183534544660}
+  handMenu: {fileID: 4650336336155544435}
+  boneGroup: {fileID: 1781766567}
+  ctGroup: {fileID: 1141950649}
+  ctPlane3: {fileID: 1293588172}
+  boneRef: {fileID: 8296172668703916607}
+  docSlate: {fileID: 7779420038883905343}
   screwScene: {fileID: 104295575}
   manipulationScene: {fileID: 345277760}
 --- !u!4 &326163311
@@ -34077,8 +34086,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 0
-  sliderStartDistance: -0.15125352
-  sliderEndDistance: 0.12317846
+  sliderStartDistance: -0.15128022
+  sliderEndDistance: 0.123205155
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls: []
@@ -49583,7 +49592,7 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 0
-  sliderStartDistance: -0.15169732
+  sliderStartDistance: -0.151698
   sliderEndDistance: 0.12621447
   OnValueUpdated:
     m_PersistentCalls:
