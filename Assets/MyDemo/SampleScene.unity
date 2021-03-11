@@ -3109,7 +3109,7 @@ MonoBehaviour:
   flattenAxis: 0
   boxPadding: {x: 0, y: 0, z: 0}
   boxDisplayConfiguration: {fileID: 0}
-  linksConfiguration: {fileID: 0}
+  linksConfiguration: {fileID: 786932879}
   scaleHandlesConfiguration: {fileID: 1193616686}
   rotationHandlesConfiguration: {fileID: 952715630}
   translationHandlesConfiguration: {fileID: 849365379}
@@ -3167,7 +3167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hostTransform: {fileID: 189440780}
-  manipulationType: 1
+  manipulationType: -1
   twoHandedManipulationType: 7
   allowFarManipulation: 1
   useForcesForNearManipulation: 0
@@ -11679,6 +11679,22 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 841600572}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &786932879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b80d41f9007c4b948b0808690195e77c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wireframeMaterial: {fileID: 0}
+  wireframeEdgeRadius: 0.001
+  wireframeShape: 0
+  showWireframe: 1
 --- !u!1 &789088005
 GameObject:
   m_ObjectHideFlags: 0
@@ -12868,7 +12884,7 @@ MonoBehaviour:
   handleMaterial: {fileID: 0}
   handleGrabbedMaterial: {fileID: 0}
   handlePrefab: {fileID: 0}
-  handleSize: 0.05
+  handleSize: 0
   colliderPadding: {x: 0.016, y: 0.016, z: 0.016}
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
@@ -14061,7 +14077,7 @@ MonoBehaviour:
   handleMaterial: {fileID: 0}
   handleGrabbedMaterial: {fileID: 0}
   handlePrefab: {fileID: 0}
-  handleSize: 0.016
+  handleSize: 0
   colliderPadding: {x: 0.016, y: 0.016, z: 0.016}
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
@@ -18593,7 +18609,7 @@ MonoBehaviour:
   handleMaterial: {fileID: 0}
   handleGrabbedMaterial: {fileID: 0}
   handlePrefab: {fileID: 0}
-  handleSize: 0.05
+  handleSize: 0
   colliderPadding: {x: 0.016, y: 0.016, z: 0.016}
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
