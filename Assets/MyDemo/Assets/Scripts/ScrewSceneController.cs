@@ -10,17 +10,12 @@ using UnityEngine;
 
 public class ScrewSceneController : MonoBehaviour
 {
-    // Menu State
-    public enum MenuState { Hand, Near }
 
     // Plates Visibility State
     public enum PlatesState { Both, Lat, Med, None }
 
     // Screw Prefab to Instantiate
     public GameObject screwPrefab;
-
-    // Menus
-    public GameObject nearMenu, handMenu;
 
     // Groups
     public GameObject screwGroup, plateGroup, boneGroup, allGroup;
@@ -122,24 +117,6 @@ public class ScrewSceneController : MonoBehaviour
         foreach (TextMeshPro tmp in texts)
         {
             tmp.text = text;
-        }
-    }
-
-    public void ChangeMenuType()
-    {
-        Debug.Log(Constants.CHANGE_MENU_BUTTON);
-
-        if (nearMenu.activeInHierarchy)
-        {
-            nearMenu.SetActive(false);
-            handMenu.SetActive(true);
-            resetButtonTexts(MenuState.Near);
-        }
-        else
-        {
-            nearMenu.SetActive(true);
-            handMenu.SetActive(false);
-            resetButtonTexts(MenuState.Hand);
         }
     }
 
@@ -384,38 +361,6 @@ public class ScrewSceneController : MonoBehaviour
             boundsControl.enabled = true;
             objectManipulator.enabled = true;
             SetTexts(texts, Constants.DISALLOW_MANIPULATION);
-        }
-    }
-
-    private bool isASharedButton(PressableButton button)
-    {
-        return button.name != Constants.BUTTON_PIN_NAME && button.name != Constants.CHANGE_MENU_BUTTON_NAME;
-    }
-
-    private void resetButtonTexts(MenuState oldMenu)
-    {
-        PressableButton[] nearButtons = Array.FindAll(nearMenu.GetComponentsInChildren<PressableButton>(true), isASharedButton).ToArray();
-        PressableButton[] handButtons = Array.FindAll(handMenu.GetComponentsInChildren<PressableButton>(true), isASharedButton).ToArray();
-
-        IDictionary<string, string> buttonsText = new Dictionary<string, string>();
-        PressableButton[] oldButtons;
-        PressableButton[] newButtons;
-
-        oldButtons = oldMenu == MenuState.Hand ? handButtons : nearButtons;
-        newButtons = oldMenu == MenuState.Hand ? nearButtons : handButtons;
-
-        foreach (var button in oldButtons)
-        {
-            buttonsText.Add(button.name, button.GetComponentInChildren<ButtonConfigHelper>().MainLabelText);
-        }
-
-        foreach (var button in newButtons)
-        {
-            TextMeshPro[] texts = button.GetComponentsInChildren<TextMeshPro>();
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = buttonsText[button.name];
-            }
         }
     }
 
@@ -709,8 +654,6 @@ static class Constants
     public const String NEW_DELETED_SCREW_TAG = "NewDeleted";
     public const String LAT_DELETED_SCREW_TAG = "LatDeleted";
     public const String MED_DELETED_SCREW_TAG = "MedDeleted";
-    public const String CHANGE_MENU_BUTTON = "Change Menu Button pressed";
-    public const String CHANGE_MENU_BUTTON_NAME = "ChangeMenuType";
     public const String BUTTON_PIN_NAME = "ButtonPin";
     public const String DISALLOW_MANIPULATION = "Disallow Manipulation";
     public const String ALLOW_MANIPULATION = "Allow Manipulation";
