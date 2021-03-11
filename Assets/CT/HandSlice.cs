@@ -35,8 +35,6 @@ public class HandSlice : MonoBehaviour {
 
     void Update() {
         if (!active) {
-            pinchSlider.SetActive(true);
-            pinchSliderHor.SetActive(true);
             handPlane.SetActive(false);
             return;
         }
@@ -49,9 +47,6 @@ public class HandSlice : MonoBehaviour {
             HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po3) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbTip, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po4) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.ThumbProximalJoint, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po5)) {
-            
-            pinchSlider.SetActive(false);
-            pinchSliderHor.SetActive(false);
             handPlane.SetActive(true);
 
             var p1 = ct.TransformWorldCoords(po1.Position);

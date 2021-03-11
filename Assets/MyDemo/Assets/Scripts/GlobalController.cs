@@ -27,7 +27,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     private static List<GameObject> bones = new List<GameObject>();
     private static List<TransformInfo> originalTransform = new List<TransformInfo>();
-    private static List<TransformInfo> originalTransformAdjusted = new List<TransformInfo>();
 
 
     // Colors and opacities
@@ -38,25 +37,32 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     public static BoneState gBoneState { get; set; }
 
     // Slider
-    private static GameObject slider, slider2;
+    public GameObject slider, slider2;
 
     // Menu
-    private static GameObject nearMenu, handMenu;
+    public GameObject nearMenu, handMenu;
 
     // Bone handlers
-    private static BoundingBox boneBoundingBox;
-    private static ManipulationHandler boneManipulationHandler;
+    public GameObject boneGroup;
+    private BoundingBox boneBoundingBox;
+    private ManipulationHandler boneManipulationHandler;
 
     // CT handlers
-    private static BoundingBox ctBoundingBox;
-    private static ManipulationHandler ctManipulationHandler;
+    public GameObject ctGroup;
+    private BoundingBox ctBoundingBox;
+    private ManipulationHandler ctManipulationHandler;
+
+    // Hand CT Plane
+    public GameObject ctPlane3;
+    private HandSlice ctPlane;
 
     // Group handlers
-    private static BoundingBox allBoundingBox;
-    private static ManipulationHandler allManipulationHandler;
+    public GameObject boneRef;
+    private BoundingBox allBoundingBox;
+    private ManipulationHandler allManipulationHandler;
 
     //Document slate
-    private static GameObject docSlate;
+    public GameObject docSlate;
 
     // Scale
     public static ScaleState gScaleState { get; set; }
@@ -86,38 +92,29 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         gBoneState = BoneState.ShowAll;
 
-        // slider enable/disable
-        slider = GameObject.Find("PinchSlider");
-        slider2 = GameObject.Find("PinchSliderHor");
-
         // scale functions
         gScaleState = ScaleState.Original;
 
-        // menus
-        nearMenu = GameObject.Find("NearMenu");
-        handMenu = GameObject.Find("HandMenu");
-
         //document slate
-        docSlate = GameObject.Find("Slate");
         Material firstPage = docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Pages>().getMat();
         docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = firstPage;
         docSlate.SetActive(false);
 
-        GameObject bone_1_ref = GameObject.Find("Bone_1");
-
         // bone manipulation components
-        boneBoundingBox = bone_1_ref.transform.Find("BoneGroup").gameObject.GetComponent<BoundingBox>();
-        boneManipulationHandler = bone_1_ref.transform.Find("BoneGroup").gameObject.GetComponent<ManipulationHandler>();
+        boneBoundingBox = boneGroup.gameObject.GetComponent<BoundingBox>();
+        boneManipulationHandler = boneGroup.gameObject.GetComponent<ManipulationHandler>();
 
         // CT manipulation components
-        ctBoundingBox = bone_1_ref.transform.Find("CTGroup").gameObject.GetComponent<BoundingBox>();
-        ctManipulationHandler = bone_1_ref.transform.Find("CTGroup").gameObject.GetComponent<ManipulationHandler>();
+        ctBoundingBox = ctGroup.gameObject.GetComponent<BoundingBox>();
+        ctManipulationHandler = ctGroup.gameObject.GetComponent<ManipulationHandler>();
 
         // group manipulation components
-        allBoundingBox = bone_1_ref.GetComponent<BoundingBox>();
-        allManipulationHandler = bone_1_ref.GetComponent<ManipulationHandler>();
+        allBoundingBox = boneRef.GetComponent<BoundingBox>();
+        allManipulationHandler = boneRef.GetComponent<ManipulationHandler>();
 
         handMenu.SetActive(false);
+
+        ctPlane = ctPlane3.GetComponent<HandSlice>();
     }
 
     public void SwitchGroupManipulation()
@@ -349,14 +346,14 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     {
         Debug.Log("Change Hand State Pressed");
 
-        HandSlice ctplane = GameObject.Find("CTPlane3").GetComponent<HandSlice>();
-
-        if (ctplane.active == true)
+        if (ctPlane.active == true)
         {
             DeactivateHandSlicer();
+            ShowSlider();
         }
         else
         {
+            HideSlider();
             ActivateHandSlicer();
         }
     }
@@ -464,31 +461,44 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         }
     }
 
-    public void ShowOrHideSlider()
+    private void ShowSlider()
     {
         TextMeshPro[] texts = GameObject.Find("ShowSlider").GetComponentsInChildren<TextMeshPro>();
+        slider.SetActive(true);
+        slider2.SetActive(true);
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Hide Slider";
+        }
+    }
 
+    private void HideSlider()
+    {
+        TextMeshPro[] texts = GameObject.Find("ShowSlider").GetComponentsInChildren<TextMeshPro>();
+        slider.SetActive(false);
+        slider2.SetActive(false);
+        foreach (TextMeshPro tmp in texts)
+        {
+            tmp.text = "Show Slider";
+        }
+    }
+
+    public void ShowOrHideSlider()
+    {
         Debug.Log("Slider Button Pressed");
 
+        if (ctPlane.active == true)
+        {
+            return;
+        }
 
         if (slider.activeInHierarchy)
         {
-            slider.SetActive(false);
-            slider2.SetActive(false);
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Show Slider";
-            }
-            ResetPositions();
+            HideSlider();
         }
         else
         {
-            slider.SetActive(true);
-            slider2.SetActive(true);
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = "Hide Slider";
-            }
+            ShowSlider();
         }
     }
 
