@@ -13,7 +13,6 @@ using Microsoft.MixedReality.Toolkit;
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
 public enum BoneState { ShowAll, HidePlates, HideAll };
-public enum MenuState { Hand, Near }
 
 public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 {
@@ -40,7 +39,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     public GameObject slider, slider2;
 
     // Menu
-    public GameObject nearMenu, handMenu;
+    public GameObject nearMenu;
 
     // Bone handlers
     public GameObject boneGroup;
@@ -49,6 +48,9 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     // Patient
     public GameObject patient;
+
+    // Patient Switch Controller
+    public PatientsController patientsController;
 
     // CT handlers
     public GameObject ctGroup;
@@ -101,9 +103,10 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         allBoundingBox = boneRef.GetComponent<BoundingBox>();
         allManipulationHandler = boneRef.GetComponent<ManipulationHandler>();
 
-        handMenu.SetActive(false);
-
         ctPlane = ctPlane3.GetComponent<HandSlice>();
+
+        patientsController.SwitchPatient();
+        patientsController.SwitchPatient();
     }
 
     public void InitBoneReferences()
@@ -116,7 +119,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         foreach (Transform child in parent)
         {
             InitBoneReferencesHelper(child);
-            Debug.Log(child.name);
             if (child.name.StartsWith("b"))
             {
                 bones.Add(child.gameObject);
@@ -264,14 +266,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     {
         Debug.Log("Manage Manipulation pressed");
         
-        if(nearMenu.activeInHierarchy)
-        {
-            EnableManipulationMenu(nearMenu);
-        }
-        else
-        {
-            EnableManipulationMenu(handMenu);
-        }
+        EnableManipulationMenu(nearMenu);
     }
 
     private void EnableManipulationMenu(GameObject menu)
@@ -288,14 +283,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     {
         Debug.Log("Back to Main pressed");
 
-        if (nearMenu.activeInHierarchy)
-        {
-            DisableManipulationMenu(nearMenu);
-        }
-        else
-        {
-            DisableManipulationMenu(handMenu);
-        }
+        DisableManipulationMenu(nearMenu);
 
     }
 
@@ -388,65 +376,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         Vector3 localScale = (gScaleState == ScaleState.Original) ? scale :
             (gScaleState == ScaleState.Double) ? scale * 2 : scale * 0.5f;
         bones[0].transform.localScale = localScale;
-    }
-
-    private bool isASharedButton(PressableButton button)
-    {
-        return button.name != "ButtonPin" && button.name != "ChangeMenuType";
-    }
-
-    private void resetButtonTexts(MenuState oldMenu)
-    {
-        PressableButton[] nearButtons = Array.FindAll(nearMenu.GetComponentsInChildren<PressableButton>(true), isASharedButton).ToArray();
-        PressableButton[] handButtons = Array.FindAll(handMenu.GetComponentsInChildren<PressableButton>(true), isASharedButton).ToArray();
-
-        IDictionary<string, string> buttonsText = new Dictionary<string, string>();
-        PressableButton[] oldButtons;
-        PressableButton[] newButtons;
-
-        oldButtons = oldMenu == MenuState.Hand ? handButtons : nearButtons;
-        newButtons = oldMenu == MenuState.Hand ? nearButtons : handButtons;
-
-        foreach (var button in oldButtons)
-        {
-            buttonsText.Add(button.name, button.GetComponentInChildren<ButtonConfigHelper>().MainLabelText);
-        }
-
-        foreach (var button in newButtons)
-        {
-            TextMeshPro[] texts = button.GetComponentsInChildren<TextMeshPro>();
-            foreach (TextMeshPro tmp in texts)
-            {
-                tmp.text = buttonsText[button.name];
-            }
-        }
-    }
-
-    public void ChangeMenuType()
-    {
-        Debug.Log("Change Menu Type Pressed");
-
-
-        if (nearMenu.activeInHierarchy)
-        {
-            nearMenu.SetActive(false);
-            handMenu.SetActive(true);
-
-            handMenu.SetChildrenActive(true);
-            handMenu.transform.Find("ButtonCollection").Find("ManipulationMenuCollection").gameObject.SetActive(false);
-            
-            resetButtonTexts(MenuState.Near);
-        }
-        else
-        {
-            nearMenu.SetActive(true);
-            handMenu.SetActive(false);
-
-            nearMenu.SetChildrenActive(true);
-            nearMenu.transform.Find("ButtonCollection").Find("ManipulationMenuCollection").gameObject.SetActive(false);
-
-            resetButtonTexts(MenuState.Hand);
-        }
     }
 
     public void VisualizeDocuments()
@@ -612,5 +541,10 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
             screwScene.SetActive(true);
             manipulationScene.SetActive(false);
         }
+    }
+
+    public void ChangePatient()
+    {
+        patientsController.SwitchPatient();
     }
 }
