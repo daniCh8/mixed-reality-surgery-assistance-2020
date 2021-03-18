@@ -32,6 +32,9 @@ public class ScrewSceneController : MonoBehaviour
     // Screw Size Window
     public GameObject screwSizeWindow;
 
+    // Near Menu
+    public GameObject nearMenu;
+
     // Lists
     public static List<GameObject> screws, bones;
 
