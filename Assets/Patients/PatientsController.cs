@@ -29,7 +29,7 @@ public class PatientsController : MonoBehaviour
         TunePinchSlider(referenceBoneSize);
     }
 
-    public void SwitchPatient()
+    public GameObject SwitchPatient()
     {
         CenterToRef(newPatient, referencePatientPosition);
         TunePinchSlider(newBone.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size);
@@ -48,14 +48,26 @@ public class PatientsController : MonoBehaviour
 
         newPatient.SetActive(false);
         referencePatient.SetActive(true);
+
+        return referencePatient;
     }
 
 
-    private void CenterToRef(GameObject obj, Vector3 referencePosition)
+    public static void CenterToRef(GameObject obj, Vector3 referencePosition)
     {
         obj.transform.position = obj.transform.position -
             obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center +
             referencePosition;
+    }
+
+    public static void ResizeToRef(GameObject obj, Vector3 referenceSize)
+    {
+        Vector3 oldLocalScale = obj.transform.localScale;
+        Vector3 oldSize = obj.GetComponentInChildren<Renderer>().bounds.size;
+
+        float newX = oldLocalScale.x / oldSize.x * referenceSize.x;
+
+        obj.transform.localScale = new Vector3(newX, newX, newX);
     }
 
     private void XCenterToRef(GameObject obj, Vector3 referencePosition)

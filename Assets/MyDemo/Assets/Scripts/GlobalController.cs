@@ -72,7 +72,9 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     // Scale
     public static ScaleState gScaleState { get; set; }
 
+    // Screw Scene References
     public GameObject screwScene, manipulationScene;
+    public ScrewSceneController screwSceneController;
 
     // Start is called before the first frame update
     void Start()
@@ -533,18 +535,40 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         if (screwScene.activeInHierarchy)
         {
-            screwScene.SetActive(false);
             manipulationScene.SetActive(true);
+
+            UpdateScenePosition(screwSceneController.allGroup.transform,
+                screwSceneController.nearMenu.transform,
+                boneRef.transform,
+                nearMenu.transform);
+            screwScene.SetActive(false);
         }
         else
         {
             screwScene.SetActive(true);
+
+            UpdateScenePosition(boneRef.transform,
+                nearMenu.transform,
+                screwSceneController.allGroup.transform,
+                screwSceneController.nearMenu.transform);
+
             manipulationScene.SetActive(false);
         }
     }
 
+    private void UpdateScenePosition(Transform oldSceneBone, Transform oldSceneMenu, Transform newSceneBone, Transform newSceneMenu)
+    {
+        PatientsController.CenterToRef(newSceneBone.gameObject, oldSceneBone.gameObject.GetComponentInChildren<Renderer>().bounds.center);
+        PatientsController.CenterToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.center);
+
+        newSceneBone.rotation = oldSceneBone.rotation;
+        newSceneMenu.rotation = oldSceneMenu.rotation;
+
+        PatientsController.ResizeToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.size);
+    }
+
     public void ChangePatient()
     {
-        patientsController.SwitchPatient();
+        patient = patientsController.SwitchPatient();
     }
 }
