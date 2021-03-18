@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class PatientsController : MonoBehaviour
 {
+    public GameObject newPatient, newBone;
 
     public GameObject referenceBone, referencePatient;
     public GameObject pinchSliderHor, visualTrackHor;
     public GameObject pinchSliderVer, visualTrackVer;
-
 
     private Vector3 referencePatientPosition, referenceBonePosition;
     private Vector3 referenceBoneSize;
@@ -24,6 +24,17 @@ public class PatientsController : MonoBehaviour
         XCenterToRef(pinchSliderHor, referenceBonePosition);
         ZCenterToRef(pinchSliderVer, referenceBonePosition);
         TunePinchSlider(referenceBoneSize);
+
+        CenterToRef(newPatient, referencePatientPosition);
+        TunePinchSlider(newBone.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size);
+        referencePatient.SetActive(false);
+    }
+
+    private void CenterToRef(GameObject obj, Vector3 referencePosition)
+    {
+        obj.transform.position = obj.transform.position -
+            obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center +
+            referencePosition;
     }
 
     private void XCenterToRef(GameObject obj, Vector3 referencePosition)
