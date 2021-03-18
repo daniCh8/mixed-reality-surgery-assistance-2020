@@ -347,22 +347,25 @@ public class ScrewSceneController : MonoBehaviour
     public void ChangeBoundsControlState()
     {
         TextMeshPro[] texts = GameObject.Find(Constants.CHANGE_BOUNDS_CONTROL).GetComponentsInChildren<TextMeshPro>();
-        BoundsControl boundsControl = allGroup.GetComponentInChildren<BoundsControl>(true);
-        ObjectManipulator objectManipulator = allGroup.GetComponentInChildren<ObjectManipulator>(true);
+        BoundingBox boundingBox = allGroup.GetComponentInChildren<BoundingBox>(true);
+        ManipulationHandler manipulationHandler = allGroup.GetComponentInChildren<ManipulationHandler>(true);
+        NearInteractionGrabbable nearInteractionGrabbable = allGroup.GetComponentInChildren<NearInteractionGrabbable>(true);
         BoxCollider boxCollider = allGroup.GetComponentInChildren<BoxCollider>(true);
 
-        if (boundsControl.enabled)
+        if (boundingBox.enabled)
         {
             boxCollider.enabled = false;
-            boundsControl.enabled = false;
-            objectManipulator.enabled = false;
+            boundingBox.enabled = false;
+            manipulationHandler.enabled = false;
+            nearInteractionGrabbable.enabled = false;
             SetTexts(texts, Constants.ALLOW_MANIPULATION);
         }
         else
         {
             boxCollider.enabled = true;
-            boundsControl.enabled = true;
-            objectManipulator.enabled = true;
+            boundingBox.enabled = true;
+            manipulationHandler.enabled = true;
+            nearInteractionGrabbable.enabled = true;
             SetTexts(texts, Constants.DISALLOW_MANIPULATION);
         }
     }
