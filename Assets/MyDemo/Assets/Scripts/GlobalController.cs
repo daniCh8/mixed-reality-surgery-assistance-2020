@@ -47,6 +47,9 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     private BoundingBox boneBoundingBox;
     private ManipulationHandler boneManipulationHandler;
 
+    // Patient
+    public GameObject patient;
+
     // CT handlers
     public GameObject ctGroup;
     private BoundingBox ctBoundingBox;
@@ -73,22 +76,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     void Start()
     {
 
-        numberOfBones = 6;
-
         // init bone references
-        for (int i = 1; i <= numberOfBones; i++)
-        {
-            GameObject t = GameObject.Find("Bone_" + i);
-            bones.Add(t);
-            Transform tr = t.GetComponent<Transform>();
-            TransformInfo ti = new TransformInfo
-            {
-                pos = tr.localPosition,
-                rotate = tr.localRotation,
-                scale = tr.localScale
-            };
-            originalTransform.Add(ti);
-        }
+        InitBoneReferences();
 
         gBoneState = BoneState.ShowAll;
 
@@ -115,6 +104,31 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         handMenu.SetActive(false);
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
+    }
+
+    public void InitBoneReferences()
+    {
+        InitBoneReferencesHelper(patient.transform);
+    }
+
+    private void InitBoneReferencesHelper(Transform parent)
+    {
+        foreach (Transform child in parent)
+        {
+            InitBoneReferencesHelper(child);
+            Debug.Log(child.name);
+            if (child.name.StartsWith("b"))
+            {
+                bones.Add(child.gameObject);
+                TransformInfo ti = new TransformInfo
+                {
+                    pos = child.transform.localPosition,
+                    rotate = child.transform.localRotation,
+                    scale = child.transform.localScale
+                };
+                originalTransform.Add(ti);
+            }
+        }
     }
 
     public void SwitchGroupManipulation()
