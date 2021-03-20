@@ -1,12 +1,14 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PatientsController : MonoBehaviour
 {
-    public GameObject newPatient, newBone;
-    public GameObject referenceBone, referencePatient;
+    // Manipulation Scene References
+    public GameObject newPatientManip, newBoneManip;
+    public GameObject referenceBoneManip, referencePatientManip;
 
     public GameObject pinchSliderHor, visualTrackHor;
     public GameObject pinchSliderVer, visualTrackVer;
@@ -14,42 +16,54 @@ public class PatientsController : MonoBehaviour
     public CTReader cTReader;
     public TextAsset newScans, referenceScans;
 
-    private Vector3 referencePatientPosition, referenceBonePosition;
-    private Vector3 referenceBoneSize;
+    private Vector3 referencePatientPositionManip, referenceBonePositionManip;
+    private Vector3 referenceBoneSizeManip;
 
+    // Screw Scene References
+    public GameObject referencePatientScrew, newPatientScrew;
 
     void Start()
     {
-        referencePatientPosition = referencePatient.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
-        referenceBonePosition = referenceBone.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
-        referenceBoneSize = referenceBone.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size;
+        referencePatientPositionManip = referencePatientManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
+        referenceBonePositionManip = referenceBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
+        referenceBoneSizeManip = referenceBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size;
 
-        XCenterToRef(pinchSliderHor, referenceBonePosition);
-        ZCenterToRef(pinchSliderVer, referenceBonePosition);
-        TunePinchSlider(referenceBoneSize);
+        XCenterToRef(pinchSliderHor, referenceBonePositionManip);
+        ZCenterToRef(pinchSliderVer, referenceBonePositionManip);
+        TunePinchSlider(referenceBoneSizeManip);
     }
 
-    public GameObject SwitchPatient()
+    public Tuple<GameObject, GameObject> SwitchPatient()
     {
-        CenterToRef(newPatient, referencePatientPosition);
-        TunePinchSlider(newBone.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size);
+        referencePatientPositionManip = 
+            referencePatientManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
+        CenterToRef(newPatientManip, referencePatientPositionManip);
+        TunePinchSlider(newBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size);
         cTReader.ct = newScans;
 
-        GameObject boxBone = referenceBone;
-        GameObject boxPatient = referencePatient;
+        GameObject boxBone = referenceBoneManip;
+        GameObject boxPatient = referencePatientManip;
         TextAsset boxCt = referenceScans;
-        referenceBone = newBone;
-        referencePatient = newPatient;
+        referenceBoneManip = newBoneManip;
+        referencePatientManip = newPatientManip;
         referenceScans = newScans;
-        newBone = boxBone;
-        newPatient = boxPatient;
+        newBoneManip = boxBone;
+        newPatientManip = boxPatient;
         newScans = boxCt;
-        
 
-        newPatient.SetActive(false);
-        referencePatient.SetActive(true);
+        newPatientManip.SetActive(false);
+        referencePatientManip.SetActive(true);
 
-        return referencePatient;
+        CenterToRef(newPatientScrew,
+            referencePatientScrew.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center);
+        boxPatient = referencePatientScrew;
+        referencePatientScrew = newPatientScrew;
+        newPatientScrew = boxPatient;
+
+        newPatientScrew.SetActive(false);
+        referencePatientScrew.SetActive(true);
+
+        return new Tuple<GameObject, GameObject>(referencePatientManip, referencePatientScrew);
     }
 
 

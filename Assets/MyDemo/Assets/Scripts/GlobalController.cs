@@ -569,6 +569,38 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     public void ChangePatient()
     {
-        patient = patientsController.SwitchPatient();
+        screwSceneController.ResetState();
+        Tuple<GameObject, GameObject> refPatients = patientsController.SwitchPatient();
+        patient = refPatients.Item1;
+        Transform screwPatientTransform = refPatients.Item2.transform;
+        screwSceneController.screwGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.SCREW_GROUP);
+        screwSceneController.plateGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.PLATE_GROUP);
+        screwSceneController.boneGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.BONE_GROUP);
+        screwSceneController.ReInit();
     }
+
+    private GameObject findChildrenWithName(Transform parent, String name)
+    {
+        foreach(Transform child in parent)
+        {
+            if(child.name.Equals(name))
+            {
+                return child.gameObject;
+            }
+            GameObject res = findChildrenWithName(child, name);
+            if(res != null)
+            {
+                return res;
+            }
+        }
+
+        return null;
+    }
+}
+
+static class GlobalConstants
+{
+    public const String SCREW_GROUP = "Screws";
+    public const String PLATE_GROUP = "Plates";
+    public const String BONE_GROUP = "Bone";
 }
