@@ -1,12 +1,16 @@
-﻿using Microsoft.MixedReality.Toolkit.Input;
+﻿using MathNet.Numerics.LinearAlgebra;
+using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
+using static Microsoft.MixedReality.Toolkit.UI.ObjectManipulator;
 
 public class ScrewSceneController : MonoBehaviour
 {
@@ -35,8 +39,8 @@ public class ScrewSceneController : MonoBehaviour
     // Near Menu
     public GameObject nearMenu;
 
-    // Lists
-    public static List<GameObject> screws, bones;
+    // List of screws
+    public static List<GameObject> screws;
 
     // Screw List Index
     private static int screwIndex;
@@ -70,8 +74,250 @@ public class ScrewSceneController : MonoBehaviour
 
     void Start()
     {
+        // Initialize Screws and Bones
+        InitScrews();
+        // Initialize Plate List
+        InitPlates();
+
+        gPlatesState = PlatesState.Both;
+        manipulating = false;
+        screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
+    }
+
+    /*
+    private void DecorateScrew(GameObject screw)
+    {
+        if (screw.GetComponentInChildren<BoundsControl>(true) == null)
+        {
+            BoundsControl boundsControl = screw.AddComponent<BoundsControl>() as BoundsControl;
+
+            boundsControl.ScaleHandlesConfig = new ScaleHandlesConfiguration();
+            boundsControl.ScaleHandlesConfig.HandleSize = (float)0.008;
+            boundsControl.ScaleHandlesConfig.ColliderPadding = new Vector3((float)0.008, (float)0.008, (float)0.008);
+
+            boundsControl.RotationHandlesConfig = new RotationHandlesConfiguration();
+            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+
+            boundsControl.enabled = false;
+        }
+
+        if (screw.GetComponentInChildren<ConstraintManager>(true) == null)
+        {
+            ConstraintManager constraintManager = screw.AddComponent<ConstraintManager>();
+        }
+
+        if (screw.GetComponentInChildren<ObjectManipulator>(true) == null)
+        { 
+            ObjectManipulator objectManipulator = screw.AddComponent<ObjectManipulator>();
+            objectManipulator.ManipulationType = ManipulationHandFlags.OneHanded;
+            objectManipulator.OneHandRotationModeFar = RotateInOneHandType.RotateAboutObjectCenter;
+            objectManipulator.OneHandRotationModeNear = RotateInOneHandType.RotateAboutObjectCenter;
+
+            objectManipulator.enabled = false;
+        }
+
+        if (screw.GetComponentInChildren<ScaleConstraint>(true) == null)
+        { 
+            ScaleConstraint scaleConstraint = screw.AddComponent<ScaleConstraint>();
+            scaleConstraint.enabled = false;
+        }
+
+        if (screw.GetComponentInChildren<PositionConstraint>(true) == null)
+        {
+            PositionConstraint positionConstraint = screw.AddComponent<PositionConstraint>();
+            positionConstraint.enabled = false;
+        }
+
+        if (screw.GetComponentInChildren<WholeScaleConstraint>(true) == null)
+        {
+            WholeScaleConstraint wholeScaleConstraint = screw.AddComponent<WholeScaleConstraint>();
+            wholeScaleConstraint.enabled = false;
+        }
+
+        if (screw.GetComponentInChildren<NearInteractionGrabbable>(true) == null)
+        {
+            NearInteractionGrabbable nearInteractionGrabbable = screw.AddComponent<NearInteractionGrabbable>();
+            nearInteractionGrabbable.enabled = false;
+        }
+    }
+    */
+
+    /*
+    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(bool latScrew)
+    {
+        String textAsset = referenceMedPositions.text.Replace("\"", "");
+        if(latScrew)
+        {
+            textAsset = referenceLatPositions.text.Replace("\"", "");
+        }
+        String[] lines = Regex.Split(textAsset, "\n|\r|\r\n");
+        List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
+        Vector3 dummyVector = new Vector3(0, 0, 0);
+        Vector3 item1 = dummyVector;
+
+        foreach(String line in lines)
+        {
+            if(line.Contains(",")) 
+            {
+                String[] vector = Regex.Split(line, ",");
+                Vector3 newPoint = new Vector3(float.Parse(vector[0]), float.Parse(vector[1]), float.Parse(vector[2]));
+
+
+                if (item1 == dummyVector)
+                {
+                    item1 = newPoint;
+                }
+                else
+                {
+                    points.Add(new Tuple<Vector3, Vector3>(item1, newPoint));
+                    item1 = dummyVector;
+                }
+            }
+        }
+
+        return points;
+    }
+    */
+
+    /*
+    private Matrix<float> FindTransformationMatrix(Vector3[] thisSysCenters, Tuple<Vector3, Vector3>[] textScrewPoints)
+    {
+        Vector3[] otherSysPoints = new Vector3[3];
+        for (int i = 0; i < 3; i++)
+        {
+            Tuple<Vector3, Vector3> otherSysTuple = textScrewPoints[i];
+            otherSysPoints[i] = new Vector3(
+            (otherSysTuple.Item1.x + otherSysTuple.Item2.x) / 2,
+            (otherSysTuple.Item1.y + otherSysTuple.Item2.y) / 2,
+            (otherSysTuple.Item1.z + otherSysTuple.Item2.z) / 2);
+        }
+
+        float[][] thisSysColumnArrays = {
+            new float[]{ thisSysCenters[0].x, thisSysCenters[0].y, thisSysCenters[0].z },
+            new float[]{ thisSysCenters[1].x, thisSysCenters[1].y, thisSysCenters[1].z },
+            new float[]{ thisSysCenters[2].x, thisSysCenters[2].y, thisSysCenters[2].z } };
+        Matrix<float> thisSystemMat = Matrix<float>.Build.DenseOfColumnArrays(thisSysColumnArrays);
+
+        float[][] otherSysColumnArrays = {
+            new float[]{ otherSysPoints[0].x, otherSysPoints[0].y, otherSysPoints[0].z },
+            new float[]{ otherSysPoints[1].x, otherSysPoints[1].y, otherSysPoints[1].z },
+            new float[]{ otherSysPoints[2].x, otherSysPoints[2].y, otherSysPoints[2].z } };
+        Matrix<float> otherSystemMat = Matrix<float>.Build.DenseOfColumnArrays(otherSysColumnArrays);
+
+        // thisCoordSys = basis (matrix.mul) otherCoordSys -->
+        //     basis = thisCoordSys (matrix.mul) otherCoordSys^(-1)
+
+        Matrix<float> basis = thisSystemMat.Multiply((otherSystemMat.Inverse()));
+
+        Debug.Log(basis);
+
+        return basis;
+    }
+    */
+
+    private GameObject GenerateScrewFromObj(GameObject screw)
+    {
+        scene.SetActive(true);
+        MeshCollider collider = screw.AddComponent<MeshCollider>();
+        collider.convex = true;
+        Vector3 minn = screw.transform.GetComponent<Renderer>().bounds.min;
+        Vector3 maxx = screw.transform.GetComponent<Renderer>().bounds.max;
+
+        Vector3[] boundPoints = new Vector3[]
+        {
+                minn,
+                new Vector3(minn.x, minn.y, maxx.z),
+                new Vector3(minn.x, maxx.y, minn.z),
+                new Vector3(minn.x, maxx.y, maxx.z),
+                new Vector3(maxx.x, minn.y, minn.z),
+                new Vector3(maxx.x, minn.y, maxx.z),
+                new Vector3(maxx.x, maxx.y, minn.z),
+                maxx
+        };
+
+        Vector3[] closestPoints = new Vector3[boundPoints.Length];
+        Vector3 firstStartPt = new Vector3(),
+            secondStartPt = new Vector3(),
+            firstEndPt = new Vector3(),
+            secondEndPt = new Vector3();
+        float startPtDist = float.MaxValue, endPtDist = float.MaxValue;
+        for (int i = 0; i < boundPoints.Length; i++)
+        {
+            closestPoints[i] = collider.ClosestPoint(boundPoints[i]);
+            float ptDist = Vector3.Distance(closestPoints[i], boundPoints[i]);
+            if (startPtDist < endPtDist && ptDist < endPtDist)
+            {
+                endPtDist = ptDist;
+                firstEndPt = closestPoints[i];
+            }
+            else if (ptDist < startPtDist)
+            {
+                startPtDist = ptDist;
+                firstStartPt = closestPoints[i];
+            }
+        }
+
+        startPtDist = float.MaxValue;
+        endPtDist = float.MaxValue;
+        foreach (Vector3 pt in closestPoints)
+        {
+            if (pt != firstStartPt)
+            {
+                float tempStartPtDist = Vector3.Distance(pt, firstStartPt);
+                if (tempStartPtDist < startPtDist)
+                {
+                    startPtDist = tempStartPtDist;
+                    secondStartPt = pt;
+                }
+            }
+
+            if (pt != firstEndPt)
+            {
+                float tempEndPtDist = Vector3.Distance(pt, firstEndPt);
+                if (tempEndPtDist < endPtDist)
+                {
+                    endPtDist = tempEndPtDist;
+                    secondEndPt = pt;
+                }
+            }
+        }
+
+        Vector3 startPoint = new Vector3(
+            (firstStartPt.x + secondStartPt.x) / 2,
+            (firstStartPt.y + secondStartPt.y) / 2,
+            (firstStartPt.z + secondStartPt.z) / 2
+            );
+
+        Vector3 endPoint = new Vector3(
+            (firstEndPt.x + secondEndPt.x) / 2,
+            (firstEndPt.y + secondEndPt.y) / 2,
+            (firstEndPt.z + secondEndPt.z) / 2
+            );
+
+        Destroy(screw.GetComponent<MeshCollider>());
+        scene.SetActive(false);
+
+        GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint);
+        cylinderScrew.transform.parent = screw.transform.parent;
+        cylinderScrew.tag = screw.tag;
+        cylinderScrew.name = screw.name;
+        cylinderScrew.GetComponent<MeshRenderer>().material = screw.GetComponent<MeshRenderer>().material;
+        Destroy(screw);
+
+        cylinderScrew.GetComponent<BoundsControl>().enabled = false;
+        cylinderScrew.GetComponent<ObjectManipulator>().enabled = false;
+        cylinderScrew.GetComponent<ScaleConstraint>().enabled = false;
+        cylinderScrew.GetComponent<WholeScaleConstraint>().enabled = false;
+        cylinderScrew.GetComponent<PositionConstraint>().enabled = false;
+        cylinderScrew.GetComponent<NearInteractionGrabbable>().enabled = false;
+        return cylinderScrew;
+    }
+
+    private void InitScrews()
+    {
         screws = new List<GameObject>();
-        bones = new List<GameObject>();
 
         originalScrewPositions = new Dictionary<string, Vector3>();
         originalScrewScales = new Dictionary<string, Vector3>();
@@ -81,22 +327,29 @@ public class ScrewSceneController : MonoBehaviour
         allGroupStartingScale = allGroup.transform.localScale;
         allGroupStartingRotation = allGroup.transform.rotation;
 
-        // Initialize Screw List
         foreach (Transform screw in screwGroup.transform)
         {
-            foreach(Transform real_screw in screw.gameObject.transform)
-            {
-                screws.Add(real_screw.gameObject);
-                originalScrewPositions.Add(real_screw.gameObject.name, real_screw.position);
-                originalScrewScales.Add(real_screw.gameObject.name, real_screw.localScale);
-                originalScrewRotations.Add(real_screw.gameObject.name, real_screw.rotation);
-            }
+            Transform real_screw = screw.transform.GetChild(0);
+
+            GameObject generatedScrew = GenerateScrewFromObj(real_screw.gameObject);
+            screws.Add(generatedScrew);
+            originalScrewPositions.Add(screw.gameObject.name, generatedScrew.transform.position);
+            originalScrewScales.Add(screw.gameObject.name, generatedScrew.transform.localScale);
+            originalScrewRotations.Add(screw.gameObject.name, generatedScrew.transform.rotation);
         }
 
-        // Initialize Plate List
+        screwIndex = 0;
+    }
+
+    private void InitPlates()
+    {
+        if(plateGroup == null)
+        {
+            return;
+        }
         foreach (Transform plate in plateGroup.transform)
         {
-            if (plate.gameObject.name.StartsWith(Constants.LAT_SCREW_TAG))
+            if (plate.gameObject.name.StartsWith(ScrewConstants.LAT_SCREW_TAG))
             {
                 latPlate = plate.gameObject;
             }
@@ -105,15 +358,75 @@ public class ScrewSceneController : MonoBehaviour
                 medPlate = plate.gameObject;
             }
         }
-
-        screwIndex = 0;
-
-        gPlatesState = PlatesState.Both;
-
-        manipulating = false;
-
-        screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
     }
+
+    private void SetScrewTags()
+    {
+        foreach (GameObject screw in screws)
+        {
+            if (IsOriginalScrew(screw))
+            {
+                if(screw.transform.parent.name.Contains(ScrewConstants.LAT_SCREW_TAG, StringComparison.OrdinalIgnoreCase))
+                {
+                    screw.tag = ScrewConstants.LAT_SCREW_TAG;
+                } else
+                {
+                    screw.tag = ScrewConstants.MED_SCREW_TAG;
+                }
+            }
+        }
+    }
+
+    public void ResetState()
+    {
+        while(manipulating)
+        {
+            ManipulateScrew();
+        }
+        while(gPlatesState != PlatesState.Both)
+        {
+            ChangePlatesVisibility();
+        }
+        while (!boneGroup.activeSelf)
+        {
+            ChangeBoneVisibility();
+        }
+        ResetScrews();
+        SetScrewTags();
+    }
+
+    public void ReInit()
+    {
+        InitScrews();
+        InitPlates();
+    }
+
+    private TextMeshPro[] RetrieveButtonText(String buttonName)
+    {
+        return RetrieveButtonFromHierarchy(buttonName).GetComponentsInChildren<TextMeshPro>();
+    }
+
+    private GameObject RetrieveButtonFromHierarchy(String objectName)
+    {
+        return RetrieveButtonFromHierarchyHelper(objectName, nearMenu.transform);
+    }
+
+    private GameObject RetrieveButtonFromHierarchyHelper(String buttonName, Transform parent)
+    {
+        foreach(Transform child in parent)
+        {
+            if(child.name.Equals(buttonName))
+            {
+                return child.gameObject;
+            }
+            GameObject res = RetrieveButtonFromHierarchyHelper(buttonName, child);
+            if(res != null)
+            {
+                return res;
+            }
+        }
+        return null;
+    } 
 
     private void SetTexts(TextMeshPro[] texts, String text)
     {
@@ -125,60 +438,67 @@ public class ScrewSceneController : MonoBehaviour
 
     public void ChangeBoneVisibility()
     {
-        TextMeshPro[] texts = GameObject.Find(Constants.BONE_VISIBILITY_BUTTON).GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = RetrieveButtonText(ScrewConstants.BONE_VISIBILITY_BUTTON);
 
-        if (boneGroup.activeInHierarchy)
+        if (boneGroup.activeSelf)
         {
             boneGroup.SetActive(false);
-            SetTexts(texts, Constants.SHOW_BONE);
+            SetTexts(texts, ScrewConstants.SHOW_BONE);
         }
         else
         {
             boneGroup.SetActive(true);
-            SetTexts(texts, Constants.HIDE_BONE);
+            SetTexts(texts, ScrewConstants.HIDE_BONE);
         }
     }
 
     public void ChangePlatesVisibility()
     {
-        TextMeshPro[] texts = GameObject.Find(Constants.CHANGE_PLATES_VISIBILITY).GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = RetrieveButtonText(ScrewConstants.CHANGE_PLATES_VISIBILITY);
+        bool latPlateActivation = true, medPlateActivation = true;
 
         switch (gPlatesState)
         {
             case PlatesState.Both:
-                latPlate.SetActive(true);
-                medPlate.SetActive(false);
+                latPlateActivation = true;
+                medPlateActivation = false;
                 SetLatScrewsActive(true);
                 SetMedScrewsActive(false);
                 gPlatesState = PlatesState.Lat;
-                SetTexts(texts, Constants.SHOW_MED_PLATE);
+                SetTexts(texts, ScrewConstants.SHOW_MED_PLATE);
                 break;
             case PlatesState.Lat:
-                latPlate.SetActive(false);
-                medPlate.SetActive(true);
+                latPlateActivation = false;
+                medPlateActivation = true;
                 SetLatScrewsActive(false);
                 SetMedScrewsActive(true);
                 gPlatesState = PlatesState.Med;
-                SetTexts(texts, Constants.SHOW_NO_PLATES);
+                SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
                 break;
             case PlatesState.Med:
-                latPlate.SetActive(false);
-                medPlate.SetActive(false);
+                latPlateActivation = false;
+                medPlateActivation = false;
                 SetLatScrewsActive(true);
                 SetMedScrewsActive(true);
                 gPlatesState = PlatesState.None;
-                SetTexts(texts, Constants.SHOW_BOTH_PLATES);
+                SetTexts(texts, ScrewConstants.SHOW_BOTH_PLATES);
                 break;
             case PlatesState.None:
-                latPlate.SetActive(true);
-                medPlate.SetActive(true);
+                latPlateActivation = true;
+                medPlateActivation = true;
                 SetLatScrewsActive(true);
                 SetMedScrewsActive(true);
                 gPlatesState = PlatesState.Both;
-                SetTexts(texts, Constants.SHOW_LAT_PLATE);
+                SetTexts(texts, ScrewConstants.SHOW_LAT_PLATE);
                 break;
             default:
                 break;
+        }
+
+        if(latPlate != null && medPlate != null)
+        {
+            latPlate.SetActive(latPlateActivation);
+            medPlate.SetActive(medPlateActivation);
         }
     }
 
@@ -196,7 +516,7 @@ public class ScrewSceneController : MonoBehaviour
     {
         foreach (GameObject screw in screws)
         {
-            if (ScrewIsTag(screw, Constants.LAT_SCREW_TAG))
+            if (ScrewIsTag(screw, ScrewConstants.LAT_SCREW_TAG))
             {
                 screw.SetActive(active);
             }
@@ -207,7 +527,7 @@ public class ScrewSceneController : MonoBehaviour
     {
         foreach (GameObject screw in screws)
         {
-            if (ScrewIsTag(screw, Constants.MED_SCREW_TAG))
+            if (ScrewIsTag(screw, ScrewConstants.MED_SCREW_TAG))
             {
                 screw.SetActive(active);
             }
@@ -244,7 +564,7 @@ public class ScrewSceneController : MonoBehaviour
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT_SCREW_TAG : Constants.MED_SCREW_TAG;
+        String flag = gPlatesState == PlatesState.Lat ? ScrewConstants.LAT_SCREW_TAG : ScrewConstants.MED_SCREW_TAG;
         NextIndex();
         while (ScrewIsNotTag(screws[screwIndex], flag) || IsDeletedScrew(screws[screwIndex]))
         {
@@ -264,7 +584,7 @@ public class ScrewSceneController : MonoBehaviour
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? Constants.LAT_SCREW_TAG : Constants.MED_SCREW_TAG;
+        String flag = gPlatesState == PlatesState.Lat ? ScrewConstants.LAT_SCREW_TAG : ScrewConstants.MED_SCREW_TAG;
         PrevIndex();
         while (ScrewIsNotTag(screws[screwIndex], flag) || IsDeletedScrew(screws[screwIndex]))
         {
@@ -286,13 +606,13 @@ public class ScrewSceneController : MonoBehaviour
     {
         switch (screw.tag)
         {
-            case Constants.LAT_SCREW_TAG:
+            case ScrewConstants.LAT_SCREW_TAG:
                 screw.GetComponentInChildren<Renderer>().material = latScrewMaterial;
                 break;
-            case Constants.MED_SCREW_TAG:
+            case ScrewConstants.MED_SCREW_TAG:
                 screw.GetComponentInChildren<Renderer>().material = medScrewMaterial;
                 break;
-            case Constants.NEW_SCREW_TAG:
+            case ScrewConstants.NEW_SCREW_TAG:
                 screw.GetComponentInChildren<Renderer>().material = newScrewMaterial;
                 break;
         }
@@ -313,7 +633,7 @@ public class ScrewSceneController : MonoBehaviour
 
     private void SetScrewSizeText(GameObject screw)
     {
-        screwSizeText.text = Constants.SCREW_SIZE_STUB_START + ComputeScrewSize(screw) + Constants.SCREW_SIZE_STUB_END;
+        screwSizeText.text = ScrewConstants.SCREW_SIZE_STUB_START + ComputeScrewSize(screw) + ScrewConstants.SCREW_SIZE_STUB_END;
     }
 
     private double ComputeScrewSize(GameObject screw)
@@ -324,7 +644,7 @@ public class ScrewSceneController : MonoBehaviour
 
     public void ChangeScrewState()
     {
-        TextMeshPro[] texts = GameObject.Find(Constants.SCREW_STATE_BUTTON).GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = RetrieveButtonText(ScrewConstants.SCREW_STATE_BUTTON);
 
         if (screwButton.activeInHierarchy)
         {
@@ -333,20 +653,20 @@ public class ScrewSceneController : MonoBehaviour
             {
                 DeactivateScrew(screw);
             }
-            SetTexts(texts, Constants.START_MANIPULATING_SCREWS);
+            SetTexts(texts, ScrewConstants.START_MANIPULATING_SCREWS);
         }
         else
         {
             screwButton.SetActive(true);
             FindNextIndex();
             ActivateScrew(screws[screwIndex]);
-            SetTexts(texts, Constants.STOP_MANIPULATING_SCREWS);
+            SetTexts(texts, ScrewConstants.STOP_MANIPULATING_SCREWS);
         }
     }
 
     public void ChangeBoundsControlState()
     {
-        TextMeshPro[] texts = GameObject.Find(Constants.CHANGE_BOUNDS_CONTROL).GetComponentsInChildren<TextMeshPro>();
+        TextMeshPro[] texts = RetrieveButtonText(ScrewConstants.CHANGE_BOUNDS_CONTROL);
         BoundingBox boundingBox = allGroup.GetComponentInChildren<BoundingBox>(true);
         ManipulationHandler manipulationHandler = allGroup.GetComponentInChildren<ManipulationHandler>(true);
         NearInteractionGrabbable nearInteractionGrabbable = allGroup.GetComponentInChildren<NearInteractionGrabbable>(true);
@@ -358,7 +678,7 @@ public class ScrewSceneController : MonoBehaviour
             boundingBox.enabled = false;
             manipulationHandler.enabled = false;
             nearInteractionGrabbable.enabled = false;
-            SetTexts(texts, Constants.ALLOW_MANIPULATION);
+            SetTexts(texts, ScrewConstants.ALLOW_MANIPULATION);
         }
         else
         {
@@ -366,7 +686,7 @@ public class ScrewSceneController : MonoBehaviour
             boundingBox.enabled = true;
             manipulationHandler.enabled = true;
             nearInteractionGrabbable.enabled = true;
-            SetTexts(texts, Constants.DISALLOW_MANIPULATION);
+            SetTexts(texts, ScrewConstants.DISALLOW_MANIPULATION);
         }
     }
 
@@ -394,9 +714,9 @@ public class ScrewSceneController : MonoBehaviour
                     screw.SetActive(true);
                 }
                 
-                screw.transform.position = originalScrewPositions[screw.name];
-                screw.transform.localScale = originalScrewScales[screw.name];
-                screw.transform.rotation = originalScrewRotations[screw.name];
+                screw.transform.position = originalScrewPositions[screw.transform.parent.name];
+                screw.transform.localScale = originalScrewScales[screw.transform.parent.name];
+                screw.transform.rotation = originalScrewRotations[screw.transform.parent.name];
             }
         }
 
@@ -407,9 +727,9 @@ public class ScrewSceneController : MonoBehaviour
 
     private bool IsDeletedScrew(GameObject screw)
     {
-        return screw.CompareTag(Constants.LAT_DELETED_SCREW_TAG) ||
-               screw.CompareTag(Constants.MED_DELETED_SCREW_TAG) ||
-               screw.CompareTag(Constants.NEW_DELETED_SCREW_TAG);
+        return screw.CompareTag(ScrewConstants.LAT_DELETED_SCREW_TAG) ||
+               screw.CompareTag(ScrewConstants.MED_DELETED_SCREW_TAG) ||
+               screw.CompareTag(ScrewConstants.NEW_DELETED_SCREW_TAG);
     }
 
     private bool ShouldBeActiveScrew(GameObject screw)
@@ -417,9 +737,9 @@ public class ScrewSceneController : MonoBehaviour
         switch (gPlatesState)
         {
             case PlatesState.Lat:
-                return ScrewIsTag(screw, Constants.LAT_SCREW_TAG);
+                return ScrewIsTag(screw, ScrewConstants.LAT_SCREW_TAG);
             case PlatesState.Med:
-                return ScrewIsTag(screw, Constants.MED_SCREW_TAG);
+                return ScrewIsTag(screw, ScrewConstants.MED_SCREW_TAG);
             default:
                 return true;
         }
@@ -427,9 +747,8 @@ public class ScrewSceneController : MonoBehaviour
 
     private bool IsOriginalScrew(GameObject screw)
     {
-        return screw.tag != Constants.NEW_SCREW_TAG;
+        return screw.tag != ScrewConstants.NEW_SCREW_TAG && screw.tag != ScrewConstants.NEW_DELETED_SCREW_TAG;
     }
-
 
     public void NewScrew()
     {
@@ -519,42 +838,6 @@ public class ScrewSceneController : MonoBehaviour
             NewScrewregister(p1, p2);
         }
     } 
-    // public void AddScrewFirstPoint(MixedRealityPointerEventData eventData)
-    // {
-    //     Debug.Log(AddingScrewSecondIndicator);
-    //     if (AddingScrewFirstIndicator){
-    //         Debug.Log(AddScrewPoint);
-    //         Vector3 pos = eventData.Pointer.Result.Details.Point;
-    //         PointIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-    //         PointIndicator.transform.localScale = Vector3.one * 0.01f;
-    //         Color translucentred = Color.red;
-    //         translucentred.a = 0.3f;
-    //         PointIndicator.GetComponent<Renderer>().material.color = translucentred;
-    //         PointIndicator.transform.position = pos;
-    //         PointIndicator.SetActive(true);
-    //         AddScrewPoint = pos;
-    //         AddingScrewSecondIndicator = true;
-    //         AddingScrewFirstIndicator = false;
-    //         boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = true;
-    //         boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
-    //     }
-    //     else if (AddingScrewSecondIndicator)
-    //     {
-    //         Vector3 pos = eventData.Pointer.Result.Details.Point;
-    //         Vector3 p1 = LerpByDistance(AddScrewPoint, pos, -0.1f);
-    //         Vector3 p2 = LerpByDistance(pos, AddScrewPoint, -0.1f);
-
-    //         Debug.Log("New Screw Added");
-    //         AddingScrewFirstIndicator = false;
-    //         AddingScrewSecondIndicator = false;
-    //         Destroy(PointIndicator);
-    //         boneGroup.GetComponent<PointerHandler>().enabled = false;
-    //         boneGroup.GetComponent<FocusHandlerVisualizer>().enabled = false;
-    //         boneMaterial.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-    //         NewScrewregister(p1, p2);
-    //     }
-
-    // }
 
     public static Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
     {
@@ -565,7 +848,7 @@ public class ScrewSceneController : MonoBehaviour
     public void NewScrewregister(Vector3 pos1, Vector3 pos2)
     {
         var newScrew = CreateCylinderBetweenPoints(pos1,pos2);
-        newScrew.tag = Constants.NEW_SCREW_TAG;
+        newScrew.tag = ScrewConstants.NEW_SCREW_TAG;
         newScrew.name = $"Screw_{screws.Count+1}";
 
         screws.Add(newScrew);
@@ -595,16 +878,16 @@ public class ScrewSceneController : MonoBehaviour
 
     public void ManipulateScrew()
     {
-        ButtonConfigHelper buttonConfig = GameObject.Find(Constants.SCREW_MANIPULATE_BUTTON).GetComponentInChildren<ButtonConfigHelper>();
+        ButtonConfigHelper buttonConfig = RetrieveButtonFromHierarchy(ScrewConstants.SCREW_MANIPULATE_BUTTON).GetComponentInChildren<ButtonConfigHelper>();
         if(manipulating)
         {
             manipulating = false;
-            buttonConfig.SetQuadIconByName(Constants.ICON_HAND_GESTURE);
+            buttonConfig.SetQuadIconByName(ScrewConstants.ICON_HAND_GESTURE);
         }
         else
         {
             manipulating = true;
-            buttonConfig.SetQuadIconByName(Constants.ICON_STOP_HAND_GESTURE);
+            buttonConfig.SetQuadIconByName(ScrewConstants.ICON_STOP_HAND_GESTURE);
         }
 
         SetCurrObjectManipulator(screws[screwIndex], manipulating);
@@ -631,20 +914,20 @@ public class ScrewSceneController : MonoBehaviour
     {
         switch (screw.tag)
         {
-            case Constants.LAT_SCREW_TAG:
-                screw.tag = Constants.LAT_DELETED_SCREW_TAG;
+            case ScrewConstants.LAT_SCREW_TAG:
+                screw.tag = ScrewConstants.LAT_DELETED_SCREW_TAG;
                 break;
-            case Constants.MED_SCREW_TAG:
-                screw.tag = Constants.MED_DELETED_SCREW_TAG;
+            case ScrewConstants.MED_SCREW_TAG:
+                screw.tag = ScrewConstants.MED_DELETED_SCREW_TAG;
                 break;
-            case Constants.NEW_SCREW_TAG:
-                screw.tag = Constants.NEW_DELETED_SCREW_TAG;
+            case ScrewConstants.NEW_SCREW_TAG:
+                screw.tag = ScrewConstants.NEW_DELETED_SCREW_TAG;
                 break;
-            case Constants.LAT_DELETED_SCREW_TAG:
-                screw.tag = Constants.LAT_SCREW_TAG;
+            case ScrewConstants.LAT_DELETED_SCREW_TAG:
+                screw.tag = ScrewConstants.LAT_SCREW_TAG;
                 break;
-            case Constants.MED_DELETED_SCREW_TAG:
-                screw.tag = Constants.MED_SCREW_TAG;
+            case ScrewConstants.MED_DELETED_SCREW_TAG:
+                screw.tag = ScrewConstants.MED_SCREW_TAG;
                 break;
             default:
                 break;
@@ -652,7 +935,7 @@ public class ScrewSceneController : MonoBehaviour
     }
 }
 
-static class Constants
+static class ScrewConstants
 {
     public const String LAT_SCREW_TAG = "Lat";
     public const String MED_SCREW_TAG = "Med";
@@ -680,4 +963,12 @@ static class Constants
     public const String ICON_STOP_HAND_GESTURE = "stop-hand-gest";
     public const String SCREW_SIZE_STUB_START = "Screw Length: ";
     public const String SCREW_SIZE_STUB_END = " cm.";
+}
+
+public static class StringExtensions
+{
+    public static bool Contains(this string source, string toCheck, StringComparison comp)
+    {
+        return source?.IndexOf(toCheck, comp) >= 0;
+    }
 }
