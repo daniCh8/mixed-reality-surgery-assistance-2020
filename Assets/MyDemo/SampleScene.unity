@@ -452,8 +452,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25109143}
   m_LocalRotation: {x: -2.1316277e-14, y: 0.70710677, z: 0.0000000149011505, w: 0.70710677}
-  m_LocalPosition: {x: -0.0015, y: 0.201, z: 0.146}
-  m_LocalScale: {x: 0.35000026, y: 0.37, z: 0.7500006}
+  m_LocalPosition: {x: -0.0015, y: 0.201, z: 0.3388}
+  m_LocalScale: {x: 0.7356167, y: 0.37, z: 0.7500006}
   m_Children: []
   m_Father: {fileID: 5033725049350510710}
   m_RootOrder: 0
@@ -3560,8 +3560,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 224483942}
   m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -0.001, y: 0.199, z: -0.469}
-  m_LocalScale: {x: 0.35000026, y: 0.8500006, z: 0.7500006}
+  m_LocalPosition: {x: -0.001, y: 0.199, z: -0.5303}
+  m_LocalScale: {x: 0.35000026, y: 0.9726959, z: 0.7500006}
   m_Children: []
   m_Father: {fileID: 585746003}
   m_RootOrder: 0
@@ -4589,6 +4589,7 @@ MonoBehaviour:
   slicer: {fileID: 7200000, guid: ea9a1b7e79a1e044d88a72a42e6e8a4c, type: 3}
   ctLength: 0
   ctDepth: 0
+  ctCenter: {x: 0, y: 0, z: 0}
 --- !u!65 &278603714
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16976,8 +16977,6 @@ MonoBehaviour:
   referenceScans: {fileID: 4900000, guid: f53e88d2d5e9b8440ade832d703557a0, type: 3}
   referencePatientScrew: {fileID: 253716662}
   newPatientScrew: {fileID: 85439648}
-  poc: {fileID: 1792547352}
-  bonePoc: {fileID: 919132148560973560}
 --- !u!1 &1240413494
 GameObject:
   m_ObjectHideFlags: 0
@@ -30679,8 +30678,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 0
-  sliderStartDistance: -0.15129562
-  sliderEndDistance: 0.123267345
+  sliderStartDistance: -0.1512961
+  sliderEndDistance: 0.12326803
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls: []
@@ -30769,7 +30768,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033263657}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.70002, y: -347, z: -60}
+  m_LocalPosition: {x: -27, y: -347, z: -34}
   m_LocalScale: {x: 950.001, y: 400, z: 400}
   m_Children:
   - {fileID: 585746003}
@@ -47028,7 +47027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5033725049482210053}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 71, y: -348, z: -223.7}
+  m_LocalPosition: {x: 119, y: -348, z: -224}
   m_LocalScale: {x: 1279.2335, y: 400, z: 400.00024}
   m_Children:
   - {fileID: 5033725049350510710}
@@ -47076,8 +47075,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 0
-  sliderStartDistance: -0.14981766
-  sliderEndDistance: 0.08746007
+  sliderStartDistance: -0.15053448
+  sliderEndDistance: 0.08746008
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls: []
@@ -47763,7 +47762,6 @@ GameObject:
   - component: {fileID: 5033725049945508380}
   - component: {fileID: 5033725049945508354}
   - component: {fileID: 5033725049945508381}
-  - component: {fileID: 5033725049945508384}
   m_Layer: 0
   m_Name: SliderTrackSimple
   m_TagString: Untagged
@@ -47771,18 +47769,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &5033725049945508384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5033725049945508383}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 884eb8ea5c1570f4fba08442559db952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &5033725050122233648
 MeshRenderer:
   m_ObjectHideFlags: 0
