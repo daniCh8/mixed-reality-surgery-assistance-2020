@@ -21,10 +21,6 @@ public class PatientsController : MonoBehaviour
     // Screw Scene References
     public GameObject referencePatientScrew, newPatientScrew;
 
-    //delete
-    public GameObject poc;
-    //
-
     private enum Axis
     {
         x,
@@ -34,8 +30,6 @@ public class PatientsController : MonoBehaviour
 
     void Start()
     {
-        GetPatientOriginalPosition(poc);
-
         referencePatientPositionManip = referencePatientManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
         referenceBonePositionManip = referenceBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
 
@@ -199,15 +193,6 @@ public class PatientsController : MonoBehaviour
                 lossyScale.y * rotatedRealOffset.y,
                 lossyScale.z * rotatedRealOffset.z);
 
-        Debug.Log(refObj.name + " refOrigin: (" + refOrigin.x + ", " + refOrigin.y + ", " + refOrigin.z + ")");
-        Debug.Log(refObj.name + " offsetOrigin: (" + offsetOrigin.x + ", " + offsetOrigin.y + ", " + offsetOrigin.z + ")");
-
-        Debug.Log("refRotation: " + refRotation);
-        Debug.Log("realOffset: " + realOffset);
-        Debug.Log("rotatedRealOffset: " + rotatedRealOffset);
-        Debug.Log("lossyScale: " + lossyScale);
-        Debug.Log("scaledRealOffset: " + scaledRealOffset);
-
         return scaledRealOffset;
     }
 
@@ -231,12 +216,9 @@ public class PatientsController : MonoBehaviour
         patient.transform.localScale = backupScale;
         patient.transform.localPosition = backupPosition;
         patient.transform.localEulerAngles = backupRotation;
-        Debug.Log(patient.name + " center: (" + patientCenter.x + ", " + patientCenter.y + ", " + patientCenter.z + ")");
+
 
         return patientCenter;
-        
-        // ctCenter = (2.7605, -226.7395, -249.5)
-        // patientCenter = (-10.14284, -247.6571, -246.7189)
     }
 
     private void TunePinchSliders(Vector3 referenceSize, Vector3 actualSize, float ctLength, float ctDepth)

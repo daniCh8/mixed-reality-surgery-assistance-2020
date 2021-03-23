@@ -32,7 +32,7 @@ public class CTReader : MonoBehaviour {
         float depthDirection = nrrd.depthDirection, depthSize = nrrd.dims[1];
         ctDepth = Math.Abs(depthDirection * depthSize);
         ctCenter = new Vector3(
-            nrrd.origin.x + ((int)Math.Ceiling((double)(nrrd.dims[0] / 2) - 1) * nrrd.scale.x),
+            -1 * (nrrd.origin.x + ((int)Math.Ceiling((double)(nrrd.dims[0] / 2) - 1) * nrrd.scale.x)),
             nrrd.origin.y + ((int)Math.Ceiling((double)(nrrd.dims[1] / 2) - 1) * nrrd.scale.y),
             nrrd.origin.z + ((int)Math.Ceiling((double)(nrrd.dims[2] / 2) - 1) * nrrd.scale.z)
             );
@@ -84,10 +84,6 @@ public class NRRD {
                 var key = tokens[0].Trim();
                 var value = tokens[1].Trim();
                 headers.Add(key, value);
-
-                //HERE
-                //Debug.Log("Key: " + key + "; Value: " + value);
-                //
             }
 
             if (headers["dimension"] != "3") throw new ArgumentException("NRRD is not 3D");
