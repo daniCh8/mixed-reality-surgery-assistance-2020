@@ -564,7 +564,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         newSceneBone.rotation = oldSceneBone.rotation;
         newSceneMenu.rotation = oldSceneMenu.rotation;
 
-        PatientsController.ResizeToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.size);
+        PatientsController.SameResizeToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.size);
     }
 
     public void ChangePatient()
