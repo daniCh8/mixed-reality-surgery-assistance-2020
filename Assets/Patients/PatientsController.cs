@@ -17,29 +17,85 @@ public class PatientsController : MonoBehaviour
     public TextAsset newScans, referenceScans;
 
     private Vector3 referencePatientPositionManip, referenceBonePositionManip;
-    private Vector3 referenceBoneSizeManip;
 
     // Screw Scene References
     public GameObject referencePatientScrew, newPatientScrew;
 
+    //delete
+    public GameObject poc;
+    //
+
+    private enum Axis
+    {
+        x,
+        y,
+        z
+    }
+
     void Start()
     {
+        GetPatientOriginalPosition(poc);
+
         referencePatientPositionManip = referencePatientManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
         referenceBonePositionManip = referenceBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
-        referenceBoneSizeManip = referenceBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size;
 
-        XCenterToRef(pinchSliderHor, referenceBonePositionManip);
-        ZCenterToRef(pinchSliderVer, referenceBonePositionManip);
-        TunePinchSlider(referenceBoneSizeManip);
+        Vector3 offset = ComputeOffsetFromOriginalCentres(GetPatientOriginalPosition(referencePatientManip), cTReader.ctCenter, referencePatientManip);
+        CenterToAxWithOffset(pinchSliderHor, referenceBonePositionManip, offset, Axis.x);
+        CenterToAxWithOffset(pinchSliderVer, referenceBonePositionManip, offset, Axis.z);
+        TunePinchSliders(RetrieveCombinedBounds(referencePatientManip).size,
+            RetrieveBoneSize(referencePatientManip),
+            cTReader.ctLength,
+            cTReader.ctDepth);
+    }
+
+    private Bounds RetrieveCombinedBounds(GameObject parent)
+    {
+        Renderer renderer = parent.GetComponentInChildren<Renderer>();
+        Bounds combinedBounds = renderer.bounds;
+        Renderer[] renderers = parent.GetComponentsInChildren<Renderer>();
+        foreach (Renderer render in renderers)
+        {
+            if (render != renderer) combinedBounds.Encapsulate(render.bounds);
+        }
+        return combinedBounds;
+    }
+
+    private Vector3 RetrieveBoneSize(GameObject patient)
+    {
+        Vector3 rotationFactor = patient.transform.eulerAngles;
+        Vector3 rotationBox = patient.transform.localEulerAngles;
+
+        Vector3 scaleFactor = patient.transform.lossyScale;
+        Vector3 scaleBox = patient.transform.localScale;
+        
+        patient.transform.localEulerAngles = new Vector3((-1 * rotationFactor.x), (-1 * rotationFactor.y), (-1 * rotationFactor.z));
+        patient.transform.localScale = new Vector3(
+            (1 / scaleFactor.x), (1 / scaleFactor.y), (1 / scaleFactor.z));
+
+        Vector3 res = RetrieveCombinedBounds(patient).size;
+
+        patient.transform.localScale = scaleBox;
+        patient.transform.localEulerAngles = rotationBox;
+
+        return res;
     }
 
     public Tuple<GameObject, GameObject> SwitchPatient()
     {
+        cTReader.ct = newScans;
+        cTReader.Init();
         referencePatientPositionManip = 
             referencePatientManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
         CenterToRef(newPatientManip, referencePatientPositionManip);
-        TunePinchSlider(newBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size);
-        cTReader.ct = newScans;
+
+        Vector3 offset = ComputeOffsetFromOriginalCentres(GetPatientOriginalPosition(newPatientManip), cTReader.ctCenter, newPatientManip);
+        CenterToAxWithOffset(pinchSliderHor, referenceBonePositionManip, offset, Axis.x);
+        CenterToAxWithOffset(pinchSliderVer, referenceBonePositionManip, offset, Axis.z);
+
+        TunePinchSliders(RetrieveCombinedBounds(newPatientManip).size,
+            RetrieveBoneSize(newPatientManip),
+            cTReader.ctLength,
+            cTReader.ctDepth);
 
         GameObject boxBone = referenceBoneManip;
         GameObject boxPatient = referencePatientManip;
@@ -74,7 +130,7 @@ public class PatientsController : MonoBehaviour
             referencePosition;
     }
 
-    public static void ResizeToRef(GameObject obj, Vector3 referenceSize)
+    public static void SameResizeToRef(GameObject obj, Vector3 referenceSize)
     {
         Vector3 oldLocalScale = obj.transform.localScale;
         Vector3 oldSize = obj.GetComponentInChildren<Renderer>().bounds.size;
@@ -84,27 +140,8 @@ public class PatientsController : MonoBehaviour
         obj.transform.localScale = new Vector3(newX, newX, newX);
     }
 
-    private void XCenterToRef(GameObject obj, Vector3 referencePosition)
-    {
-        Vector3 startingPosition = obj.transform.position;
-        float newX = startingPosition.x -
-            obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center.x +
-            referencePosition.x;
-
-        obj.transform.position = new Vector3(newX, startingPosition.y, startingPosition.z);
-    }
-
-    private void ZCenterToRef(GameObject obj, Vector3 referencePosition)
-    {
-        Vector3 startingPosition = obj.transform.position;
-        float newZ = startingPosition.z -
-            obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center.z +
-            referencePosition.z;
-
-        obj.transform.position = new Vector3(startingPosition.x, startingPosition.y, newZ);
-    }
-
-    private void TunePinchSlider(Vector3 referenceSize)
+    /*
+    private void OldTunePinchSliders(Vector3 referenceSize)
     {
         PinchSlider pinchSliderCompHor = pinchSliderHor.GetComponent<PinchSlider>();
         float distanceHor = referenceSize.x / (pinchSliderHor.transform.lossyScale.x * 2);
@@ -127,6 +164,111 @@ public class PatientsController : MonoBehaviour
         float newTrackLocalScaleVer = oldLocalScaleVer.x /
             visualTrackVer.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size.z *
             referenceSize.z;
+
+        visualTrackVer.transform.localScale = new Vector3(newTrackLocalScaleVer, oldLocalScaleVer.y, oldLocalScaleVer.z);
+    }
+    */
+
+    private void CenterToAxWithOffset(GameObject obj, Vector3 referencePos, Vector3 offset, Axis axis)
+    {
+        if(offset == null)
+        {
+            offset = new Vector3(0, 0, 0);
+        }
+        Vector3 startingPosition = obj.transform.position;
+        float newAxis = startingPosition[(int)axis] -
+            obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center[(int)axis] +
+            referencePos[(int)axis] + 
+            offset[(int)axis];
+
+        startingPosition[(int)axis] = newAxis;
+        obj.transform.position = startingPosition;
+    }
+
+    private Vector3 ComputeOffsetFromOriginalCentres(Vector3 refOrigin, Vector3 offsetOrigin, GameObject refObj)
+    {
+        Quaternion refRotation = refObj.transform.rotation;
+        Vector3 realOffset = new Vector3(
+            offsetOrigin.x - refOrigin.x,
+            offsetOrigin.y - refOrigin.y,
+            offsetOrigin.z - refOrigin.z),
+            rotatedRealOffset = refRotation * realOffset,
+            lossyScale = refObj.transform.lossyScale,
+            scaledRealOffset = new Vector3(
+                lossyScale.x * rotatedRealOffset.x,
+                lossyScale.y * rotatedRealOffset.y,
+                lossyScale.z * rotatedRealOffset.z);
+
+        Debug.Log(refObj.name + " refOrigin: (" + refOrigin.x + ", " + refOrigin.y + ", " + refOrigin.z + ")");
+        Debug.Log(refObj.name + " offsetOrigin: (" + offsetOrigin.x + ", " + offsetOrigin.y + ", " + offsetOrigin.z + ")");
+
+        Debug.Log("refRotation: " + refRotation);
+        Debug.Log("realOffset: " + realOffset);
+        Debug.Log("rotatedRealOffset: " + rotatedRealOffset);
+        Debug.Log("lossyScale: " + lossyScale);
+        Debug.Log("scaledRealOffset: " + scaledRealOffset);
+
+        return scaledRealOffset;
+    }
+
+    private Vector3 GetPatientOriginalPosition(GameObject patient)
+    {
+        Vector3 backupScale = patient.transform.localScale,
+            backupPosition = patient.transform.localPosition,
+            backupRotation = patient.transform.localEulerAngles,
+            zeroVector = new Vector3(0, 0, 0),
+            unitVector = new Vector3(1, 1, 1);
+        Transform backupParent = patient.transform.parent;
+
+        patient.transform.parent = null;
+        patient.transform.localScale = unitVector;
+        patient.transform.localPosition = zeroVector;
+        patient.transform.localEulerAngles = zeroVector;
+
+        Vector3 patientCenter = RetrieveCombinedBounds(patient).center;
+
+        patient.transform.parent = backupParent;
+        patient.transform.localScale = backupScale;
+        patient.transform.localPosition = backupPosition;
+        patient.transform.localEulerAngles = backupRotation;
+        Debug.Log(patient.name + " center: (" + patientCenter.x + ", " + patientCenter.y + ", " + patientCenter.z + ")");
+
+        return patientCenter;
+        
+        // ctCenter = (2.7605, -226.7395, -249.5)
+        // patientCenter = (-10.14284, -247.6571, -246.7189)
+    }
+
+    private void TunePinchSliders(Vector3 referenceSize, Vector3 actualSize, float ctLength, float ctDepth)
+    {
+        // referenceSize.x : actualSize.z = x : ctLength
+        // referenceSize.z : actualSize.y = x : ctDepth
+
+        float ctLengthRef = ctLength * referenceSize.x / actualSize.z;
+
+        PinchSlider pinchSliderCompHor = pinchSliderHor.GetComponent<PinchSlider>();
+        float distanceHor = ctLengthRef / (pinchSliderHor.transform.lossyScale.x * 2);
+        pinchSliderCompHor.SliderStartDistance = -distanceHor;
+        pinchSliderCompHor.SliderEndDistance = distanceHor;
+
+        Vector3 oldLocalScaleHor = visualTrackHor.transform.localScale;
+        float newTrackLocalScaleHor = oldLocalScaleHor.x /
+            visualTrackHor.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size.x *
+            ctLengthRef;
+
+        visualTrackHor.transform.localScale = new Vector3(newTrackLocalScaleHor, oldLocalScaleHor.y, oldLocalScaleHor.z);
+
+        float ctDepthRef = ctDepth * referenceSize.z / actualSize.y;
+        
+        PinchSlider pinchSliderCompVer = pinchSliderVer.GetComponent<PinchSlider>();
+        float distanceVer = ctDepthRef / (pinchSliderVer.transform.lossyScale.x * 2);
+        pinchSliderCompVer.SliderStartDistance = -distanceVer;
+        pinchSliderCompVer.SliderEndDistance = distanceVer;
+
+        Vector3 oldLocalScaleVer = visualTrackVer.transform.localScale;
+        float newTrackLocalScaleVer = oldLocalScaleVer.x /
+            visualTrackVer.transform.gameObject.GetComponentInChildren<Renderer>().bounds.size.z *
+            ctDepthRef;
 
         visualTrackVer.transform.localScale = new Vector3(newTrackLocalScaleVer, oldLocalScaleVer.y, oldLocalScaleVer.z);
     }

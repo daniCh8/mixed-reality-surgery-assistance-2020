@@ -9,10 +9,16 @@ using UnityEngine;
 public class CTReader : MonoBehaviour {
     public TextAsset ct;
     public ComputeShader slicer;
-
+    public float ctLength, ctDepth;
+    public Vector3 ctCenter;
     int kernel;
 
     void Start() {
+        Init();
+    }
+
+    public void Init()
+    {
         var nrrd = new NRRD(ct);
 
         kernel = slicer.FindKernel("CSMain");
@@ -20,25 +26,19 @@ public class CTReader : MonoBehaviour {
         buf.SetData(nrrd.data);
         slicer.SetBuffer(kernel, "data", buf);
         slicer.SetInts("dims", nrrd.dims);
+
+        float lengthDirection = nrrd.lengthDirection, lengthSize = nrrd.dims[2];
+        ctLength = Math.Abs(lengthDirection * lengthSize);
+        float depthDirection = nrrd.depthDirection, depthSize = nrrd.dims[1];
+        ctDepth = Math.Abs(depthDirection * depthSize);
+        ctCenter = new Vector3(
+            nrrd.origin.x + ((int)Math.Ceiling((double)(nrrd.dims[0] / 2) - 1) * nrrd.scale.x),
+            nrrd.origin.y + ((int)Math.Ceiling((double)(nrrd.dims[1] / 2) - 1) * nrrd.scale.y),
+            nrrd.origin.z + ((int)Math.Ceiling((double)(nrrd.dims[2] / 2) - 1) * nrrd.scale.z)
+            );
     }
 
-    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result)
-    {
-#if !UNITY_EDITOR
-        ulong limit = Windows.System.MemoryManager.AppMemoryUsageLimit;
-        ulong usage = Windows.System.MemoryManager.AppMemoryUsage;
-        ulong headroom = limit - usage;
-        ulong room_treshold = 600000000;
-        if (headroom > room_treshold)
-        {
-            SliceHelper(orig, dx, dy, result);
-        }
-#else
-        SliceHelper(orig, dx, dy, result);
-#endif
-    }
-
-    private void SliceHelper(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
+    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
@@ -70,6 +70,9 @@ public class NRRD {
     readonly public float[] data;
     readonly public int[] dims;
 
+    readonly public float lengthDirection;
+    readonly public float depthDirection;
+
     readonly public Vector3 origin = new Vector3(0, 0, 0);
     readonly public Vector3 scale = new Vector3(1, 1, 1);
 
@@ -81,6 +84,10 @@ public class NRRD {
                 var key = tokens[0].Trim();
                 var value = tokens[1].Trim();
                 headers.Add(key, value);
+
+                //HERE
+                //Debug.Log("Key: " + key + "; Value: " + value);
+                //
             }
 
             if (headers["dimension"] != "3") throw new ArgumentException("NRRD is not 3D");
@@ -99,6 +106,8 @@ public class NRRD {
                 if (scale[0][1] != 0 || scale[1][0] != 0 || scale[2][0] != 0 ||
                     scale[0][2] != 0 || scale[1][2] != 0 || scale[2][1] != 0) throw new ArgumentException("NRRD is not axis-aligned");
                 this.scale = new Vector3(scale[0][0], scale[1][1], scale[2][2]);
+                depthDirection = scale[1][1];
+                lengthDirection = scale[2][2];
             }
 
             var mem = new MemoryStream();
