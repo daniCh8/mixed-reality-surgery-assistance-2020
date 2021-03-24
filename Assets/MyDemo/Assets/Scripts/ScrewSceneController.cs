@@ -337,6 +337,7 @@ public class ScrewSceneController : MonoBehaviour
             originalScrewScales.Add(screw.gameObject.name, generatedScrew.transform.localScale);
             originalScrewRotations.Add(screw.gameObject.name, generatedScrew.transform.rotation);
         }
+        SetScrewTags();
 
         screwIndex = 0;
     }
@@ -366,7 +367,9 @@ public class ScrewSceneController : MonoBehaviour
         {
             if (IsOriginalScrew(screw))
             {
-                if(screw.transform.parent.name.Contains(ScrewConstants.LAT_SCREW_TAG, StringComparison.OrdinalIgnoreCase))
+                if(screw.name.Contains(ScrewConstants.LAT_SCREW_TAG, StringComparison.OrdinalIgnoreCase) ||
+                    screw.transform.parent.name.Contains(ScrewConstants.LAT_SCREW_TAG, StringComparison.OrdinalIgnoreCase) ||
+                    (screw.transform.childCount > 0 && screw.transform.GetChild(0).name.Contains(ScrewConstants.LAT_SCREW_TAG, StringComparison.OrdinalIgnoreCase)))
                 {
                     screw.tag = ScrewConstants.LAT_SCREW_TAG;
                 } else
