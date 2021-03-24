@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 2319736}
   - component: {fileID: 2319737}
   m_Layer: 0
-  m_Name: SceneController
+  m_Name: ScrewSceneController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
