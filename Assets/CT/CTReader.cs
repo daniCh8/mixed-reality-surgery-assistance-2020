@@ -18,6 +18,16 @@ public class CTReader : MonoBehaviour
     public GameObject sliderV;
     int kernel;
 
+    public GameObject bottomBackLeft;
+    public GameObject bottomBackRight;
+    public GameObject topBackLeft;
+    public GameObject topBackRight;
+    public GameObject bottomFrontLeft;
+    public GameObject bottomFrontRight;
+    public GameObject topFrontLeft;
+    public GameObject topFrontRight;
+    public GameObject center;
+
     void Start() {
         Init();
     }
@@ -42,22 +52,23 @@ public class CTReader : MonoBehaviour
             nrrd.origin.z + ((int)Math.Ceiling((double)(nrrd.dims[2] / 2) - 1) * nrrd.scale.z)
             );
 
+        int rounds = 2;
         float minx = float.MaxValue,
                 maxx = float.MinValue,
                 miny = float.MaxValue,
                 maxy = float.MinValue,
                 minz = float.MaxValue,
                 maxz = float.MinValue;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < rounds; i++)
         {
             // i : 10 == x : dim --> x = dim*i/10
-            int dx = (int)(nrrd.dims[0] * i / 10);
-            for(int j = 0; j < 10; j++)
+            int dx = (int)(nrrd.dims[0] * i / (rounds-1));
+            for(int j = 0; j < rounds; j++)
             {
-                int dy = (int)(nrrd.dims[1] * j / 10);
-                for (int k = 0; k < 10; k++)
+                int dy = (int)(nrrd.dims[1] * j / (rounds-1));
+                for (int k = 0; k < rounds; k++)
                 {
-                    int dz = (int)(nrrd.dims[2] * k / 10);
+                    int dz = (int)(nrrd.dims[2] * k / (rounds-1));
                     float x = nrrd.origin.x + dx * nrrd.scale.x;
                     float y = nrrd.origin.y + dy * nrrd.scale.y;
                     float z = nrrd.origin.z + dz * nrrd.scale.z;
@@ -67,23 +78,23 @@ public class CTReader : MonoBehaviour
                     maxy = Math.Max(maxy, y);
                     minz = Math.Min(minz, z);
                     maxz = Math.Max(maxz, z);
-                    /*GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    sphere.transform.position = new Vector3(x, y, z);
-                    sphere.transform.localScale = new Vector3(4f, 4f, 4f);
-                    sphere.transform.parent = oo.transform;*/
                 }
             }
         }
 
-        GameObject bottomBackLeft = CreateSphereFromPos(minx, miny, minz, "bottomBackLeft");
-        GameObject bottomBackRight = CreateSphereFromPos(minx, miny, maxz, "bottomBackRight");
-        GameObject topBackLeft = CreateSphereFromPos(minx, maxy, minz, "topBackLeft");
-        GameObject topBackRight = CreateSphereFromPos(minx, maxy, maxz, "topBackRight");
-        GameObject bottomFrontLeft = CreateSphereFromPos(maxx, miny, minz, "bottomFrontLeft");
-        GameObject bottomFrontRight = CreateSphereFromPos(maxx, miny, maxz, "bottomFrontRight");
-        GameObject topFrontLeft = CreateSphereFromPos(maxx, maxy, minz, "topFrontLeft");
-        GameObject topFrontRight = CreateSphereFromPos(maxx, maxy, maxz, "topFrontRight");
-
+        bottomBackLeft = CreateSphereFromPos(minx, miny, minz, "bottomBackLeft");
+        bottomBackRight = CreateSphereFromPos(minx, miny, maxz, "bottomBackRight");
+        topBackLeft = CreateSphereFromPos(minx, maxy, minz, "topBackLeft");
+        topBackRight = CreateSphereFromPos(minx, maxy, maxz, "topBackRight");
+        bottomFrontLeft = CreateSphereFromPos(maxx, miny, minz, "bottomFrontLeft");
+        bottomFrontRight = CreateSphereFromPos(maxx, miny, maxz, "bottomFrontRight");
+        topFrontLeft = CreateSphereFromPos(maxx, maxy, minz, "topFrontLeft");
+        topFrontRight = CreateSphereFromPos(maxx, maxy, maxz, "topFrontRight");
+        Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
+        center = CreateSphereFromPos(ccct.x, ccct.y, ccct.z, "center");
+        center.transform.localScale = new Vector3(0f, 0f, 0f);
+        Debug.Log(1);
+        /*
         sliderH.transform.position = FindCenter(minx, maxx, miny, maxy, minz, maxz);
         sliderH.transform.parent = oo.transform;
         sliderH.transform.localScale = new Vector3(400f, 400f, 400f);
@@ -93,11 +104,13 @@ public class CTReader : MonoBehaviour
         sliderV.transform.parent = oo.transform;
         sliderV.transform.localScale = new Vector3(400f, 400f, 400f);
         sliderV.transform.eulerAngles = new Vector3(180f, 0f, 0f);
+        */
 
         oo.transform.position = new Vector3(0.941f, 0.75f, 1.729f);
         oo.transform.eulerAngles = new Vector3(0f, 90f, 0f);
         oo.transform.localScale = new Vector3(0.0025f, 0.0025f, 0.0025f);
 
+        /*
         PinchSlider psH = sliderH.GetComponentInChildren<PinchSlider>();
         float sliderLength = (Math.Abs(bottomBackRight.transform.localPosition.z - bottomBackLeft.transform.localPosition.z))
             / (2 * sliderH.transform.localScale.z);
@@ -120,6 +133,7 @@ public class CTReader : MonoBehaviour
         psV.transform.localPosition = new Vector3(psV.transform.localPosition.x,
             bottomFrontRight.transform.localPosition.y,
             bottomFrontRight.transform.localPosition.z);
+        */
     }
 
     private GameObject CreateSphereFromPos(float x, float y, float z, String n)
