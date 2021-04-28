@@ -52,6 +52,28 @@ public class PatientsController : MonoBehaviour
 
     private void TutuneTranslation()
     {
+        Vector3 refCenter = cTReader.GetCenterOfCt(referenceScans);
+        Vector3 newCenter = cTReader.GetCenterOfCt(newScans);
+        float xTranslation = refCenter.x - newCenter.x,
+            yTranslation = refCenter.y - newCenter.y,
+            zTranslation = refCenter.z - newCenter.z;
+        newPatientManip.transform.localPosition = new Vector3(xTranslation, yTranslation, zTranslation);
+        
+        Vector3 pshPos = pinchSliderHor.transform.localPosition,
+            psvPos = pinchSliderVer.transform.localPosition;
+        pinchSliderHor.transform.localPosition = new Vector3(
+            pshPos.x + xTranslation, pshPos.y + yTranslation, pshPos.z + zTranslation);
+        pinchSliderVer.transform.localPosition = new Vector3(
+            psvPos.x + xTranslation, psvPos.y + yTranslation, psvPos.z + zTranslation);
+
+        foreach (GameObject go in cTReader.GetPoints())
+        {
+            Vector3 goPos = go.transform.localPosition;
+            go.transform.localPosition = new Vector3(
+                goPos.x + xTranslation, goPos.y + yTranslation, goPos.z + zTranslation);
+        }
+
+        /*
         Transform backupParentRef = referencePatientManip.transform.parent;
         Transform backupParentNew = newPatientManip.transform.parent;
 
@@ -78,6 +100,7 @@ public class PatientsController : MonoBehaviour
         referencePatientManip.transform.parent = backupParentRef;
         newPatientManip.transform.parent = backupParentNew;
         dummyHandler.RestoreBackup();
+        */
     }
 
     private void TutunePinchSliders()

@@ -23,6 +23,8 @@ public class CTReader : MonoBehaviour
     [HideInInspector]
     public Vector3 ctCenter;
 
+    private float minx, maxx, miny, maxy, minz, maxz;
+
     void Start() {
         Init();
     }
@@ -55,13 +57,35 @@ public class CTReader : MonoBehaviour
             nrrd.origin.z + ((int)Math.Ceiling((double)(nrrd.dims[2] / 2) - 1) * nrrd.scale.z)
             );
 
+        ComputeMinMaxFloats(nrrd);
+
+        bottomBackLeft = CreateSphereFromPos(minx, miny, minz, "bottomBackLeft");
+        bottomBackRight = CreateSphereFromPos(minx, miny, maxz, "bottomBackRight");
+        topBackLeft = CreateSphereFromPos(minx, maxy, minz, "topBackLeft");
+        topBackRight = CreateSphereFromPos(minx, maxy, maxz, "topBackRight");
+        bottomFrontLeft = CreateSphereFromPos(maxx, miny, minz, "bottomFrontLeft");
+        bottomFrontRight = CreateSphereFromPos(maxx, miny, maxz, "bottomFrontRight");
+        topFrontLeft = CreateSphereFromPos(maxx, maxy, minz, "topFrontLeft");
+        topFrontRight = CreateSphereFromPos(maxx, maxy, maxz, "topFrontRight");
+        Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
+        center = CreateSphereFromPos(ccct.x, ccct.y, ccct.z, "center");
+        center.transform.localScale = new Vector3(0f, 0f, 0f);
+        Debug.Log(1);
+
+        dummyHandler.ChangeTransform(new Vector3(0.941f, 0.75f, 1.729f),
+            new Vector3(0f, 90f, 0f),
+            new Vector3(0.0025f, 0.0025f, 0.0025f));
+    }
+
+    private void ComputeMinMaxFloats(NRRD nrrd)
+    {
         int rounds = 2;
-        float minx = float.MaxValue,
-                maxx = float.MinValue,
-                miny = float.MaxValue,
-                maxy = float.MinValue,
-                minz = float.MaxValue,
-                maxz = float.MinValue;
+        minx = float.MaxValue;
+        maxx = float.MinValue;
+        miny = float.MaxValue;
+        maxy = float.MinValue;
+        minz = float.MaxValue;
+        maxz = float.MinValue;
         for (int i = 0; i < rounds; i++)
         {
             // i : 10 == x : dim --> x = dim*i/10
@@ -84,23 +108,6 @@ public class CTReader : MonoBehaviour
                 }
             }
         }
-
-        bottomBackLeft = CreateSphereFromPos(minx, miny, minz, "bottomBackLeft");
-        bottomBackRight = CreateSphereFromPos(minx, miny, maxz, "bottomBackRight");
-        topBackLeft = CreateSphereFromPos(minx, maxy, minz, "topBackLeft");
-        topBackRight = CreateSphereFromPos(minx, maxy, maxz, "topBackRight");
-        bottomFrontLeft = CreateSphereFromPos(maxx, miny, minz, "bottomFrontLeft");
-        bottomFrontRight = CreateSphereFromPos(maxx, miny, maxz, "bottomFrontRight");
-        topFrontLeft = CreateSphereFromPos(maxx, maxy, minz, "topFrontLeft");
-        topFrontRight = CreateSphereFromPos(maxx, maxy, maxz, "topFrontRight");
-        Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
-        center = CreateSphereFromPos(ccct.x, ccct.y, ccct.z, "center");
-        center.transform.localScale = new Vector3(0f, 0f, 0f);
-        Debug.Log(1);
-
-        dummyHandler.ChangeTransform(new Vector3(0.941f, 0.75f, 1.729f),
-            new Vector3(0f, 90f, 0f),
-            new Vector3(0.0025f, 0.0025f, 0.0025f));
     }
 
     private GameObject CreateSphereFromPos(float x, float y, float z, String n)
@@ -120,6 +127,36 @@ public class CTReader : MonoBehaviour
             middlez = (maxz + minz) / 2;
 
         return new Vector3(middlex, middley, middlez);
+    }
+
+    public Vector3 GetCenterOfCt(TextAsset ctObj)
+    {
+        var nrrd = new NRRD(ctObj);
+
+        DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
+        dummyHandler.GoToZero();
+
+        float lengthDirection = nrrd.lengthDirection, lengthSize = nrrd.dims[2];
+        ctLength = Math.Abs(lengthDirection * lengthSize);
+        float depthDirection = nrrd.depthDirection, depthSize = nrrd.dims[1];
+        ctDepth = Math.Abs(depthDirection * depthSize);
+        ctCenter = new Vector3(
+            -1 * (nrrd.origin.x + ((int)Math.Ceiling((double)(nrrd.dims[0] / 2) - 1) * nrrd.scale.x)),
+            nrrd.origin.y + ((int)Math.Ceiling((double)(nrrd.dims[1] / 2) - 1) * nrrd.scale.y),
+            nrrd.origin.z + ((int)Math.Ceiling((double)(nrrd.dims[2] / 2) - 1) * nrrd.scale.z)
+            );
+
+        ComputeMinMaxFloats(nrrd);
+        Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
+
+        dummyHandler.RestoreBackup();
+        return ccct;
+    }
+
+    public GameObject[] GetPoints()
+    {
+        GameObject[] arr = new GameObject[] { bottomBackLeft, bottomBackRight, topBackLeft, topBackRight, bottomFrontLeft, bottomFrontRight, topFrontLeft, topFrontRight, center };
+        return arr;
     }
 
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
