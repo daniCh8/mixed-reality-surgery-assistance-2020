@@ -30,6 +30,7 @@ public class PatientsController : MonoBehaviour
 
     void Start()
     {
+        /*
         referencePatientPositionManip = referencePatientManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
         referenceBonePositionManip = referenceBoneManip.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center;
 
@@ -40,6 +41,43 @@ public class PatientsController : MonoBehaviour
             RetrieveBoneSize(referencePatientManip),
             cTReader.ctLength,
             cTReader.ctDepth);
+        */
+        TutunePinchSliders();
+        Debug.Log(2);
+    }
+
+    private void TutunePinchSliders()
+    {
+        pinchSliderHor.transform.localPosition = cTReader.center.transform.localPosition;
+        pinchSliderVer.transform.localPosition = cTReader.center.transform.localPosition;
+
+        pinchSliderHor.transform.localScale = new Vector3(400f, 400f, 400f);
+        pinchSliderHor.transform.localEulerAngles= new Vector3(0f, 90f, 0f);
+        pinchSliderVer.transform.localScale = new Vector3(400f, 400f, 400f);
+        pinchSliderVer.transform.localEulerAngles = new Vector3(180f, 0f, 0f);
+
+        PinchSlider psH = pinchSliderHor.GetComponentInChildren<PinchSlider>();
+        float sliderLength = (Math.Abs(cTReader.bottomBackRight.transform.localPosition.z - cTReader.bottomBackLeft.transform.localPosition.z))
+            / (2 * pinchSliderHor.transform.localScale.z);
+        psH.SliderStartDistance = sliderLength;
+        psH.SliderEndDistance = -sliderLength;
+        // 1 : .250 = x : 2*sliderLength --> x = .9725 / .250
+        float newScaleX = (2 * sliderLength) / 0.250f;
+        psH.transform.GetChild(0).transform.localScale = new Vector3(newScaleX, 1f, 1f);
+        psH.transform.localPosition = new Vector3(cTReader.bottomFrontLeft.transform.localPosition.x,
+            cTReader.bottomFrontLeft.transform.localPosition.y,
+            psH.transform.localPosition.z);
+
+        PinchSlider psV = pinchSliderVer.GetComponentInChildren<PinchSlider>();
+        sliderLength = (Math.Abs(cTReader.bottomFrontLeft.transform.localPosition.x - cTReader.bottomBackLeft.transform.localPosition.x))
+            / (2 * pinchSliderVer.transform.localScale.z);
+        psV.SliderStartDistance = sliderLength;
+        psV.SliderEndDistance = -sliderLength;
+        newScaleX = (2 * sliderLength) / 0.250f;
+        psV.transform.GetChild(0).transform.localScale = new Vector3(newScaleX, 1f, 1f);
+        psV.transform.localPosition = new Vector3(psV.transform.localPosition.x,
+            cTReader.bottomFrontRight.transform.localPosition.y,
+            cTReader.bottomFrontRight.transform.localPosition.z);
     }
 
     private Bounds RetrieveCombinedBounds(GameObject parent)
