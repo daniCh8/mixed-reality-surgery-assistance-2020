@@ -79,6 +79,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     // Start is called before the first frame update
     void Start()
     {
+        //Debug.Log("helo1! " + boneGroup.transform.TransformPointUnscaled(boneGroup.transform.position));
+        // Debug.Log("helo2! " + boneGroup.transform.TransformPoint(boneGroup.transform.position));
 
         // init bone references
         InitBoneReferences();
@@ -107,8 +109,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
 
-        patientsController.SwitchPatient();
-        patientsController.SwitchPatient();
+        // patientsController.SwitchPatient();
+        // patientsController.SwitchPatient();
     }
 
     public void InitBoneReferences()

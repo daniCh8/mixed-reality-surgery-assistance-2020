@@ -14,6 +14,9 @@ using static Microsoft.MixedReality.Toolkit.UI.ObjectManipulator;
 
 public class ScrewSceneController : MonoBehaviour
 {
+    // Screw Positions
+    public TextAsset referenceDistPositions;
+    public GameObject distScrew1, distScrew2, distScrew3;
 
     // Plates Visibility State
     public enum PlatesState { Both, Lat, Med, None }
@@ -144,14 +147,9 @@ public class ScrewSceneController : MonoBehaviour
     }
     */
 
-    /*
-    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(bool latScrew)
+    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition()
     {
-        String textAsset = referenceMedPositions.text.Replace("\"", "");
-        if(latScrew)
-        {
-            textAsset = referenceLatPositions.text.Replace("\"", "");
-        }
+        String textAsset = referenceDistPositions.text.Replace("\"", "");
         String[] lines = Regex.Split(textAsset, "\n|\r|\r\n");
         List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
         Vector3 dummyVector = new Vector3(0, 0, 0);
@@ -179,9 +177,7 @@ public class ScrewSceneController : MonoBehaviour
 
         return points;
     }
-    */
 
-    /*
     private Matrix<float> FindTransformationMatrix(Vector3[] thisSysCenters, Tuple<Vector3, Vector3>[] textScrewPoints)
     {
         Vector3[] otherSysPoints = new Vector3[3];
@@ -211,14 +207,58 @@ public class ScrewSceneController : MonoBehaviour
 
         Matrix<float> basis = thisSystemMat.Multiply((otherSystemMat.Inverse()));
 
-        Debug.Log(basis);
-
         return basis;
     }
-    */
+
+    public void GenerateScrewFromTextFile()
+    {
+        List<Tuple<Vector3, Vector3>> textScrewPoints = ProcessScrewPosition();
+        Tuple<Vector3, Vector3>[] firstThreeTextScrewPoints = 
+            {textScrewPoints[0], textScrewPoints[1], textScrewPoints[2] };
+        Vector3[] screwPointsCenter =
+        {
+            distScrew1.GetComponentInChildren<Renderer>().bounds.center,
+            distScrew2.GetComponentInChildren<Renderer>().bounds.center,
+            distScrew3.GetComponentInChildren<Renderer>().bounds.center
+        };
+
+        Matrix<float> transformationMatrix = FindTransformationMatrix(screwPointsCenter, firstThreeTextScrewPoints);
+        
+        foreach(Tuple<Vector3, Vector3> textScrewPoint in textScrewPoints)
+        {
+            float[][] startPointColumnArrays = {
+            new float[]{ textScrewPoint.Item1.x, textScrewPoint.Item1.y, textScrewPoint.Item1.z } };
+            Matrix<float> startPointMat = Matrix<float>.Build.DenseOfColumnArrays(startPointColumnArrays);
+            Matrix<float> startPointMatM = transformationMatrix.Multiply(startPointMat);
+            Vector3 startVector = new Vector3(
+                startPointMatM.ToColumnArrays()[0][0], startPointMatM.ToColumnArrays()[0][1], startPointMatM.ToColumnArrays()[0][2]);
+
+            float[][] endPointColumnArrays = {
+            new float[]{ textScrewPoint.Item2.x, textScrewPoint.Item2.y, textScrewPoint.Item2.z } };
+            Matrix<float> endPointMat = Matrix<float>.Build.DenseOfColumnArrays(endPointColumnArrays);
+            Matrix<float> endPointMatM = transformationMatrix.Multiply(endPointMat);
+            Vector3 endVector = new Vector3(
+                endPointMatM.ToColumnArrays()[0][0], endPointMatM.ToColumnArrays()[0][1], endPointMatM.ToColumnArrays()[0][2]);
+
+            GameObject sphereStart = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphereStart.transform.localScale = new Vector3(0.012f, 0.012f, 0.012f);
+            sphereStart.transform.position = startVector;
+            sphereStart.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
+
+            GameObject sphereEnd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphereEnd.transform.localScale = new Vector3(0.012f, 0.012f, 0.012f);
+            sphereEnd.transform.position = endVector;
+            sphereEnd.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
+
+            GameObject scrr = CreateCylinderBetweenPoints(startVector, endVector);
+            scrr.GetComponentInChildren<Renderer>().material = newScrewMaterial;
+        }
+
+    }
 
     private GameObject GenerateScrewFromObj(GameObject screw)
     {
+        bool backupSceneActive = scene.activeSelf;
         scene.SetActive(true);
         MeshCollider collider = screw.AddComponent<MeshCollider>();
         collider.convex = true;
@@ -297,7 +337,7 @@ public class ScrewSceneController : MonoBehaviour
             );
 
         Destroy(screw.GetComponent<MeshCollider>());
-        scene.SetActive(false);
+        scene.SetActive(backupSceneActive);
 
         GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint);
         cylinderScrew.transform.parent = screw.transform.parent;
@@ -372,9 +412,14 @@ public class ScrewSceneController : MonoBehaviour
                     (screw.transform.childCount > 0 && screw.transform.GetChild(0).name.Contains(ScrewConstants.LAT_SCREW_TAG, StringComparison.OrdinalIgnoreCase)))
                 {
                     screw.tag = ScrewConstants.LAT_SCREW_TAG;
-                } else
+                } else if(screw.name.Contains(ScrewConstants.MED_SCREW_TAG, StringComparison.OrdinalIgnoreCase) ||
+                    screw.transform.parent.name.Contains(ScrewConstants.MED_SCREW_TAG, StringComparison.OrdinalIgnoreCase) ||
+                    (screw.transform.childCount > 0 && screw.transform.GetChild(0).name.Contains(ScrewConstants.MED_SCREW_TAG, StringComparison.OrdinalIgnoreCase)))
                 {
                     screw.tag = ScrewConstants.MED_SCREW_TAG;
+                } else
+                {
+                    screw.tag = ScrewConstants.DIST_SCREW_TAG;
                 }
             }
         }
@@ -941,8 +986,10 @@ public class ScrewSceneController : MonoBehaviour
 static class ScrewConstants
 {
     public const String LAT_SCREW_TAG = "Lat";
+    public const String DIST_SCREW_TAG = "Dist";
     public const String MED_SCREW_TAG = "Med";
     public const String NEW_SCREW_TAG = "New";
+    public const String DIST_DELETED_SCREW_TAG = "DistDeleted";
     public const String NEW_DELETED_SCREW_TAG = "NewDeleted";
     public const String LAT_DELETED_SCREW_TAG = "LatDeleted";
     public const String MED_DELETED_SCREW_TAG = "MedDeleted";
