@@ -4629,7 +4629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e415674c384175a44ab6e2750ea79dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ct: {fileID: 4900000, guid: b9753f92c1822124093543c4fcdf142d, type: 3}
+  ct: {fileID: 4900000, guid: f53e88d2d5e9b8440ade832d703557a0, type: 3}
   slicer: {fileID: 7200000, guid: ea9a1b7e79a1e044d88a72a42e6e8a4c, type: 3}
   oo: {fileID: 1516372278}
   sliderH: {fileID: 4464616428543595917}
@@ -17933,7 +17933,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1203975248
 Transform:
   m_ObjectHideFlags: 0
@@ -18293,16 +18293,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newPatientManip: {fileID: 1203975247}
-  newBoneManip: {fileID: 919132147579210064}
-  referenceBoneManip: {fileID: 919132148560973560}
   referencePatientManip: {fileID: 1792547352}
+  onScreenPatientManip: {fileID: 1792547352}
   pinchSliderHor: {fileID: 4464616428543595917}
-  visualTrackHor: {fileID: 0}
   pinchSliderVer: {fileID: 903487277}
-  visualTrackVer: {fileID: 0}
   cTReader: {fileID: 278603713}
   newScans: {fileID: 4900000, guid: b9753f92c1822124093543c4fcdf142d, type: 3}
   referenceScans: {fileID: 4900000, guid: f53e88d2d5e9b8440ade832d703557a0, type: 3}
+  onScreenScans: {fileID: 4900000, guid: f53e88d2d5e9b8440ade832d703557a0, type: 3}
   referencePatientScrew: {fileID: 253716662}
   newPatientScrew: {fileID: 85439648}
   dummyObject: {fileID: 1516372278}
