@@ -11,22 +11,17 @@ public class CTReader : MonoBehaviour
 {
     public TextAsset ct;
     public ComputeShader slicer;
-    public float ctLength, ctDepth;
-    public Vector3 ctCenter;
     public GameObject oo;
     public GameObject sliderH;
     public GameObject sliderV;
     int kernel;
 
-    public GameObject bottomBackLeft;
-    public GameObject bottomBackRight;
-    public GameObject topBackLeft;
-    public GameObject topBackRight;
-    public GameObject bottomFrontLeft;
-    public GameObject bottomFrontRight;
-    public GameObject topFrontLeft;
-    public GameObject topFrontRight;
-    public GameObject center;
+    [HideInInspector]
+    public GameObject bottomBackLeft, bottomBackRight, topBackLeft, topBackRight, bottomFrontLeft, bottomFrontRight, topFrontLeft, topFrontRight, center;
+    [HideInInspector]
+    public float ctLength, ctDepth;
+    [HideInInspector]
+    public Vector3 ctCenter;
 
     void Start() {
         Init();
