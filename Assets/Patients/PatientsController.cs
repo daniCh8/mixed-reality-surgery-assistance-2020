@@ -21,6 +21,9 @@ public class PatientsController : MonoBehaviour
     // Screw Scene References
     public GameObject referencePatientScrew, newPatientScrew;
 
+    // Dummy Object at (0,0,0)
+    public GameObject dummyObject;
+
     private enum Axis
     {
         x,
@@ -43,7 +46,38 @@ public class PatientsController : MonoBehaviour
             cTReader.ctDepth);
         */
         TutunePinchSliders();
+        TutuneTranslation();
         Debug.Log(2);
+    }
+
+    private void TutuneTranslation()
+    {
+        Transform backupParentRef = referencePatientManip.transform.parent;
+        Transform backupParentNew = newPatientManip.transform.parent;
+
+        DummyTransformHandler dummyHandler = dummyObject.GetComponent<DummyTransformHandler>();
+        dummyHandler.GoToZero();
+
+        referencePatientManip.transform.parent = dummyObject.transform;
+        newPatientManip.transform.parent = dummyObject.transform;
+
+        Bounds refBounds = RetrieveCombinedBounds(referencePatientManip);
+        Bounds newBounds = RetrieveCombinedBounds(newPatientManip);
+
+        Debug.Log(refBounds.center);
+        Debug.Log(newBounds.center);
+
+        float xTranslation = refBounds.center.x - newBounds.center.x,
+            yTranslation = refBounds.center.y - newBounds.center.y,
+            zTranslation = refBounds.center.z - newBounds.center.z;
+        newPatientManip.transform.localPosition = new Vector3(xTranslation, yTranslation, zTranslation);
+        Debug.Log(xTranslation);
+        Debug.Log(yTranslation);
+        Debug.Log(zTranslation);
+
+        referencePatientManip.transform.parent = backupParentRef;
+        newPatientManip.transform.parent = backupParentNew;
+        dummyHandler.RestoreBackup();
     }
 
     private void TutunePinchSliders()

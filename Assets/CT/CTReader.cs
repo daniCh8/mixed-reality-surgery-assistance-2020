@@ -37,6 +37,14 @@ public class CTReader : MonoBehaviour
         slicer.SetBuffer(kernel, "data", buf);
         slicer.SetInts("dims", nrrd.dims);
 
+        PointCloud(nrrd);
+    }
+
+    private void PointCloud(NRRD nrrd)
+    {
+        DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
+        dummyHandler.GoToZero();
+
         float lengthDirection = nrrd.lengthDirection, lengthSize = nrrd.dims[2];
         ctLength = Math.Abs(lengthDirection * lengthSize);
         float depthDirection = nrrd.depthDirection, depthSize = nrrd.dims[1];
@@ -57,14 +65,14 @@ public class CTReader : MonoBehaviour
         for (int i = 0; i < rounds; i++)
         {
             // i : 10 == x : dim --> x = dim*i/10
-            int dx = (int)(nrrd.dims[0] * i / (rounds-1));
-            for(int j = 0; j < rounds; j++)
+            int dx = (int)(nrrd.dims[0] * i / (rounds - 1));
+            for (int j = 0; j < rounds; j++)
             {
-                int dy = (int)(nrrd.dims[1] * j / (rounds-1));
+                int dy = (int)(nrrd.dims[1] * j / (rounds - 1));
                 for (int k = 0; k < rounds; k++)
                 {
-                    int dz = (int)(nrrd.dims[2] * k / (rounds-1));
-                    float x = nrrd.origin.x + dx * nrrd.scale.x;
+                    int dz = (int)(nrrd.dims[2] * k / (rounds - 1));
+                    float x = -1 * (nrrd.origin.x + dx * nrrd.scale.x);
                     float y = nrrd.origin.y + dy * nrrd.scale.y;
                     float z = nrrd.origin.z + dz * nrrd.scale.z;
                     minx = Math.Min(minx, x);
@@ -89,46 +97,10 @@ public class CTReader : MonoBehaviour
         center = CreateSphereFromPos(ccct.x, ccct.y, ccct.z, "center");
         center.transform.localScale = new Vector3(0f, 0f, 0f);
         Debug.Log(1);
-        /*
-        sliderH.transform.position = FindCenter(minx, maxx, miny, maxy, minz, maxz);
-        sliderH.transform.parent = oo.transform;
-        sliderH.transform.localScale = new Vector3(400f, 400f, 400f);
-        sliderH.transform.eulerAngles = new Vector3(0f, 90f, 0f);
 
-        sliderV.transform.position = FindCenter(minx, maxx, miny, maxy, minz, maxz);
-        sliderV.transform.parent = oo.transform;
-        sliderV.transform.localScale = new Vector3(400f, 400f, 400f);
-        sliderV.transform.eulerAngles = new Vector3(180f, 0f, 0f);
-        */
-
-        oo.transform.position = new Vector3(0.941f, 0.75f, 1.729f);
-        oo.transform.eulerAngles = new Vector3(0f, 90f, 0f);
-        oo.transform.localScale = new Vector3(0.0025f, 0.0025f, 0.0025f);
-
-        /*
-        PinchSlider psH = sliderH.GetComponentInChildren<PinchSlider>();
-        float sliderLength = (Math.Abs(bottomBackRight.transform.localPosition.z - bottomBackLeft.transform.localPosition.z))
-            / (2 * sliderH.transform.localScale.z);
-        psH.SliderStartDistance = sliderLength;
-        psH.SliderEndDistance = -sliderLength;
-        // 1 : .250 = x : 2*sliderLength --> x = .9725 / .250
-        float newScaleX = (2 * sliderLength) / 0.250f;
-        psH.transform.GetChild(0).transform.localScale = new Vector3(newScaleX, 1f, 1f);
-        psH.transform.localPosition = new Vector3(bottomFrontLeft.transform.localPosition.x, 
-            bottomFrontLeft.transform.localPosition.y, 
-            psH.transform.localPosition.z);
-
-        PinchSlider psV = sliderV.GetComponentInChildren<PinchSlider>();
-        sliderLength = (Math.Abs(bottomFrontLeft.transform.localPosition.x - bottomBackLeft.transform.localPosition.x))
-            / (2 * sliderV.transform.localScale.z);
-        psV.SliderStartDistance = sliderLength;
-        psV.SliderEndDistance = -sliderLength;
-        newScaleX = (2 * sliderLength) / 0.250f;
-        psV.transform.GetChild(0).transform.localScale = new Vector3(newScaleX, 1f, 1f);
-        psV.transform.localPosition = new Vector3(psV.transform.localPosition.x,
-            bottomFrontRight.transform.localPosition.y,
-            bottomFrontRight.transform.localPosition.z);
-        */
+        dummyHandler.ChangeTransform(new Vector3(0.941f, 0.75f, 1.729f),
+            new Vector3(0f, 90f, 0f),
+            new Vector3(0.0025f, 0.0025f, 0.0025f));
     }
 
     private GameObject CreateSphereFromPos(float x, float y, float z, String n)
