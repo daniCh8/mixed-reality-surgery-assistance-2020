@@ -171,7 +171,7 @@ public class CTReader : MonoBehaviour
         dx = Vector3.Scale(dx, scale / rtex.width);
         dy = Vector3.Scale(dy, scale / rtex.height);
 
-        slicer.SetFloats("orig", new float[] { orig.x, orig.y, orig.z });
+        slicer.SetFloats("orig", new float[] { orig.x, orig.y, orig.z }); 
         slicer.SetFloats("dx", new float[] { dx.x, dx.y, dx.z });
         slicer.SetFloats("dy", new float[] { dy.x, dy.y, dy.z });
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);
