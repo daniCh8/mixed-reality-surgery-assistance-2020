@@ -12,8 +12,8 @@ public class CTReader : MonoBehaviour
     public TextAsset ct;
     public ComputeShader slicer;
     public GameObject oo;
-    public GameObject sliderH;
-    public GameObject sliderV;
+    public GameObject sliderH, sliderV;
+    public GameObject quadH, revQuadH, quadV, revQuadV;
     int kernel;
 
     [HideInInspector]
@@ -24,6 +24,7 @@ public class CTReader : MonoBehaviour
     public Vector3 ctCenter;
 
     private float minx, maxx, miny, maxy, minz, maxz;
+    private NRRD nrrd;
 
     void Start() {
         Init();
@@ -31,14 +32,16 @@ public class CTReader : MonoBehaviour
 
     public void Init()
     {
-        var nrrd = new NRRD(ct);
+        nrrd = new NRRD(ct);
 
         kernel = slicer.FindKernel("CSMain");
         var buf = new ComputeBuffer(nrrd.data.Length, sizeof(float));
         buf.SetData(nrrd.data);
         slicer.SetBuffer(kernel, "data", buf);
         slicer.SetInts("dims", nrrd.dims);
-
+        print(nrrd.dims[0]);
+        print(nrrd.dims[1]);
+        print(nrrd.dims[2]);
         PointCloud(nrrd);
     }
 
@@ -70,7 +73,18 @@ public class CTReader : MonoBehaviour
         Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
         center = CreateSphereFromPos(ccct.x, ccct.y, ccct.z, "center");
         center.transform.localScale = new Vector3(0f, 0f, 0f);
-        Debug.Log(1);
+
+        float width = 0.0025f * (maxz - minz),
+            height = 0.0025f * (maxy - miny),
+            depth = 0.0025f * (maxx - minx);
+        Vector3 quadLocalScaleH = new Vector3(depth, height, 1f),
+            revQuadLocalScaleH = new Vector3(-depth, height, 1f),
+            quadLocalScaleV = new Vector3(width, height, 1f),
+            revQuadLocalScaleV = new Vector3(width, -height, 1f);
+        quadH.transform.localScale = quadLocalScaleH;
+        revQuadH.transform.localScale = revQuadLocalScaleH;
+        quadV.transform.localScale = quadLocalScaleV;
+        revQuadV.transform.localScale = revQuadLocalScaleV;
 
         dummyHandler.ChangeTransform(new Vector3(0.941f, 0.75f, 1.729f),
             new Vector3(0f, 90f, 0f),
@@ -159,17 +173,27 @@ public class CTReader : MonoBehaviour
         return arr;
     }
 
-    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
+    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned) {
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
         slicer.SetTexture(kernel, "slice", rtex);
         slicer.SetInts("outDims", new int[] { rtex.width, rtex.height });
 
-        var scale = GetComponent<Transform>().localScale.normalized;
+        Vector3 scale = new Vector3(nrrd.dims[2], nrrd.dims[2], nrrd.dims[1]).normalized;
+        
+        float factor1 = 1f, factor2 = 2.75f;
+        if (disaligned)
+        {
+            factor1 = nrrd.dims[1] / nrrd.dims[2];
+        }
+        if (dx.z == 1)
+        {
+            factor2 = 1.17f;
+        }
         scale = new Vector3(1 / scale.x, 1 / scale.y, 1 / scale.z);
-        dx = Vector3.Scale(dx, scale / rtex.width);
-        dy = Vector3.Scale(dy, scale / rtex.height);
+        dx = Vector3.Scale(dx, scale / (factor2 * rtex.width));
+        dy = Vector3.Scale(dy, scale / (factor1 * factor2 * rtex.height));
 
         slicer.SetFloats("orig", new float[] { orig.x, orig.y, orig.z }); 
         slicer.SetFloats("dx", new float[] { dx.x, dx.y, dx.z });
@@ -177,12 +201,41 @@ public class CTReader : MonoBehaviour
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);
 
         RenderTexture.active = rtex;
-        result.ReadPixels(new Rect(0, 0, rtex.width-32, rtex.height-32), 16, 16);
+        result.ReadPixels(new Rect(0, 0, rtex.width, rtex.height), 0, 0);
         result.Apply();
     }
 
     public Vector3 TransformWorldCoords(Vector3 p) {
         return GetComponent<Transform>().InverseTransformPoint(p);
+    }
+
+    public Vector3 GetPositionFromSlider(float v, SliderSlice.Axis ax) {
+        // (v+0.5) : 1 == x : delta
+        Vector3 pos = new Vector3(center.transform.localPosition.x,
+            center.transform.localPosition.y,
+            center.transform.localPosition.z);
+        switch (ax)
+        {
+            case SliderSlice.Axis.X:
+                // depth
+                pos.x = bottomFrontLeft.transform.localPosition.x +
+                    ((bottomBackLeft.transform.localPosition.x - 
+                    bottomFrontLeft.transform.localPosition.x) * (v + 0.5f));
+                break;
+            case SliderSlice.Axis.Y:
+                // height
+                pos.y = bottomFrontLeft.transform.localPosition.y +
+                    ((topFrontLeft.transform.localPosition.y -
+                    bottomFrontLeft.transform.localPosition.y) * (v + 0.5f));
+                break;
+            case SliderSlice.Axis.Z:
+                // length
+                pos.z = bottomFrontLeft.transform.localPosition.z +
+                    ((bottomFrontRight.transform.localPosition.z -
+                    bottomFrontLeft.transform.localPosition.z ) * (v + 0.5f));
+                break;
+        }
+        return pos;
     }
 }
 

@@ -10,6 +10,8 @@ public class SliderSlice : MonoBehaviour {
     public PinchSlider slider;
     public enum Axis { X, Y, Z };
     public Axis axis;
+    public GameObject quad;
+    public bool disaligned;
 
     public enum ColorFlag { Emerald, Yellow, None }
     public ColorFlag colorTexture;
@@ -70,7 +72,12 @@ public class SliderSlice : MonoBehaviour {
                     break;
             }
 
-            ct.Slice(orig, dx, dy, tex);
+            ct.Slice(orig, dx, dy, tex, disaligned);
+            Vector3 quadPos = ct.GetPositionFromSlider(val, axis);
+            Transform backupParent = quad.transform.parent;
+            quad.transform.parent = ct.oo.transform;
+            quad.transform.localPosition = quadPos;
+            quad.transform.parent = backupParent;
         }
     }
 }
