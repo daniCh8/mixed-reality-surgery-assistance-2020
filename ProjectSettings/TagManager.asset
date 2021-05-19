@@ -12,6 +12,7 @@ TagManager:
   - NewDeleted
   - Dist
   - DistDeleted
+  - Rev
   layers:
   - Default
   - TransparentFX
