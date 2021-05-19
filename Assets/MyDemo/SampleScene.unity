@@ -5932,8 +5932,8 @@ MonoBehaviour:
   - {fileID: 640187606}
   - {fileID: 768218865}
   quadTransparentMat: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  quadCyanMat: {fileID: 2100000, guid: 055192405bd43bb41a3d51c70fd443ef, type: 2}
-  quadYellowMat: {fileID: 2100000, guid: 6a92a01febd262544a43a7fe54b88013, type: 2}
+  quadCyanMat: {fileID: 2100000, guid: ab6b5d4dc17c48bbab69426bced2d601, type: 2}
+  quadYellowMat: {fileID: 2100000, guid: 4e7efd468ef796b4cbdefce6c9b071f9, type: 2}
   nearMenu: {fileID: 7545364183534544660}
   boneGroup: {fileID: 1781766567}
   patient: {fileID: 1792547352}

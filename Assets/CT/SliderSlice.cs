@@ -21,6 +21,11 @@ public class SliderSlice : MonoBehaviour {
     Vector4 bCol;
 
     void Start() {
+        Init();
+    }
+
+    public void Init() {
+        currentVal = -1;
         switch (colorTexture)
         {
             case ColorFlag.Cyan:

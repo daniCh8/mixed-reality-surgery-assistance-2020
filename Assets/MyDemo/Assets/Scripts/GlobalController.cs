@@ -612,19 +612,19 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     {
         foreach (var quad in quads)
         {
-            Material m;
+            Renderer r = quad.GetComponent<Renderer>();
             SliderSlice s = quad.GetComponent<SliderSlice>();
             if (s.enabled)
             {
                 s.enabled = false;
-                m = s.colorTexture == SliderSlice.ColorFlag.Cyan ? quadCyanMat : quadYellowMat;
+                r.material = s.colorTexture == SliderSlice.ColorFlag.Cyan ? quadCyanMat : quadYellowMat;
                 
             } else
             {
                 s.enabled = true;
-                m = quadTransparentMat;
+                r.material = quadTransparentMat;
+                s.Init();
             }
-            quad.GetComponent<Renderer>().material = m;
         }
     }
 }
