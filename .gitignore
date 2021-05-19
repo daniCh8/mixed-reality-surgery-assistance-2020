@@ -70,3 +70,4 @@ crashlytics-build.properties
 # unused test contents and builds
 App/
 App1/
+.DS_Store
