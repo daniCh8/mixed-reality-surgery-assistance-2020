@@ -99,7 +99,7 @@ public class HandSlice : MonoBehaviour {
                 referencePlane.GetComponent<Transform>().localPosition = p2;
             }
 
-            ct.Slice(orig, dx, dy, tex, false);
+            ct.Slice(orig, dx, dy, tex, false, BorderColors.RED);
         }
     }
 }
