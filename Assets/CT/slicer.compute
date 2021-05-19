@@ -7,6 +7,7 @@ RWTexture2D<float4> slice;
 uint2 outDims;
 
 float3 orig, dx, dy;
+float4 borderColor;
 
 float getData(uint3 ip, uint corner) {
 	return data[(ip.x + (corner & 4)) + (ip.y + (corner & 2)) * dims.x + (ip.z + (corner & 1)) * dims.x * dims.y];
@@ -38,7 +39,7 @@ void CSMain(uint3 id : SV_DispatchThreadID) {
 
 	if (all(abs(p) <= float3(0.5, 0.5, 0.5))) {
 		if (any(float3(0.5, 0.5, 0.5) - abs(p) < 0.005)) {
-			slice[id.xy] = float4(1, 1, 0, 1);
+			slice[id.xy] = float4(borderColor.x, borderColor.y, borderColor.z, borderColor.w);
 		} else {
 			float v = interpolate(p);
 			slice[id.xy] = float4(v, v, v, 1);

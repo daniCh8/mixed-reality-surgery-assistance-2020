@@ -13,27 +13,27 @@ public class SliderSlice : MonoBehaviour {
     public GameObject quad;
     public bool disaligned;
 
-    public enum ColorFlag { Emerald, Yellow, None }
+    public enum ColorFlag { Cyan, Yellow, Red }
     public ColorFlag colorTexture;
 
     Texture2D tex;
     float currentVal = -1;
+    Vector4 bCol;
 
     void Start() {
-        Color textureColor = Color.black;
         switch (colorTexture)
         {
-            case ColorFlag.Emerald:
-                textureColor = new Color32(37, 160, 149, 1);
+            case ColorFlag.Cyan:
+                bCol = BorderColors.CYAN;
                 break;
             case ColorFlag.Yellow:
-                textureColor = new Color32(175, 162, 54, 1);
+                bCol = BorderColors.YELLOW;
                 break;
-            case ColorFlag.None:
-                textureColor = Color.black;
+            case ColorFlag.Red:
+                bCol = BorderColors.RED;
                 break;
         }
-        tex = NewTexture(width, height, textureColor);
+        tex = NewTexture(width, height, Color.black);
         GetComponent<Renderer>().material.mainTexture = tex;
     }
 
@@ -72,7 +72,7 @@ public class SliderSlice : MonoBehaviour {
                     break;
             }
 
-            ct.Slice(orig, dx, dy, tex, disaligned);
+            ct.Slice(orig, dx, dy, tex, disaligned, bCol);
             Vector3 quadPos = ct.GetPositionFromSlider(val, axis);
             Transform backupParent = quad.transform.parent;
             quad.transform.parent = ct.oo.transform;

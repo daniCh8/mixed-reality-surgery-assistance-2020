@@ -170,7 +170,7 @@ public class CTReader : MonoBehaviour
         return arr;
     }
 
-    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned) {
+    public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned, Vector4 bCol) {
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
@@ -195,6 +195,7 @@ public class CTReader : MonoBehaviour
         slicer.SetFloats("orig", new float[] { orig.x, orig.y, orig.z }); 
         slicer.SetFloats("dx", new float[] { dx.x, dx.y, dx.z });
         slicer.SetFloats("dy", new float[] { dy.x, dy.y, dy.z });
+        slicer.SetFloats("borderColor", new float[] { bCol.x, bCol.y, bCol.z, bCol.w });
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);
 
         RenderTexture.active = rtex;
@@ -305,4 +306,11 @@ public static class BinaryReaderExtension {
         }
         return line.ToString();
     }
+}
+
+public static class BorderColors
+{
+    public static readonly Vector4 YELLOW = new Vector4(1, 1, 0, 1);
+    public static readonly Vector4 RED = new Vector4(1, 0, 0, 1);
+    public static readonly Vector4 CYAN = new Vector4(0, 1, 1, 1);
 }
