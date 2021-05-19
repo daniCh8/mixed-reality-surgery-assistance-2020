@@ -24,7 +24,6 @@ public class PatientsController : MonoBehaviour
     {
         TutunePinchSliders();
         //TutuneTranslation();
-        Debug.Log(2);
     }
 
     private void TutuneTranslation()
