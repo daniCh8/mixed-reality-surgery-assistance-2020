@@ -37,6 +37,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     // Slider
     public GameObject slider, slider2;
+    public GameObject[] quads;
+    public Material quadTransparentMat, quadCyanMat, quadYellowMat;
 
     // Menu
     public GameObject nearMenu;
@@ -604,6 +606,26 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         }
 
         return null;
+    }
+
+    public void ScanToPlanes()
+    {
+        foreach (var quad in quads)
+        {
+            Material m;
+            SliderSlice s = quad.GetComponent<SliderSlice>();
+            if (s.enabled)
+            {
+                s.enabled = false;
+                m = s.colorTexture == SliderSlice.ColorFlag.Cyan ? quadCyanMat : quadYellowMat;
+                
+            } else
+            {
+                s.enabled = true;
+                m = quadTransparentMat;
+            }
+            quad.GetComponent<Renderer>().material = m;
+        }
     }
 }
 
