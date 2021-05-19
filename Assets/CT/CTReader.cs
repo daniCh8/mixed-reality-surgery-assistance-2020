@@ -23,7 +23,7 @@ public class CTReader : MonoBehaviour
     [HideInInspector]
     public Vector3 ctCenter;
 
-    private float minx, maxx, miny, maxy, minz, maxz;
+    private float minx, maxx, miny, maxy, minz, maxz, width, height, depth;
     private NRRD nrrd;
 
     void Start() {
@@ -39,9 +39,6 @@ public class CTReader : MonoBehaviour
         buf.SetData(nrrd.data);
         slicer.SetBuffer(kernel, "data", buf);
         slicer.SetInts("dims", nrrd.dims);
-        print(nrrd.dims[0]);
-        print(nrrd.dims[1]);
-        print(nrrd.dims[2]);
         PointCloud(nrrd);
     }
 
@@ -74,17 +71,17 @@ public class CTReader : MonoBehaviour
         center = CreateSphereFromPos(ccct.x, ccct.y, ccct.z, "center");
         center.transform.localScale = new Vector3(0f, 0f, 0f);
 
-        float width = 0.0025f * (maxz - minz),
-            height = 0.0025f * (maxy - miny),
-            depth = 0.0025f * (maxx - minx);
+        width = maxz - minz;
+        height = maxy - miny;
+        depth = maxx - minx;
         Vector3 quadLocalScaleH = new Vector3(depth, height, 1f),
             revQuadLocalScaleH = new Vector3(-depth, height, 1f),
             quadLocalScaleV = new Vector3(width, height, 1f),
             revQuadLocalScaleV = new Vector3(width, -height, 1f);
-        quadH.transform.localScale = quadLocalScaleH;
-        revQuadH.transform.localScale = revQuadLocalScaleH;
-        quadV.transform.localScale = quadLocalScaleV;
-        revQuadV.transform.localScale = revQuadLocalScaleV;
+        quadH.transform.localScale = quadLocalScaleH * 0.0025f;
+        revQuadH.transform.localScale = revQuadLocalScaleH * 0.0025f;
+        quadV.transform.localScale = quadLocalScaleV * 0.0025f;
+        revQuadV.transform.localScale = revQuadLocalScaleV * 0.0025f;
 
         dummyHandler.ChangeTransform(new Vector3(0.941f, 0.75f, 1.729f),
             new Vector3(0f, 90f, 0f),
@@ -180,16 +177,16 @@ public class CTReader : MonoBehaviour
         slicer.SetTexture(kernel, "slice", rtex);
         slicer.SetInts("outDims", new int[] { rtex.width, rtex.height });
 
-        Vector3 scale = new Vector3(nrrd.dims[2], nrrd.dims[2], nrrd.dims[1]).normalized;
-        
-        float factor1 = 1f, factor2 = 2.75f;
+        Vector3 scale = new Vector3(depth, height, width).normalized;
+
+        float factor1 = 1f, factor2 = 2.23f;
         if (disaligned)
         {
-            factor1 = nrrd.dims[1] / nrrd.dims[2];
+            factor1 = width / height;
         }
         if (dx.z == 1)
         {
-            factor2 = 1.17f;
+            factor2 = 1.29f;
         }
         scale = new Vector3(1 / scale.x, 1 / scale.y, 1 / scale.z);
         dx = Vector3.Scale(dx, scale / (factor2 * rtex.width));
