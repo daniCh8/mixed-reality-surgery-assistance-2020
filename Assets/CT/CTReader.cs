@@ -33,6 +33,12 @@ public class CTReader : MonoBehaviour
     public void Init()
     {
         nrrd = new NRRD(ct);
+        for (int i = 0; i < 3; i++)
+        {
+            // Debug.Log(nrrd.dims[i]);
+            // Debug.Log(nrrd.scale[i]);
+            Debug.Log(nrrd.dims[i] * nrrd.scale[i]);
+        }
 
         kernel = slicer.FindKernel("CSMain");
         var buf = new ComputeBuffer(nrrd.data.Length, sizeof(float));
@@ -177,20 +183,8 @@ public class CTReader : MonoBehaviour
         slicer.SetTexture(kernel, "slice", rtex);
         slicer.SetInts("outDims", new int[] { rtex.width, rtex.height });
 
-        Vector3 scale = new Vector3(depth, height, width).normalized;
-
-        float factor1 = 1f, factor2 = 2.23f;
-        if (disaligned)
-        {
-            factor1 = width / height;
-        }
-        if (dx.z == 1)
-        {
-            factor2 = 1.29f;
-        }
-        scale = new Vector3(1 / scale.x, 1 / scale.y, 1 / scale.z);
-        dx = Vector3.Scale(dx, scale / (factor2 * rtex.width));
-        dy = Vector3.Scale(dy, scale / (factor1 * factor2 * rtex.height));
+        dx = dx * RtexConstants.SCALE;
+        dy = dy * RtexConstants.SCALE;
 
         slicer.SetFloats("orig", new float[] { orig.x, orig.y, orig.z }); 
         slicer.SetFloats("dx", new float[] { dx.x, dx.y, dx.z });
@@ -313,4 +307,9 @@ public static class BorderColors
     public static readonly Vector4 YELLOW = new Vector4(1, 1, 0, 1);
     public static readonly Vector4 RED = new Vector4(1, 0, 0, 1);
     public static readonly Vector4 CYAN = new Vector4(0, 1, 1, 1);
+}
+
+static class RtexConstants
+{
+    public static readonly float SCALE = 0.001961119675f;
 }

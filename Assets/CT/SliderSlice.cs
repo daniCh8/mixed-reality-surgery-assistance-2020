@@ -51,38 +51,44 @@ public class SliderSlice : MonoBehaviour {
         return texture;
     }
 
+    public void UpdateHelper()
+    {
+        currentVal = slider.SliderValue;
+        var val = currentVal - 0.5f;
+
+        var orig = Vector3.zero;
+        var dx = Vector3.zero;
+        var dy = Vector3.zero;
+        switch (axis)
+        {
+            case Axis.X:
+                orig = new Vector3(val, 0, 0);
+                dx = new Vector3(0, 0, 1);
+                dy = new Vector3(0, 1, 0);
+                break;
+            case Axis.Y:
+                orig = new Vector3(val, 0, 0);
+                dx = new Vector3(0, 0, 1);
+                dy = new Vector3(-1, 0, 0);
+                break;
+            case Axis.Z:
+                orig = new Vector3(0, 0, val);
+                dx = new Vector3(1, 0, 0);
+                dy = new Vector3(0, 1, 0);
+                break;
+        }
+
+        ct.Slice(orig, dx, dy, tex, disaligned, bCol);
+        Vector3 quadPos = ct.GetPositionFromSlider(val, axis);
+        Transform backupParent = quad.transform.parent;
+        quad.transform.parent = ct.oo.transform;
+        quad.transform.localPosition = quadPos;
+        quad.transform.parent = backupParent;
+    }
+
     void Update() {
-        if (currentVal != slider.SliderValue) {
-            currentVal = slider.SliderValue;
-            var val = currentVal - 0.5f;
-
-            var orig = Vector3.zero;
-            var dx = Vector3.zero;
-            var dy = Vector3.zero;
-            switch (axis) {
-                case Axis.X:
-                    orig = new Vector3(val, 0, 0);
-                    dx = new Vector3(0, 0, 1);
-                    dy = new Vector3(0, 1, 0);
-                    break;
-                case Axis.Y:
-                    orig = new Vector3(val, 0, 0);
-                    dx = new Vector3(0, 0, 1);
-                    dy = new Vector3(-1, 0, 0);
-                    break;
-                case Axis.Z:
-                    orig = new Vector3(0, 0, val);
-                    dx = new Vector3(1, 0, 0);
-                    dy = new Vector3(0, 1, 0);
-                    break;
-            }
-
-            ct.Slice(orig, dx, dy, tex, disaligned, bCol);
-            Vector3 quadPos = ct.GetPositionFromSlider(val, axis);
-            Transform backupParent = quad.transform.parent;
-            quad.transform.parent = ct.oo.transform;
-            quad.transform.localPosition = quadPos;
-            quad.transform.parent = backupParent;
+        if (currentVal != slider.SliderValue ) {
+            UpdateHelper();
         }
     }
 }
