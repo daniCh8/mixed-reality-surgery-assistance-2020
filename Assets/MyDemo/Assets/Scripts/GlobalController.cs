@@ -290,7 +290,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         Debug.Log("Back to Main pressed");
 
         DisableManipulationMenu(nearMenu);
-
     }
 
     private void DisableManipulationMenu(GameObject menu)

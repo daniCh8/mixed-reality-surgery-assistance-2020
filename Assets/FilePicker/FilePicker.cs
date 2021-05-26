@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.Networking;
 
 #if !UNITY_EDITOR && UNITY_WSA_10_0
 using System;
@@ -71,7 +72,6 @@ public class FilePicker : MonoBehaviour
 
 	IEnumerator ReadTextFileCoroutine(string path)
 	{
-
 		Debug.Log("***********************************");
 		Debug.Log(" Coroutine start: " + path);
 		Debug.Log("***********************************");
