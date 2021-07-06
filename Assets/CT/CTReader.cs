@@ -1,6 +1,7 @@
 using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -103,6 +104,7 @@ public class CTReader : MonoBehaviour
         maxy = float.MinValue;
         minz = float.MaxValue;
         maxz = float.MinValue;
+
         for (int i = 0; i < rounds; i++)
         {
             // i : 10 == x : dim --> x = dim*i/10
@@ -259,11 +261,11 @@ public class NRRD {
 
             dims = Array.ConvertAll(headers["sizes"].Split(), s => int.Parse(s));
             if (headers.ContainsKey("space origin")) {
-                var origin = Array.ConvertAll(headers["space origin"].Substring(1, headers["space origin"].Length - 2).Split(','), v => float.Parse(v));
+                var origin = Array.ConvertAll(headers["space origin"].Substring(1, headers["space origin"].Length - 2).Split(','), v => float.Parse(v, CultureInfo.InvariantCulture));
                 this.origin = new Vector3(origin[0], origin[1], origin[2]);
             }
             if (headers.ContainsKey("space directions")) {
-                var scale = Array.ConvertAll(headers["space directions"].Split(), s => Array.ConvertAll(s.Substring(1, s.Length - 2).Split(','), v => float.Parse(v)));
+                var scale = Array.ConvertAll(headers["space directions"].Split(), s => Array.ConvertAll(s.Substring(1, s.Length - 2).Split(','), v => float.Parse(v, CultureInfo.InvariantCulture)));
                 if (scale[0][0] == 0 || scale[1][1] == 0 || scale[2][2] == 0) throw new ArgumentException("NRRD has 0 scale value");
                 if (scale[0][1] != 0 || scale[1][0] != 0 || scale[2][0] != 0 ||
                     scale[0][2] != 0 || scale[1][2] != 0 || scale[2][1] != 0) throw new ArgumentException("NRRD is not axis-aligned");
