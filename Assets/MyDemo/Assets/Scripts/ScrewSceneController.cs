@@ -17,6 +17,8 @@ public class ScrewSceneController : MonoBehaviour
 
     // Screw Positions
     public TextAsset screwLatPositions, screwDistPositions, screwMedPositions;
+    [HideInInspector]
+    public string screwLatPositionsS, screwDistPositionsS, screwMedPositionsS;
 
     // Plates Visibility State
     public enum PlatesState { Both, Lat, Med, None }
@@ -77,6 +79,9 @@ public class ScrewSceneController : MonoBehaviour
 
     void Start()
     {
+        screwLatPositionsS = screwLatPositions == null ? null : screwLatPositions.text;
+        screwMedPositionsS = screwMedPositions == null ? null : screwMedPositions.text;
+        screwDistPositionsS = screwDistPositions == null ? null : screwDistPositions.text;
         // Initialize Screws and Bones
         InitScrews();
         // Initialize Plate List
@@ -87,9 +92,9 @@ public class ScrewSceneController : MonoBehaviour
         screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
     }
 
-    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(TextAsset textScrewPositions)
+    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(string textScrewPositions)
     {
-        String textAsset = textScrewPositions.text.Replace("\"", "");
+        String textAsset = textScrewPositions.Replace("\"", "");
         String[] lines = Regex.Split(textAsset, "\n|\r|\r\n");
         List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
         Vector3 dummyVector = new Vector3(0, 0, 0);
@@ -123,25 +128,25 @@ public class ScrewSceneController : MonoBehaviour
         bool backupSceneActive = scene.activeSelf;
         scene.SetActive(true);
 
-        if (screwLatPositions != null)
+        if (screwLatPositionsS != null)
         {
-            GenerateScrewsFromTextFileHelper(screwLatPositions, ScrewConstants.LAT_SCREW_TAG, latScrewMaterial);
+            GenerateScrewsFromTextFileHelper(screwLatPositionsS, ScrewConstants.LAT_SCREW_TAG, latScrewMaterial);
         }
 
-        if (screwMedPositions != null)
+        if (screwMedPositionsS != null)
         {
-            GenerateScrewsFromTextFileHelper(screwMedPositions, ScrewConstants.MED_SCREW_TAG, medScrewMaterial);
+            GenerateScrewsFromTextFileHelper(screwMedPositionsS, ScrewConstants.MED_SCREW_TAG, medScrewMaterial);
         }
 
-        if (screwDistPositions != null)
+        if (screwDistPositionsS != null)
         {
-            GenerateScrewsFromTextFileHelper(screwDistPositions, ScrewConstants.DIST_SCREW_TAG, distScrewMaterial);
+            GenerateScrewsFromTextFileHelper(screwDistPositionsS, ScrewConstants.DIST_SCREW_TAG, distScrewMaterial);
         }
 
         scene.SetActive(backupSceneActive);
     }
 
-    private void GenerateScrewsFromTextFileHelper(TextAsset textScrewPositions, String tag, Material material)
+    private void GenerateScrewsFromTextFileHelper(string textScrewPositions, string tag, Material material)
     {
         List<Tuple<Vector3, Vector3>> textScrewPoints = ProcessScrewPosition(textScrewPositions);
         int i = 0;
@@ -787,7 +792,7 @@ public class ScrewSceneController : MonoBehaviour
     }
 }
 
-static class ScrewConstants
+public static class ScrewConstants
 {
     public const String LAT_SCREW_TAG = "Lat";
     public const String DIST_SCREW_TAG = "Dist";

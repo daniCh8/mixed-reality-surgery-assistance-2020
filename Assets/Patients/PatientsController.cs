@@ -1,7 +1,9 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Dummiesman;
+using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PatientsController : MonoBehaviour
@@ -13,6 +15,7 @@ public class PatientsController : MonoBehaviour
 
     public CTReader cTReader;
     public TextAsset newScans, referenceScans, onScreenScans;
+    private byte[] newScansB, referenceScansB, onScreenScansB;
 
     // Screw Scene References
     public GameObject referencePatientScrew, newPatientScrew;
@@ -22,18 +25,21 @@ public class PatientsController : MonoBehaviour
 
     public GlobalController globalController;
     public ScrewSceneController screwController;
-    public TextAsset referenceLatScrew, referenceDistScrew, referenceMedScrew,
-        newLatScrew, newDistScrew, newMedScrew;
+    public TextAsset newLatScrew, newDistScrew, newMedScrew;
+    private string newLatScrewS, newDistScrewS, newMedScrewS;
 
     void Start()
     {
+        newScansB = newScans.bytes;
+        referenceScansB = referenceScans.bytes;
+        onScreenScansB = onScreenScans.bytes;
         TutunePinchSliders();
     }
 
     private void TutuneTranslation()
     {
-        Vector3 refCenter = cTReader.GetCenterOfCt(referenceScans);
-        Vector3 newCenter = cTReader.GetCenterOfCt(newScans);
+        Vector3 refCenter = cTReader.GetCenterOfCt(referenceScansB);
+        Vector3 newCenter = cTReader.GetCenterOfCt(newScansB);
         float xTranslation = refCenter.x - newCenter.x,
             yTranslation = refCenter.y - newCenter.y,
             zTranslation = refCenter.z - newCenter.z;
@@ -95,18 +101,18 @@ public class PatientsController : MonoBehaviour
             Destroy(go);
         }
 
-        cTReader.ct = newScans;
+        cTReader.ct_bytes = newScansB;
         cTReader.Init();
 
         TutunePinchSliders();
         TutuneTranslation();
 
         globalController.patient = newPatientManip;
-        TextAsset boxCt = newScans;
+        byte[] boxCtB = newScansB;
         newPatientManip = onScreenPatientManip;
-        newScans = onScreenScans;
+        newScansB = onScreenScansB;
         onScreenPatientManip = globalController.patient;
-        onScreenScans = boxCt;
+        onScreenScansB = boxCtB;
 
         newPatientManip.SetActive(false);
         onScreenPatientManip.SetActive(true);
@@ -121,15 +127,19 @@ public class PatientsController : MonoBehaviour
 
         screwController.ResetState();
         AlignScrewScene();
-        screwController.screwDistPositions = newDistScrew;
-        screwController.screwLatPositions = newLatScrew;
-        screwController.screwMedPositions = newMedScrew;
-        newDistScrew = referenceDistScrew;
-        newLatScrew = referenceLatScrew;
-        newMedScrew = referenceMedScrew;
-        referenceDistScrew = screwController.screwDistPositions;
-        referenceLatScrew = screwController.screwLatPositions;
-        referenceMedScrew = screwController.screwMedPositions;
+
+        string boxD = screwController.screwDistPositionsS;
+        string boxL = screwController.screwLatPositionsS;
+        string boxM = screwController.screwMedPositionsS;
+
+        screwController.screwDistPositionsS = newDistScrewS;
+        screwController.screwLatPositionsS = newLatScrewS;
+        screwController.screwMedPositionsS = newMedScrewS;
+        
+        newDistScrewS = boxD;
+        newLatScrewS = boxL;
+        newMedScrewS = boxM;
+
         screwController.screwGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.SCREW_GROUP);
         screwController.plateGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.PLATE_GROUP);
         screwController.boneGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.BONE_GROUP);
@@ -190,5 +200,78 @@ public class PatientsController : MonoBehaviour
         // adjust controllers parameters to have reference patient and new patient
         // call switch patients
         // destroy old patient instead of keeping it
+
+        LoadNewCT();
+        LoadNewScrews();
+        LoadNewPatientManip();
     }
+
+    private void LoadNewCT()
+    {
+        string ctPath = @"Assets\Patients\TestPatient\CT\ct.bytes";
+        newScansB = ReadBytesFromPath(ctPath);
+    }
+
+    private void LoadNewScrews()
+    {
+        string[] screwPosPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Screws\", "*.txt", SearchOption.TopDirectoryOnly);
+        foreach (var screwPosPath in screwPosPaths)
+        {
+            if (screwPosPath.IndexOf(ScrewConstants.LAT_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+            {
+                newLatScrewS = ReadStringFromPath(screwPosPath);
+            }
+            else if (screwPosPath.IndexOf(ScrewConstants.MED_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+            {
+                newMedScrewS = ReadStringFromPath(screwPosPath);
+            }
+            else if (screwPosPath.IndexOf(ScrewConstants.DIST_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+            {
+                newDistScrewS = ReadStringFromPath(screwPosPath);
+            }
+        }
+    }
+
+    private void LoadNewPatientManip()
+    {
+        Transform newPatHandles = referencePatientManip == onScreenPatientManip ? newPatientManip.transform : onScreenPatientManip.transform;
+        DestroyAllChildren(newPatHandles);
+
+        // fractured
+        string[] fracturedPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Fractured\", "*.obj", SearchOption.TopDirectoryOnly);
+        foreach (var fracturedP in fracturedPaths)
+        {
+            if (!File.Exists(fracturedP))
+            {
+                Debug.LogError(fracturedP + " is not a valid path.");
+                return;
+            }
+
+            //load
+            var loadedBone = new OBJLoader().Load(fracturedP);
+            loadedBone.transform.parent = newPatHandles;
+            loadedBone.transform.localScale = new Vector3(1f, 1f, 1f);
+            loadedBone.transform.localPosition = new Vector3();
+            loadedBone.transform.localEulerAngles = new Vector3();
+        }
+    }
+
+    private void DestroyAllChildren(Transform t)
+    {
+        foreach (Transform child in t)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private string ReadStringFromPath(string path)
+    {
+        return File.ReadAllText(path);
+    }
+
+    private byte[] ReadBytesFromPath(string path)
+    {
+        return File.ReadAllBytes(path);
+    }
+
 }
