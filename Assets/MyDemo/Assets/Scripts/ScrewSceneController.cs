@@ -14,9 +14,9 @@ using static Microsoft.MixedReality.Toolkit.UI.ObjectManipulator;
 
 public class ScrewSceneController : MonoBehaviour
 {
+
     // Screw Positions
-    public TextAsset referenceDistPositions;
-    public GameObject distScrew1, distScrew2, distScrew3;
+    public TextAsset screwLatPositions, screwDistPositions, screwMedPositions;
 
     // Plates Visibility State
     public enum PlatesState { Both, Lat, Med, None }
@@ -28,7 +28,7 @@ public class ScrewSceneController : MonoBehaviour
     public GameObject screwGroup, plateGroup, boneGroup, allGroup;
 
     // Screws Materials
-    public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, selectedScrewMaterial, boneMaterial;
+    public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, distScrewMaterial, selectedScrewMaterial, boneMaterial;
 
     // Screw Button Handler
     public GameObject screwButton;
@@ -87,69 +87,9 @@ public class ScrewSceneController : MonoBehaviour
         screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
     }
 
-    /*
-    private void DecorateScrew(GameObject screw)
+    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(TextAsset textScrewPositions)
     {
-        if (screw.GetComponentInChildren<BoundsControl>(true) == null)
-        {
-            BoundsControl boundsControl = screw.AddComponent<BoundsControl>() as BoundsControl;
-
-            boundsControl.ScaleHandlesConfig = new ScaleHandlesConfiguration();
-            boundsControl.ScaleHandlesConfig.HandleSize = (float)0.008;
-            boundsControl.ScaleHandlesConfig.ColliderPadding = new Vector3((float)0.008, (float)0.008, (float)0.008);
-
-            boundsControl.RotationHandlesConfig = new RotationHandlesConfiguration();
-            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-
-            boundsControl.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<ConstraintManager>(true) == null)
-        {
-            ConstraintManager constraintManager = screw.AddComponent<ConstraintManager>();
-        }
-
-        if (screw.GetComponentInChildren<ObjectManipulator>(true) == null)
-        { 
-            ObjectManipulator objectManipulator = screw.AddComponent<ObjectManipulator>();
-            objectManipulator.ManipulationType = ManipulationHandFlags.OneHanded;
-            objectManipulator.OneHandRotationModeFar = RotateInOneHandType.RotateAboutObjectCenter;
-            objectManipulator.OneHandRotationModeNear = RotateInOneHandType.RotateAboutObjectCenter;
-
-            objectManipulator.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<ScaleConstraint>(true) == null)
-        { 
-            ScaleConstraint scaleConstraint = screw.AddComponent<ScaleConstraint>();
-            scaleConstraint.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<PositionConstraint>(true) == null)
-        {
-            PositionConstraint positionConstraint = screw.AddComponent<PositionConstraint>();
-            positionConstraint.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<WholeScaleConstraint>(true) == null)
-        {
-            WholeScaleConstraint wholeScaleConstraint = screw.AddComponent<WholeScaleConstraint>();
-            wholeScaleConstraint.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<NearInteractionGrabbable>(true) == null)
-        {
-            NearInteractionGrabbable nearInteractionGrabbable = screw.AddComponent<NearInteractionGrabbable>();
-            nearInteractionGrabbable.enabled = false;
-        }
-    }
-    */
-
-    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition()
-    {
-        String textAsset = referenceDistPositions.text.Replace("\"", "");
+        String textAsset = textScrewPositions.text.Replace("\"", "");
         String[] lines = Regex.Split(textAsset, "\n|\r|\r\n");
         List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
         Vector3 dummyVector = new Vector3(0, 0, 0);
@@ -160,7 +100,7 @@ public class ScrewSceneController : MonoBehaviour
             if(line.Contains(",")) 
             {
                 String[] vector = Regex.Split(line, ",");
-                Vector3 newPoint = new Vector3(float.Parse(vector[0]), float.Parse(vector[1]), float.Parse(vector[2]));
+                Vector3 newPoint = new Vector3(-1f * float.Parse(vector[0]), float.Parse(vector[1]), float.Parse(vector[2]));
 
 
                 if (item1 == dummyVector)
@@ -178,181 +118,54 @@ public class ScrewSceneController : MonoBehaviour
         return points;
     }
 
-    private Matrix<float> FindTransformationMatrix(Vector3[] thisSysCenters, Tuple<Vector3, Vector3>[] textScrewPoints)
-    {
-        Vector3[] otherSysPoints = new Vector3[3];
-        for (int i = 0; i < 3; i++)
-        {
-            Tuple<Vector3, Vector3> otherSysTuple = textScrewPoints[i];
-            otherSysPoints[i] = new Vector3(
-            (otherSysTuple.Item1.x + otherSysTuple.Item2.x) / 2,
-            (otherSysTuple.Item1.y + otherSysTuple.Item2.y) / 2,
-            (otherSysTuple.Item1.z + otherSysTuple.Item2.z) / 2);
-        }
-
-        float[][] thisSysColumnArrays = {
-            new float[]{ thisSysCenters[0].x, thisSysCenters[0].y, thisSysCenters[0].z },
-            new float[]{ thisSysCenters[1].x, thisSysCenters[1].y, thisSysCenters[1].z },
-            new float[]{ thisSysCenters[2].x, thisSysCenters[2].y, thisSysCenters[2].z } };
-        Matrix<float> thisSystemMat = Matrix<float>.Build.DenseOfColumnArrays(thisSysColumnArrays);
-
-        float[][] otherSysColumnArrays = {
-            new float[]{ otherSysPoints[0].x, otherSysPoints[0].y, otherSysPoints[0].z },
-            new float[]{ otherSysPoints[1].x, otherSysPoints[1].y, otherSysPoints[1].z },
-            new float[]{ otherSysPoints[2].x, otherSysPoints[2].y, otherSysPoints[2].z } };
-        Matrix<float> otherSystemMat = Matrix<float>.Build.DenseOfColumnArrays(otherSysColumnArrays);
-
-        // thisCoordSys = basis (matrix.mul) otherCoordSys -->
-        //     basis = thisCoordSys (matrix.mul) otherCoordSys^(-1)
-
-        Matrix<float> basis = thisSystemMat.Multiply((otherSystemMat.Inverse()));
-
-        return basis;
-    }
-
-    public void GenerateScrewFromTextFile()
-    {
-        List<Tuple<Vector3, Vector3>> textScrewPoints = ProcessScrewPosition();
-        Tuple<Vector3, Vector3>[] firstThreeTextScrewPoints = 
-            {textScrewPoints[0], textScrewPoints[1], textScrewPoints[2] };
-        Vector3[] screwPointsCenter =
-        {
-            distScrew1.GetComponentInChildren<Renderer>().bounds.center,
-            distScrew2.GetComponentInChildren<Renderer>().bounds.center,
-            distScrew3.GetComponentInChildren<Renderer>().bounds.center
-        };
-
-        Matrix<float> transformationMatrix = FindTransformationMatrix(screwPointsCenter, firstThreeTextScrewPoints);
-        
-        foreach(Tuple<Vector3, Vector3> textScrewPoint in textScrewPoints)
-        {
-            float[][] startPointColumnArrays = {
-            new float[]{ textScrewPoint.Item1.x, textScrewPoint.Item1.y, textScrewPoint.Item1.z } };
-            Matrix<float> startPointMat = Matrix<float>.Build.DenseOfColumnArrays(startPointColumnArrays);
-            Matrix<float> startPointMatM = transformationMatrix.Multiply(startPointMat);
-            Vector3 startVector = new Vector3(
-                startPointMatM.ToColumnArrays()[0][0], startPointMatM.ToColumnArrays()[0][1], startPointMatM.ToColumnArrays()[0][2]);
-
-            float[][] endPointColumnArrays = {
-            new float[]{ textScrewPoint.Item2.x, textScrewPoint.Item2.y, textScrewPoint.Item2.z } };
-            Matrix<float> endPointMat = Matrix<float>.Build.DenseOfColumnArrays(endPointColumnArrays);
-            Matrix<float> endPointMatM = transformationMatrix.Multiply(endPointMat);
-            Vector3 endVector = new Vector3(
-                endPointMatM.ToColumnArrays()[0][0], endPointMatM.ToColumnArrays()[0][1], endPointMatM.ToColumnArrays()[0][2]);
-
-            GameObject sphereStart = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphereStart.transform.localScale = new Vector3(0.012f, 0.012f, 0.012f);
-            sphereStart.transform.position = startVector;
-            sphereStart.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
-
-            GameObject sphereEnd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphereEnd.transform.localScale = new Vector3(0.012f, 0.012f, 0.012f);
-            sphereEnd.transform.position = endVector;
-            sphereEnd.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
-
-            GameObject scrr = CreateCylinderBetweenPoints(startVector, endVector);
-            scrr.GetComponentInChildren<Renderer>().material = newScrewMaterial;
-        }
-
-    }
-
-    private GameObject GenerateScrewFromObj(GameObject screw)
+    public void GenerateScrewsFromTextFiles()
     {
         bool backupSceneActive = scene.activeSelf;
         scene.SetActive(true);
-        MeshCollider collider = screw.AddComponent<MeshCollider>();
-        collider.convex = true;
-        Vector3 minn = screw.transform.GetComponent<Renderer>().bounds.min;
-        Vector3 maxx = screw.transform.GetComponent<Renderer>().bounds.max;
 
-        Vector3[] boundPoints = new Vector3[]
+        if (screwLatPositions != null)
         {
-                minn,
-                new Vector3(minn.x, minn.y, maxx.z),
-                new Vector3(minn.x, maxx.y, minn.z),
-                new Vector3(minn.x, maxx.y, maxx.z),
-                new Vector3(maxx.x, minn.y, minn.z),
-                new Vector3(maxx.x, minn.y, maxx.z),
-                new Vector3(maxx.x, maxx.y, minn.z),
-                maxx
-        };
-
-        Vector3[] closestPoints = new Vector3[boundPoints.Length];
-        Vector3 firstStartPt = new Vector3(),
-            secondStartPt = new Vector3(),
-            firstEndPt = new Vector3(),
-            secondEndPt = new Vector3();
-        float startPtDist = float.MaxValue, endPtDist = float.MaxValue;
-        for (int i = 0; i < boundPoints.Length; i++)
-        {
-            closestPoints[i] = collider.ClosestPoint(boundPoints[i]);
-            float ptDist = Vector3.Distance(closestPoints[i], boundPoints[i]);
-            if (startPtDist < endPtDist && ptDist < endPtDist)
-            {
-                endPtDist = ptDist;
-                firstEndPt = closestPoints[i];
-            }
-            else if (ptDist < startPtDist)
-            {
-                startPtDist = ptDist;
-                firstStartPt = closestPoints[i];
-            }
+            GenerateScrewsFromTextFileHelper(screwLatPositions, ScrewConstants.LAT_SCREW_TAG, latScrewMaterial);
         }
 
-        startPtDist = float.MaxValue;
-        endPtDist = float.MaxValue;
-        foreach (Vector3 pt in closestPoints)
+        if (screwMedPositions != null)
         {
-            if (pt != firstStartPt)
-            {
-                float tempStartPtDist = Vector3.Distance(pt, firstStartPt);
-                if (tempStartPtDist < startPtDist)
-                {
-                    startPtDist = tempStartPtDist;
-                    secondStartPt = pt;
-                }
-            }
-
-            if (pt != firstEndPt)
-            {
-                float tempEndPtDist = Vector3.Distance(pt, firstEndPt);
-                if (tempEndPtDist < endPtDist)
-                {
-                    endPtDist = tempEndPtDist;
-                    secondEndPt = pt;
-                }
-            }
+            GenerateScrewsFromTextFileHelper(screwMedPositions, ScrewConstants.MED_SCREW_TAG, medScrewMaterial);
         }
 
-        Vector3 startPoint = new Vector3(
-            (firstStartPt.x + secondStartPt.x) / 2,
-            (firstStartPt.y + secondStartPt.y) / 2,
-            (firstStartPt.z + secondStartPt.z) / 2
-            );
+        if (screwDistPositions != null)
+        {
+            GenerateScrewsFromTextFileHelper(screwDistPositions, ScrewConstants.DIST_SCREW_TAG, distScrewMaterial);
+        }
 
-        Vector3 endPoint = new Vector3(
-            (firstEndPt.x + secondEndPt.x) / 2,
-            (firstEndPt.y + secondEndPt.y) / 2,
-            (firstEndPt.z + secondEndPt.z) / 2
-            );
-
-        Destroy(screw.GetComponent<MeshCollider>());
         scene.SetActive(backupSceneActive);
+    }
 
-        GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint);
-        cylinderScrew.transform.parent = screw.transform.parent;
-        cylinderScrew.tag = screw.tag;
-        cylinderScrew.name = screw.name;
-        cylinderScrew.GetComponent<MeshRenderer>().material = screw.GetComponent<MeshRenderer>().material;
-        Destroy(screw);
+    private void GenerateScrewsFromTextFileHelper(TextAsset textScrewPositions, String tag, Material material)
+    {
+        List<Tuple<Vector3, Vector3>> textScrewPoints = ProcessScrewPosition(textScrewPositions);
+        int i = 0;
+        foreach (var textScrew in textScrewPoints)
+        {
+            Vector3 startPos = screwGroup.transform.TransformPoint(textScrew.Item1),
+                endPos = screwGroup.transform.TransformPoint(textScrew.Item2);
+            GameObject cylinderScrew = CreateCylinderBetweenPoints(startPos, endPos);
+            cylinderScrew.transform.parent = screwGroup.transform;
+            cylinderScrew.tag = tag;
+            cylinderScrew.name = tag + i++;
+            cylinderScrew.GetComponent<MeshRenderer>().material = material;
+            cylinderScrew.GetComponent<BoundsControl>().enabled = false;
+            cylinderScrew.GetComponent<ObjectManipulator>().enabled = false;
+            cylinderScrew.GetComponent<ScaleConstraint>().enabled = false;
+            cylinderScrew.GetComponent<WholeScaleConstraint>().enabled = false;
+            cylinderScrew.GetComponent<PositionConstraint>().enabled = false;
+            cylinderScrew.GetComponent<NearInteractionGrabbable>().enabled = false;
 
-        cylinderScrew.GetComponent<BoundsControl>().enabled = false;
-        cylinderScrew.GetComponent<ObjectManipulator>().enabled = false;
-        cylinderScrew.GetComponent<ScaleConstraint>().enabled = false;
-        cylinderScrew.GetComponent<WholeScaleConstraint>().enabled = false;
-        cylinderScrew.GetComponent<PositionConstraint>().enabled = false;
-        cylinderScrew.GetComponent<NearInteractionGrabbable>().enabled = false;
-        return cylinderScrew;
+            screws.Add(cylinderScrew);
+            originalScrewPositions.Add(cylinderScrew.gameObject.name, cylinderScrew.transform.position);
+            originalScrewScales.Add(cylinderScrew.gameObject.name, cylinderScrew.transform.localScale);
+            originalScrewRotations.Add(cylinderScrew.gameObject.name, cylinderScrew.transform.rotation);
+        }
     }
 
     private void InitScrews()
@@ -367,16 +180,7 @@ public class ScrewSceneController : MonoBehaviour
         allGroupStartingScale = allGroup.transform.localScale;
         allGroupStartingRotation = allGroup.transform.rotation;
 
-        foreach (Transform screw in screwGroup.transform)
-        {
-            Transform real_screw = screw.transform.GetChild(0);
-
-            GameObject generatedScrew = GenerateScrewFromObj(real_screw.gameObject);
-            screws.Add(generatedScrew);
-            originalScrewPositions.Add(screw.gameObject.name, generatedScrew.transform.position);
-            originalScrewScales.Add(screw.gameObject.name, generatedScrew.transform.localScale);
-            originalScrewRotations.Add(screw.gameObject.name, generatedScrew.transform.rotation);
-        }
+        GenerateScrewsFromTextFiles();
         SetScrewTags();
 
         screwIndex = 0;
