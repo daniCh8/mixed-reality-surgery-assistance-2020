@@ -33,6 +33,11 @@ public class PatientsController : MonoBehaviour
         newScansB = newScans.bytes;
         referenceScansB = referenceScans.bytes;
         onScreenScansB = onScreenScans.bytes;
+
+        newLatScrewS = newLatScrew.text;
+        newMedScrewS = newMedScrew.text;
+        newDistScrewS = newDistScrew.text;
+
         TutunePinchSliders();
     }
 
@@ -175,10 +180,10 @@ public class PatientsController : MonoBehaviour
         referencePatientScrew.SetActive(true);
     }
 
-    public static void CenterToRef(GameObject obj, Vector3 referencePosition)
+    public void CenterToRef(GameObject obj, Vector3 referencePosition)
     {
         obj.transform.position = obj.transform.position -
-            obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center +
+            RetrieveCombinedBounds(obj).center +
             referencePosition;
     }
 
@@ -194,7 +199,7 @@ public class PatientsController : MonoBehaviour
         return combinedBounds;
     }
 
-    private void PickNewPatient()
+    public void PickNewPatient()
     {
         // instantiate new bones and create new patient with it
         // adjust controllers parameters to have reference patient and new patient
@@ -204,6 +209,8 @@ public class PatientsController : MonoBehaviour
         LoadNewCT();
         LoadNewScrews();
         LoadNewPatientManip();
+        LoadNewPatientScrew();
+        SwitchPatient();
     }
 
     private void LoadNewCT()
@@ -232,6 +239,24 @@ public class PatientsController : MonoBehaviour
         }
     }
 
+    private void LoadNewPatientScrew()
+    {
+        Transform newPatScrew = newPatientScrew.transform;
+        Transform screwsPat = newPatScrew.Find("Screws"),
+            platesPat = newPatScrew.Find("Plates"),
+            bonesPat = newPatScrew.Find("Bone");
+
+        DestroyAllChildren(screwsPat);
+        DestroyAllChildren(platesPat);
+        DestroyAllChildren(bonesPat);
+
+        string[] alignedPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Aligned\", "*.obj", SearchOption.TopDirectoryOnly);
+        LoadObjsFrom(alignedPaths, bonesPat);
+
+        string[] platesPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Plates\", "*.obj", SearchOption.TopDirectoryOnly);
+        LoadObjsFrom(platesPaths, platesPat);
+    }
+
     private void LoadNewPatientManip()
     {
         Transform newPatHandles = referencePatientManip == onScreenPatientManip ? newPatientManip.transform : onScreenPatientManip.transform;
@@ -239,7 +264,12 @@ public class PatientsController : MonoBehaviour
 
         // fractured
         string[] fracturedPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Fractured\", "*.obj", SearchOption.TopDirectoryOnly);
-        foreach (var fracturedP in fracturedPaths)
+        LoadObjsFrom(fracturedPaths, newPatHandles);
+    }
+
+    private void LoadObjsFrom(string[] paths, Transform parent)
+    {
+        foreach (var fracturedP in paths)
         {
             if (!File.Exists(fracturedP))
             {
@@ -248,11 +278,11 @@ public class PatientsController : MonoBehaviour
             }
 
             //load
-            var loadedBone = new OBJLoader().Load(fracturedP);
-            loadedBone.transform.parent = newPatHandles;
-            loadedBone.transform.localScale = new Vector3(1f, 1f, 1f);
-            loadedBone.transform.localPosition = new Vector3();
-            loadedBone.transform.localEulerAngles = new Vector3();
+            var loadedObj = new OBJLoader().Load(fracturedP);
+            loadedObj.transform.parent = parent;
+            loadedObj.transform.localScale = new Vector3(1f, 1f, 1f);
+            loadedObj.transform.localPosition = new Vector3();
+            loadedObj.transform.localEulerAngles = new Vector3();
         }
     }
 
