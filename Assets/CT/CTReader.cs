@@ -23,17 +23,20 @@ public class CTReader : MonoBehaviour
     public float ctLength, ctDepth;
     [HideInInspector]
     public Vector3 ctCenter;
+    [HideInInspector]
+    public byte[] ct_bytes;
 
     private float minx, maxx, miny, maxy, minz, maxz, width, height, depth;
     private NRRD nrrd;
 
     void Start() {
+        ct_bytes = ct.bytes;
         Init();
     }
 
     public void Init()
     {
-        nrrd = new NRRD(ct);
+        nrrd = new NRRD(ct_bytes);
         for (int i = 0; i < 3; i++)
         {
             // Debug.Log(nrrd.dims[i]);
@@ -148,9 +151,9 @@ public class CTReader : MonoBehaviour
         return new Vector3(middlex, middley, middlez);
     }
 
-    public Vector3 GetCenterOfCt(TextAsset ctObj)
+    public Vector3 GetCenterOfCt(byte[] ctBytes)
     {
-        var nrrd = new NRRD(ctObj);
+        var nrrd = new NRRD(ctBytes);
 
         DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
         dummyHandler.GoToZero();
@@ -244,8 +247,8 @@ public class NRRD {
     readonly public Vector3 origin = new Vector3(0, 0, 0);
     readonly public Vector3 scale = new Vector3(1, 1, 1);
 
-    public NRRD(TextAsset asset) {
-        using (var reader = new BinaryReader(new MemoryStream(asset.bytes))) {
+    public NRRD(byte[] bytes) {
+        using (var reader = new BinaryReader(new MemoryStream(bytes))) {
             for (string line = reader.ReadLine(); line.Length > 0; line = reader.ReadLine()) {
                 if (line.StartsWith("#") || !line.Contains(":")) continue;
                 var tokens = line.Split(':');
