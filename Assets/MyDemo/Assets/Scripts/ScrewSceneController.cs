@@ -162,9 +162,9 @@ public class ScrewSceneController : MonoBehaviour
             cylinderScrew.GetComponent<NearInteractionGrabbable>().enabled = false;
 
             screws.Add(cylinderScrew);
-            originalScrewPositions.Add(cylinderScrew.gameObject.name, cylinderScrew.transform.position);
-            originalScrewScales.Add(cylinderScrew.gameObject.name, cylinderScrew.transform.localScale);
-            originalScrewRotations.Add(cylinderScrew.gameObject.name, cylinderScrew.transform.rotation);
+            originalScrewPositions.Add(cylinderScrew.name, cylinderScrew.transform.position);
+            originalScrewScales.Add(cylinderScrew.name, cylinderScrew.transform.localScale);
+            originalScrewRotations.Add(cylinderScrew.name, cylinderScrew.transform.rotation);
         }
     }
 
@@ -566,9 +566,9 @@ public class ScrewSceneController : MonoBehaviour
                     screw.SetActive(true);
                 }
                 
-                screw.transform.position = originalScrewPositions[screw.transform.parent.name];
-                screw.transform.localScale = originalScrewScales[screw.transform.parent.name];
-                screw.transform.rotation = originalScrewRotations[screw.transform.parent.name];
+                screw.transform.position = originalScrewPositions[screw.transform.name];
+                screw.transform.localScale = originalScrewScales[screw.transform.name];
+                screw.transform.rotation = originalScrewRotations[screw.transform.name];
             }
         }
 

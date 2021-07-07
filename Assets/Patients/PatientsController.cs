@@ -20,10 +20,13 @@ public class PatientsController : MonoBehaviour
     // Dummy Object at (0,0,0)
     public GameObject dummyObject;
 
+    public ScrewSceneController screwController;
+    public TextAsset referenceLatScrew, referenceDistScrew, referenceMedScrew,
+        newLatScrew, newDistScrew, newMedScrew;
+
     void Start()
     {
         TutunePinchSliders();
-        //TutuneTranslation();
     }
 
     private void TutuneTranslation()
@@ -114,5 +117,69 @@ public class PatientsController : MonoBehaviour
                 sliderSlice.UpdateHelper();
             }
         }
+
+        screwController.ResetState();
+        AlignScrewScene();
+        screwController.screwDistPositions = newDistScrew;
+        screwController.screwLatPositions = newLatScrew;
+        screwController.screwMedPositions = newMedScrew;
+        newDistScrew = referenceDistScrew;
+        newLatScrew = referenceLatScrew;
+        newMedScrew = referenceMedScrew;
+        referenceDistScrew = screwController.screwDistPositions;
+        referenceLatScrew = screwController.screwLatPositions;
+        referenceMedScrew = screwController.screwMedPositions;
+        screwController.screwGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.SCREW_GROUP);
+        screwController.plateGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.PLATE_GROUP);
+        screwController.boneGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.BONE_GROUP);
+        screwController.ReInit();
+    }
+
+    private GameObject findChildrenWithName(Transform parent, String name)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name.Equals(name))
+            {
+                return child.gameObject;
+            }
+            GameObject res = findChildrenWithName(child, name);
+            if (res != null)
+            {
+                return res;
+            }
+        }
+
+        return null;
+    }
+
+    private void AlignScrewScene()
+    {
+        CenterToRef(newPatientScrew,
+                RetrieveCombinedBounds(referencePatientScrew).center);
+        GameObject boxPatient = referencePatientScrew;
+        referencePatientScrew = newPatientScrew;
+        newPatientScrew = boxPatient;
+        newPatientScrew.SetActive(false);
+        referencePatientScrew.SetActive(true);
+    }
+
+    public static void CenterToRef(GameObject obj, Vector3 referencePosition)
+    {
+        obj.transform.position = obj.transform.position -
+            obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center +
+            referencePosition;
+    }
+
+    private Bounds RetrieveCombinedBounds(GameObject parent)
+    {
+        Renderer renderer = parent.GetComponentInChildren<Renderer>();
+        Bounds combinedBounds = renderer.bounds;
+        Renderer[] renderers = parent.GetComponentsInChildren<Renderer>();
+        foreach (Renderer render in renderers)
+        {
+            if (render != renderer) combinedBounds.Encapsulate(render.bounds);
+        }
+        return combinedBounds;
     }
 }

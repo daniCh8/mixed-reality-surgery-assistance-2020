@@ -589,24 +589,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         patientsController.SwitchPatient();
     }
 
-    private GameObject findChildrenWithName(Transform parent, String name)
-    {
-        foreach(Transform child in parent)
-        {
-            if(child.name.Equals(name))
-            {
-                return child.gameObject;
-            }
-            GameObject res = findChildrenWithName(child, name);
-            if(res != null)
-            {
-                return res;
-            }
-        }
-
-        return null;
-    }
-
     public void ScanToPlanes()
     {
         foreach (var quad in quads)

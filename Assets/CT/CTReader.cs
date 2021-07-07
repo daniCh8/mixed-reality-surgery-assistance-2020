@@ -133,7 +133,7 @@ public class CTReader : MonoBehaviour
     {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.transform.position = new Vector3(x, y, z);
-        sphere.transform.localScale = new Vector3(6f, 6f, 6f);
+        sphere.transform.localScale = new Vector3(0f, 0f, 0f);
         sphere.name = n;
         sphere.transform.parent = oo.transform;
         return sphere;
