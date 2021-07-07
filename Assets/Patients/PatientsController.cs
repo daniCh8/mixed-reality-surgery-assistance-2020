@@ -20,6 +20,7 @@ public class PatientsController : MonoBehaviour
     // Dummy Object at (0,0,0)
     public GameObject dummyObject;
 
+    public GlobalController globalController;
     public ScrewSceneController screwController;
     public TextAsset referenceLatScrew, referenceDistScrew, referenceMedScrew,
         newLatScrew, newDistScrew, newMedScrew;
@@ -100,11 +101,11 @@ public class PatientsController : MonoBehaviour
         TutunePinchSliders();
         TutuneTranslation();
 
-        GameObject boxPatient = newPatientManip;
+        globalController.patient = newPatientManip;
         TextAsset boxCt = newScans;
         newPatientManip = onScreenPatientManip;
         newScans = onScreenScans;
-        onScreenPatientManip = boxPatient;
+        onScreenPatientManip = globalController.patient;
         onScreenScans = boxCt;
 
         newPatientManip.SetActive(false);
@@ -181,5 +182,13 @@ public class PatientsController : MonoBehaviour
             if (render != renderer) combinedBounds.Encapsulate(render.bounds);
         }
         return combinedBounds;
+    }
+
+    private void PickNewPatient()
+    {
+        // instantiate new bones and create new patient with it
+        // adjust controllers parameters to have reference patient and new patient
+        // call switch patients
+        // destroy old patient instead of keeping it
     }
 }
