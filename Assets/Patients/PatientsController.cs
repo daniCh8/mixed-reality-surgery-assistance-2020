@@ -27,6 +27,7 @@ public class PatientsController : MonoBehaviour
     public ScrewSceneController screwController;
     public TextAsset newLatScrew, newDistScrew, newMedScrew;
     private string newLatScrewS, newDistScrewS, newMedScrewS;
+    private char sep = Path.DirectorySeparatorChar;
 
     void Start()
     {
@@ -215,13 +216,14 @@ public class PatientsController : MonoBehaviour
 
     private void LoadNewCT()
     {
-        string ctPath = @"Assets\Patients\TestPatient\CT\ct.bytes";
+        string ctPath = $"Assets{sep}Patients{sep}TestPatient{sep}CT{sep}ct.bytes";
+        Debug.Log(ctPath);
         newScansB = ReadBytesFromPath(ctPath);
     }
 
     private void LoadNewScrews()
     {
-        string[] screwPosPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Screws\", "*.txt", SearchOption.TopDirectoryOnly);
+        string[] screwPosPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Screws{sep}", "*.txt", SearchOption.TopDirectoryOnly);
         foreach (var screwPosPath in screwPosPaths)
         {
             if (screwPosPath.IndexOf(ScrewConstants.LAT_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
@@ -250,10 +252,10 @@ public class PatientsController : MonoBehaviour
         DestroyAllChildren(platesPat);
         DestroyAllChildren(bonesPat);
 
-        string[] alignedPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Aligned\", "*.obj", SearchOption.TopDirectoryOnly);
+        string[] alignedPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Aligned{sep}", "*.obj", SearchOption.TopDirectoryOnly);
         LoadObjsFrom(alignedPaths, bonesPat);
 
-        string[] platesPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Plates\", "*.obj", SearchOption.TopDirectoryOnly);
+        string[] platesPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Plates{sep}", "*.obj", SearchOption.TopDirectoryOnly);
         LoadObjsFrom(platesPaths, platesPat);
     }
 
@@ -263,7 +265,7 @@ public class PatientsController : MonoBehaviour
         DestroyAllChildren(newPatHandles);
 
         // fractured
-        string[] fracturedPaths = Directory.GetFiles(@"Assets\Patients\TestPatient\Fractured\", "*.obj", SearchOption.TopDirectoryOnly);
+        string[] fracturedPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Fractured{sep}", "*.obj", SearchOption.TopDirectoryOnly);
         LoadObjsFrom(fracturedPaths, newPatHandles);
     }
 
@@ -280,7 +282,7 @@ public class PatientsController : MonoBehaviour
             //load
             var loadedObj = new OBJLoader().Load(fracturedP);
             loadedObj.transform.parent = parent;
-            loadedObj.transform.localScale = new Vector3(1f, 1f, 1f);
+            loadedObj.transform.localScale = new Vector3(-1f, 1f, 1f);
             loadedObj.transform.localPosition = new Vector3();
             loadedObj.transform.localEulerAngles = new Vector3();
         }

@@ -584,7 +584,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     public void ChangePatient()
     {
-        patientsController.SwitchPatient();
+        patientsController.PickNewPatient();
     }
 
     public void ScanToPlanes()
