@@ -76,8 +76,7 @@ public class ScrewSceneController : MonoBehaviour
     // Screw Size text
     private TextMesh screwSizeText;
 
-
-    void Start()
+    public void Init()
     {
         screwLatPositionsS = screwLatPositions == null ? null : screwLatPositions.text;
         screwMedPositionsS = screwMedPositions == null ? null : screwMedPositions.text;

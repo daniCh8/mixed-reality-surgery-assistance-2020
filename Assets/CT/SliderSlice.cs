@@ -16,7 +16,7 @@ public class SliderSlice : MonoBehaviour {
     public enum ColorFlag { Cyan, Yellow, Red }
     public ColorFlag colorTexture;
 
-    Texture2D tex;
+    public Texture2D tex;
     float currentVal = -1;
     Vector4 bCol;
 
@@ -80,7 +80,6 @@ public class SliderSlice : MonoBehaviour {
 
         ct.Slice(orig, dx, dy, tex, disaligned, bCol);
         Vector3 quadPos = ct.GetPositionFromSlider(val, axis);
-
 
         Transform backupParent = quad.transform.parent;
         quad.transform.parent = ct.oo.transform;
