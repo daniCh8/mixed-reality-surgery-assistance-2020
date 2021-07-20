@@ -80,10 +80,13 @@ public class SliderSlice : MonoBehaviour {
 
         ct.Slice(orig, dx, dy, tex, disaligned, bCol);
         Vector3 quadPos = ct.GetPositionFromSlider(val, axis);
+
+
         Transform backupParent = quad.transform.parent;
         quad.transform.parent = ct.oo.transform;
         quad.transform.localPosition = quadPos;
         quad.transform.parent = backupParent;
+        
     }
 
     void Update() {

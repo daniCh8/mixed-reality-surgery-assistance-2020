@@ -18,7 +18,9 @@ public class CTReader : MonoBehaviour
     int kernel;
 
     [HideInInspector]
-    public GameObject bottomBackLeft, bottomBackRight, topBackLeft, topBackRight, bottomFrontLeft, bottomFrontRight, topFrontLeft, topFrontRight, center;
+    public GameObject bottomBackLeft, bottomBackRight, topBackLeft,
+        topBackRight, bottomFrontLeft, bottomFrontRight, topFrontLeft,
+        topFrontRight, center;
     [HideInInspector]
     public float ctLength, ctDepth;
     [HideInInspector]
@@ -39,8 +41,6 @@ public class CTReader : MonoBehaviour
         nrrd = new NRRD(ct_bytes);
         for (int i = 0; i < 3; i++)
         {
-            // Debug.Log(nrrd.dims[i]);
-            // Debug.Log(nrrd.scale[i]);
             Debug.Log(nrrd.dims[i] * nrrd.scale[i]);
         }
 
@@ -98,6 +98,14 @@ public class CTReader : MonoBehaviour
             new Vector3(0.0025f, 0.0025f, 0.0025f));
     }
 
+    public void ComputeOffsets()
+    {
+        foreach (var pt in GetPoints())
+        {
+            pt.GetComponent<AutoAlign>().ComputeOffset();
+        }
+    }
+
     private void ComputeMinMaxFloats(NRRD nrrd)
     {
         int rounds = 2;
@@ -139,6 +147,10 @@ public class CTReader : MonoBehaviour
         sphere.transform.localScale = new Vector3(0f, 0f, 0f);
         sphere.name = n;
         sphere.transform.parent = oo.transform;
+
+        AutoAlign autoAlign = sphere.AddComponent<AutoAlign>();
+        autoAlign.target = sliderH;
+
         return sphere;
     }
 
