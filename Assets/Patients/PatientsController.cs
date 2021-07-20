@@ -40,6 +40,7 @@ public class PatientsController : MonoBehaviour
         newDistScrewS = newDistScrew.text;
 
         TutunePinchSliders();
+        cTReader.ComputeOffsets();
     }
 
     private void TutuneTranslation()
@@ -112,6 +113,7 @@ public class PatientsController : MonoBehaviour
 
         TutunePinchSliders();
         TutuneTranslation();
+        cTReader.ComputeOffsets();
 
         globalController.patient = newPatientManip;
         byte[] boxCtB = newScansB;
@@ -217,7 +219,6 @@ public class PatientsController : MonoBehaviour
     private void LoadNewCT()
     {
         string ctPath = $"Assets{sep}Patients{sep}TestPatient{sep}CT{sep}ct.bytes";
-        Debug.Log(ctPath);
         newScansB = ReadBytesFromPath(ctPath);
     }
 
