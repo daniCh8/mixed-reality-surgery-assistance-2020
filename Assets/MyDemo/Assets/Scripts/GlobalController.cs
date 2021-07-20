@@ -75,7 +75,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     public static ScaleState gScaleState { get; set; }
 
     // Screw Scene References
-    public GameObject screwScene, manipulationScene;
+    public GameObject screwScene, manipulationScene, startingScene;
     public ScrewSceneController screwSceneController;
 
     // Start is called before the first frame update
@@ -109,8 +109,16 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
 
-        // patientsController.SwitchPatient();
-        // patientsController.SwitchPatient();
+        screwSceneController.Init();
+        patientsController.Init();
+
+        GoToStartingScene(true);
+    }
+
+    public void GoToStartingScene(bool flag)
+    {
+        manipulationScene.SetActive(!flag);
+        startingScene.SetActive(flag);
     }
 
     public void InitBoneReferences()
@@ -556,31 +564,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
             manipulationScene.SetActive(false);
         }
     }
-
-    /*
-    private void UpdateScenePosition(Transform oldSceneBone, Transform oldSceneMenu, Transform newSceneBone, Transform newSceneMenu)
-    {
-        PatientsController.CenterToRef(newSceneBone.gameObject, oldSceneBone.gameObject.GetComponentInChildren<Renderer>().bounds.center);
-        PatientsController.CenterToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.center);
-
-        newSceneBone.rotation = oldSceneBone.rotation;
-        newSceneMenu.rotation = oldSceneMenu.rotation;
-
-        PatientsController.SameResizeToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.size);
-    }
-
-    public void ChangePatient()
-    {
-        screwSceneController.ResetState();
-        Tuple<GameObject, GameObject> refPatients = patientsController.SwitchPatient();
-        patient = refPatients.Item1;
-        Transform screwPatientTransform = refPatients.Item2.transform;
-        screwSceneController.screwGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.SCREW_GROUP);
-        screwSceneController.plateGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.PLATE_GROUP);
-        screwSceneController.boneGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.BONE_GROUP);
-        screwSceneController.ReInit();
-    }
-    */
 
     public void ChangePatient()
     {

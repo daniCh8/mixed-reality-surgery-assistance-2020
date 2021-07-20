@@ -29,7 +29,7 @@ public class PatientsController : MonoBehaviour
     private string newLatScrewS, newDistScrewS, newMedScrewS;
     private char sep = Path.DirectorySeparatorChar;
 
-    void Start()
+    public void Init()
     {
         newScansB = newScans.bytes;
         referenceScansB = referenceScans.bytes;
@@ -125,14 +125,6 @@ public class PatientsController : MonoBehaviour
         newPatientManip.SetActive(false);
         onScreenPatientManip.SetActive(true);
 
-        foreach (var item in new GameObject[] {pinchSliderHor, pinchSliderVer})
-        {
-            foreach (SliderSlice sliderSlice in item.GetComponentsInChildren<SliderSlice>())
-            {
-                sliderSlice.UpdateHelper();
-            }
-        }
-
         screwController.ResetState();
         AlignScrewScene();
 
@@ -152,6 +144,18 @@ public class PatientsController : MonoBehaviour
         screwController.plateGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.PLATE_GROUP);
         screwController.boneGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.BONE_GROUP);
         screwController.ReInit();
+
+        foreach (var item in new GameObject[] { pinchSliderHor, pinchSliderVer })
+        {
+            foreach (SliderSlice sliderSlice in item.GetComponentsInChildren<SliderSlice>())
+            {
+                if (sliderSlice.tex == null)
+                {
+                    sliderSlice.Init();
+                }
+                sliderSlice.UpdateHelper();
+            }
+        }
     }
 
     private GameObject findChildrenWithName(Transform parent, String name)
@@ -202,6 +206,16 @@ public class PatientsController : MonoBehaviour
         return combinedBounds;
     }
 
+    public void PickPatientInFolderOne()
+    {
+        PickNewPatient();
+    }
+
+    public void PickPatientInFolderTwo()
+    {
+        PickNewPatient();
+    }
+
     public void PickNewPatient()
     {
         // instantiate new bones and create new patient with it
@@ -209,6 +223,7 @@ public class PatientsController : MonoBehaviour
         // call switch patients
         // destroy old patient instead of keeping it
 
+        globalController.GoToStartingScene(false);
         LoadNewCT();
         LoadNewScrews();
         LoadNewPatientManip();
