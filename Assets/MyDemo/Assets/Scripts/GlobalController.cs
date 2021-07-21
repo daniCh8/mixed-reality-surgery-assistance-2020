@@ -111,6 +111,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         screwSceneController.Init();
         patientsController.Init();
+        FilePicker.CreateFolders();
 
         GoToStartingScene(true);
     }
@@ -567,7 +568,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     public void ChangePatient()
     {
-        patientsController.PickNewPatient();
+        patientsController.PickNewPatient(true);
     }
 
     public void ScanToPlanes()
