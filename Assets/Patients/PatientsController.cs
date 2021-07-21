@@ -6,6 +6,13 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+#if !UNITY_EDITOR && UNITY_WSA_10_0
+using System;
+using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Streams;
+#endif
+
 public class PatientsController : MonoBehaviour
 {
     // Manipulation Scene References
@@ -208,15 +215,15 @@ public class PatientsController : MonoBehaviour
 
     public void PickPatientInFolderOne()
     {
-        PickNewPatient();
+        PickNewPatient(true);
     }
 
     public void PickPatientInFolderTwo()
     {
-        PickNewPatient();
+        PickNewPatient(false);
     }
 
-    public void PickNewPatient()
+    public void PickNewPatient(bool first)
     {
         // instantiate new bones and create new patient with it
         // adjust controllers parameters to have reference patient and new patient
@@ -224,65 +231,11 @@ public class PatientsController : MonoBehaviour
         // destroy old patient instead of keeping it
 
         globalController.GoToStartingScene(false);
-        LoadNewCT();
-        LoadNewScrews();
-        LoadNewPatientManip();
-        LoadNewPatientScrew();
+        LoadNewCT(first);
+        LoadNewScrews(first);
+        LoadNewPatientManip(first);
+        LoadNewPatientScrew(first);
         SwitchPatient();
-    }
-
-    private void LoadNewCT()
-    {
-        string ctPath = $"Assets{sep}Patients{sep}TestPatient{sep}CT{sep}ct.bytes";
-        newScansB = ReadBytesFromPath(ctPath);
-    }
-
-    private void LoadNewScrews()
-    {
-        string[] screwPosPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Screws{sep}", "*.txt", SearchOption.TopDirectoryOnly);
-        foreach (var screwPosPath in screwPosPaths)
-        {
-            if (screwPosPath.IndexOf(ScrewConstants.LAT_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
-            {
-                newLatScrewS = ReadStringFromPath(screwPosPath);
-            }
-            else if (screwPosPath.IndexOf(ScrewConstants.MED_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
-            {
-                newMedScrewS = ReadStringFromPath(screwPosPath);
-            }
-            else if (screwPosPath.IndexOf(ScrewConstants.DIST_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
-            {
-                newDistScrewS = ReadStringFromPath(screwPosPath);
-            }
-        }
-    }
-
-    private void LoadNewPatientScrew()
-    {
-        Transform newPatScrew = newPatientScrew.transform;
-        Transform screwsPat = newPatScrew.Find("Screws"),
-            platesPat = newPatScrew.Find("Plates"),
-            bonesPat = newPatScrew.Find("Bone");
-
-        DestroyAllChildren(screwsPat);
-        DestroyAllChildren(platesPat);
-        DestroyAllChildren(bonesPat);
-
-        string[] alignedPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Aligned{sep}", "*.obj", SearchOption.TopDirectoryOnly);
-        LoadObjsFrom(alignedPaths, bonesPat);
-
-        string[] platesPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Plates{sep}", "*.obj", SearchOption.TopDirectoryOnly);
-        LoadObjsFrom(platesPaths, platesPat);
-    }
-
-    private void LoadNewPatientManip()
-    {
-        Transform newPatHandles = referencePatientManip == onScreenPatientManip ? newPatientManip.transform : onScreenPatientManip.transform;
-        DestroyAllChildren(newPatHandles);
-
-        // fractured
-        string[] fracturedPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Fractured{sep}", "*.obj", SearchOption.TopDirectoryOnly);
-        LoadObjsFrom(fracturedPaths, newPatHandles);
     }
 
     private void LoadObjsFrom(string[] paths, Transform parent)
@@ -320,6 +273,237 @@ public class PatientsController : MonoBehaviour
     private byte[] ReadBytesFromPath(string path)
     {
         return File.ReadAllBytes(path);
+    }
+
+    public void LoadNewScrews(bool flag)
+    {
+#if WINDOWS_UWP
+        Task loadNewScrewsTask = new Task(
+            async () =>
+            {
+                try
+                {
+                    StorageFolder cs = await KnownFolders.DocumentsLibrary.GetFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
+                    StorageFolder p = await cs.GetFolderAsync(flag ? FolderCostants.FOLDER_CUSTOM_PATIENT_1 : FolderCostants.FOLDER_CUSTOM_PATIENT_2);
+                    StorageFolder screwsFolder = await p.GetFolderAsync(FolderCostants.SCREWS);
+                    var screwPosFiles = await screwsFolder.GetFilesAsync();
+                    foreach (StorageFile screwPosFile in screwPosFiles)
+                    {
+                        if (screwPosFile.Name.IndexOf(ScrewConstants.LAT_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            newLatScrewS = await FileIO.ReadTextAsync(screwPosFile);
+                        }
+                        else if (screwPosFile.Name.IndexOf(ScrewConstants.MED_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            newMedScrewS = await FileIO.ReadTextAsync(screwPosFile);
+                        }
+                        else if (screwPosFile.Name.IndexOf(ScrewConstants.DIST_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            newDistScrewS = await FileIO.ReadTextAsync(screwPosFile);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    Debug.Log("Failed to locate documents folder!");
+                }
+            });
+
+        loadNewScrewsTask.Start();
+#endif
+
+#if UNITY_EDITOR
+		LoadNewScrewsUnity();
+#endif
+    }
+
+    public void LoadNewCT(bool flag)
+    {
+#if WINDOWS_UWP
+        Task loadNewCTTask = new Task(
+            async () =>
+            {
+                try
+                {
+                    StorageFolder cs = await KnownFolders.DocumentsLibrary.GetFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
+                    StorageFolder p = await cs.GetFolderAsync(flag ? FolderCostants.FOLDER_CUSTOM_PATIENT_1 : FolderCostants.FOLDER_CUSTOM_PATIENT_2);
+                    StorageFolder ctFolder = await p.GetFolderAsync(FolderCostants.CT);
+                    var ctFiles = await ctFolder.GetFilesAsync();
+                    foreach (StorageFile ctFile in ctFiles)
+                    {
+                        if (ctFile.Name.IndexOf(FolderCostants.OBJ_EXTENSION, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            IBuffer buffer = await FileIO.ReadBufferAsync(ctFile);
+                            DataReader dataReader = DataReader.FromBuffer(buffer);
+                            byte[] ctBytes = new byte[buffer.Length];
+                            dataReader.ReadBytes(ctBytes);
+                            newScansB = ctBytes;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    Debug.Log("Failed to locate documents folder!");
+                }
+            });
+
+        loadNewCTTask.Start();
+#endif
+
+#if UNITY_EDITOR
+		LoadNewCTUnity();
+#endif
+    }
+
+    public void LoadNewPatientManip(bool flag)
+    {
+#if WINDOWS_UWP
+        Task loadNewPatientManipTask = new Task(
+            async () =>
+            {
+                try
+                {
+                    Transform newPatHandles = referencePatientManip == onScreenPatientManip ? newPatientManip.transform : onScreenPatientManip.transform;
+                    DestroyAllChildren(newPatHandles);
+                    
+                    StorageFolder cs = await KnownFolders.DocumentsLibrary.GetFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
+                    StorageFolder p = await cs.GetFolderAsync(flag ? FolderCostants.FOLDER_CUSTOM_PATIENT_1 : FolderCostants.FOLDER_CUSTOM_PATIENT_2);
+                    StorageFolder boneFolder = await p.GetFolderAsync(FolderCostants.FRACTURED_BONES);
+                    var boneFiles = await boneFolder.GetFilesAsync();
+                    List<string> bonePaths = new List<string>();
+                    foreach (StorageFile boneFile in boneFiles)
+                    {
+                        if (boneFile.Name.IndexOf(FolderCostants.OBJ_EXTENSION, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            bonePaths.Add(boneFile.Path);
+                        }
+                    }
+                    LoadObjsFrom(bonePaths.ToArray(), newPatHandles);
+                }
+                catch (Exception)
+                {
+                    Debug.Log("Failed to locate documents folder!");
+                }
+            });
+
+        loadNewPatientManipTask.Start();
+#endif
+
+#if UNITY_EDITOR
+		LoadNewPatientManipUnity();
+#endif
+    }
+
+    public void LoadNewPatientScrew(bool flag)
+    {
+#if WINDOWS_UWP
+        Task loadNewPatientScrewTask = new Task(
+            async () =>
+            {
+                try
+                {
+                    Transform newPatScrew = newPatientScrew.transform;
+                    Transform screwsPat = newPatScrew.Find("Screws"),
+                        platesPat = newPatScrew.Find("Plates"),
+                        bonesPat = newPatScrew.Find("Bone");
+
+                    DestroyAllChildren(screwsPat);
+                    DestroyAllChildren(platesPat);
+                    DestroyAllChildren(bonesPat);
+
+                    StorageFolder cs = await KnownFolders.DocumentsLibrary.GetFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
+                    StorageFolder p = await cs.GetFolderAsync(flag ? FolderCostants.FOLDER_CUSTOM_PATIENT_1 : FolderCostants.FOLDER_CUSTOM_PATIENT_2);
+
+                    StorageFolder boneFolder = await p.GetFolderAsync(FolderCostants.REALIGNED_BONES);
+                    var boneFiles = await boneFolder.GetFilesAsync();
+                    List<string> bonePaths = new List<string>();
+                    foreach (StorageFile boneFile in boneFiles)
+                    {
+                        if (boneFile.Name.IndexOf(FolderCostants.OBJ_EXTENSION, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            bonePaths.Add(boneFile.Path);
+                        }
+                    }
+                    LoadObjsFrom(bonePaths.ToArray(), bonesPat);
+
+                    StorageFolder plateFolder = await p.GetFolderAsync(FolderCostants.PLATES);
+                    var plateFiles = await plateFolder.GetFilesAsync();
+                    List<string> platePaths = new List<string>();
+                    foreach (StorageFile plateFile in plateFiles)
+                    {
+                        if (plateFile.Name.IndexOf(FolderCostants.OBJ_EXTENSION, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            platePaths.Add(plateFile.Path);
+                        }
+                    }
+                    LoadObjsFrom(platePaths.ToArray(), platesPat);
+                }
+                catch (Exception)
+                {
+                    Debug.Log("Failed to locate documents folder!");
+                }
+            });
+
+        loadNewPatientScrewTask.Start();
+#endif
+
+#if UNITY_EDITOR
+		LoadNewPatientScrewUnity();
+#endif
+    }
+
+    private void LoadNewPatientScrewUnity()
+    {
+        Transform newPatScrew = newPatientScrew.transform;
+        Transform screwsPat = newPatScrew.Find("Screws"),
+            platesPat = newPatScrew.Find("Plates"),
+            bonesPat = newPatScrew.Find("Bone");
+
+        DestroyAllChildren(screwsPat);
+        DestroyAllChildren(platesPat);
+        DestroyAllChildren(bonesPat);
+
+        string[] alignedPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Aligned{sep}", "*.obj", SearchOption.TopDirectoryOnly);
+        LoadObjsFrom(alignedPaths, bonesPat);
+
+        string[] platesPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Plates{sep}", "*.obj", SearchOption.TopDirectoryOnly);
+        LoadObjsFrom(platesPaths, platesPat);
+    }
+
+    private void LoadNewPatientManipUnity()
+    {
+        Transform newPatHandles = referencePatientManip == onScreenPatientManip ? newPatientManip.transform : onScreenPatientManip.transform;
+        DestroyAllChildren(newPatHandles);
+
+        // fractured
+        string[] fracturedPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Fractured{sep}", "*.obj", SearchOption.TopDirectoryOnly);
+        LoadObjsFrom(fracturedPaths, newPatHandles);
+    }
+
+    private void LoadNewScrewsUnity()
+    {
+        string[] screwPosPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Screws{sep}", "*.txt", SearchOption.TopDirectoryOnly);
+        foreach (var screwPosPath in screwPosPaths)
+        {
+            if (screwPosPath.IndexOf(ScrewConstants.LAT_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+            {
+                newLatScrewS = ReadStringFromPath(screwPosPath);
+            }
+            else if (screwPosPath.IndexOf(ScrewConstants.MED_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+            {
+                newMedScrewS = ReadStringFromPath(screwPosPath);
+            }
+            else if (screwPosPath.IndexOf(ScrewConstants.DIST_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
+            {
+                newDistScrewS = ReadStringFromPath(screwPosPath);
+            }
+        }
+    }
+
+    private void LoadNewCTUnity()
+    {
+        string ctPath = $"Assets{sep}Patients{sep}TestPatient{sep}CT{sep}ct.bytes";
+        newScansB = ReadBytesFromPath(ctPath);
     }
 
 }

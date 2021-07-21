@@ -12,15 +12,8 @@ using Windows.Storage;
 
 public class FilePicker : MonoBehaviour
 {
-	public TextMesh textMesh;
-    public static string path;
 
-    public void Start()
-    {
-        path = Application.streamingAssetsPath;
-    }
-
-    public void UpdateText()
+    public static void CreateFolders()
     {
 #if WINDOWS_UWP
         Task createFolderTask = new Task(
@@ -28,12 +21,12 @@ public class FilePicker : MonoBehaviour
             {
                 try
                 {
-                    var customSurg = await KnownFolders.DocumentsLibrary.CreateFolderAsync("CustomSurg");
+                    var customSurg = await KnownFolders.DocumentsLibrary.CreateFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
                     var newFolderDescription = await customSurg.CreateFileAsync(FolderCostants.OVERALL_FILE, CreationCollisionOption.ReplaceExisting);
                     await FileIO.AppendTextAsync(newFolderDescription, FolderCostants.OVERALL_FILE + Environment.NewLine);
 
-                    var p1 = await customSurg.CreateFolderAsync("Patient1", CreationCollisionOption.OpenIfExists);
-                    var p2 = await customSurg.CreateFolderAsync("Patient2", CreationCollisionOption.OpenIfExists);
+                    var p1 = await customSurg.CreateFolderAsync(FolderCostants.FOLDER_CUSTOM_PATIENT_1, CreationCollisionOption.OpenIfExists);
+                    var p2 = await customSurg.CreateFolderAsync(FolderCostants.FOLDER_CUSTOM_PATIENT_2, CreationCollisionOption.OpenIfExists);
                     
 
                     for (int i = 0; i < FolderCostants.FOLDER_CUSTOM_SUBFOLDERS.Length; i++)
@@ -56,7 +49,7 @@ public class FilePicker : MonoBehaviour
 #endif
 
 #if UNITY_EDITOR
-		textMesh.text = "We are not on the HoloLens Device, but still in Unity.";
+		Debug.Log("We are not on the HoloLens Device, but still in Unity.");
 #endif
     }
 }
@@ -86,4 +79,5 @@ public static class FolderCostants
     public readonly static string[] FOLDER_CUSTOM_TEXTS = new string[] { CT_EXPLANATION, FRACTURED_BONES_EXPLANATION, REALIGNED_BONES_EXPLANATION, SCREWS_EXPLANATION, PLATES_EXPLANATION };
     public readonly static string OVERALL_FILE = "Info.txt";
     public readonly static string OVERALL_EXPLANATION = "These are the patients folders. You can use them to change the patient. Once you completed uploading all the files for one patient, you can go back to the application and choose that patient. Go inside a patient's subfolder to find more information about the files you should upload.";
+    public readonly static string OBJ_EXTENSION = ".obj";
 }
