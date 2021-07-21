@@ -114,13 +114,28 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         patientsController.Init();
         FilePicker.CreateFolders();
 
-        GoToStartingScene(true);
+        GoToStartingScene();
     }
 
-    public void GoToStartingScene(bool flag)
+    public void GoToManipScene()
     {
-        screwScene.SetActive(!flag);
-        startingScene.SetActive(flag);
+        startingScene.SetActive(false);
+        screwScene.SetActive(false);
+        manipulationScene.SetActive(true);
+    }
+
+    public void GoToScrewScene()
+    {
+        startingScene.SetActive(false);
+        manipulationScene.SetActive(false);
+        screwScene.SetActive(true);
+    }
+
+    public void GoToStartingScene()
+    {
+        manipulationScene.SetActive(false);
+        screwScene.SetActive(false);
+        startingScene.SetActive(true);
     }
 
     public void InitBoneReferences()

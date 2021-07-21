@@ -234,7 +234,7 @@ public class PatientsController : MonoBehaviour
         // call switch patients
         // destroy old patient instead of keeping it
 
-        globalController.GoToStartingScene(false);
+        globalController.GoToScrewScene();
         // LoadNewCT(first);
         LoadNewScrews(first);
         // LoadNewPatientManip(first);
