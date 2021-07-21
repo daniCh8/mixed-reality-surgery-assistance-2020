@@ -7,7 +7,7 @@ public class LogScript : MonoBehaviour
     TextMesh textMesh;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         textMesh = gameObject.GetComponent<TextMesh>();
     }
