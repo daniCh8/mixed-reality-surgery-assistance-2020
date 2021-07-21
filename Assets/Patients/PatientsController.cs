@@ -38,6 +38,8 @@ public class PatientsController : MonoBehaviour
 
     public void Init()
     {
+        return;
+
         newScansB = newScans.bytes;
         referenceScansB = referenceScans.bytes;
         onScreenScansB = onScreenScans.bytes;
@@ -110,6 +112,7 @@ public class PatientsController : MonoBehaviour
 
     public void SwitchPatient()
     {
+        /*
         foreach (GameObject go in cTReader.GetPoints())
         {
             Destroy(go);
@@ -132,6 +135,19 @@ public class PatientsController : MonoBehaviour
         newPatientManip.SetActive(false);
         onScreenPatientManip.SetActive(true);
 
+        foreach (var item in new GameObject[] { pinchSliderHor, pinchSliderVer })
+        {
+            foreach (SliderSlice sliderSlice in item.GetComponentsInChildren<SliderSlice>())
+            {
+                if (sliderSlice.tex == null)
+                {
+                    sliderSlice.Init();
+                }
+                sliderSlice.UpdateHelper();
+            }
+        }
+        */
+
         screwController.ResetState();
         AlignScrewScene();
 
@@ -151,18 +167,6 @@ public class PatientsController : MonoBehaviour
         screwController.plateGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.PLATE_GROUP);
         screwController.boneGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.BONE_GROUP);
         screwController.ReInit();
-
-        foreach (var item in new GameObject[] { pinchSliderHor, pinchSliderVer })
-        {
-            foreach (SliderSlice sliderSlice in item.GetComponentsInChildren<SliderSlice>())
-            {
-                if (sliderSlice.tex == null)
-                {
-                    sliderSlice.Init();
-                }
-                sliderSlice.UpdateHelper();
-            }
-        }
     }
 
     private GameObject findChildrenWithName(Transform parent, String name)
@@ -231,9 +235,9 @@ public class PatientsController : MonoBehaviour
         // destroy old patient instead of keeping it
 
         globalController.GoToStartingScene(false);
-        LoadNewCT(first);
+        // LoadNewCT(first);
         LoadNewScrews(first);
-        LoadNewPatientManip(first);
+        // LoadNewPatientManip(first);
         LoadNewPatientScrew(first);
         SwitchPatient();
     }

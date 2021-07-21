@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1211,7 +1211,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &128135504
 Transform:
   m_ObjectHideFlags: 0
@@ -4016,7 +4016,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e415674c384175a44ab6e2750ea79dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ct: {fileID: 4900000, guid: 76ff13df26e9c7f4db9164bd56ef4cfb, type: 3}
+  ct: {fileID: 4900000, guid: 06b3b452149a440c69707fea0a6a5df1, type: 3}
   slicer: {fileID: 7200000, guid: ea9a1b7e79a1e044d88a72a42e6e8a4c, type: 3}
   oo: {fileID: 1516372278}
   sliderH: {fileID: 4464616428543595917}
@@ -5094,7 +5094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &345277761
 Transform:
   m_ObjectHideFlags: 0
@@ -15156,9 +15156,9 @@ MonoBehaviour:
   pinchSliderHor: {fileID: 4464616428543595917}
   pinchSliderVer: {fileID: 903487277}
   cTReader: {fileID: 278603713}
-  newScans: {fileID: 4900000, guid: 8078b63a99195284a9db19c19f50e8fb, type: 3}
-  referenceScans: {fileID: 4900000, guid: 76ff13df26e9c7f4db9164bd56ef4cfb, type: 3}
-  onScreenScans: {fileID: 4900000, guid: 76ff13df26e9c7f4db9164bd56ef4cfb, type: 3}
+  newScans: {fileID: 4900000, guid: b73b39adb0858480a90c93956b74475f, type: 3}
+  referenceScans: {fileID: 4900000, guid: 06b3b452149a440c69707fea0a6a5df1, type: 3}
+  onScreenScans: {fileID: 4900000, guid: 06b3b452149a440c69707fea0a6a5df1, type: 3}
   referencePatientScrew: {fileID: 253716662}
   newPatientScrew: {fileID: 85439648}
   dummyObject: {fileID: 1516372278}
