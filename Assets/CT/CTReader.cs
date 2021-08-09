@@ -36,8 +36,6 @@ public class CTReader : MonoBehaviour
         nrrd = new NRRD(ct);
         for (int i = 0; i < 3; i++)
         {
-            // Debug.Log(nrrd.dims[i]);
-            // Debug.Log(nrrd.scale[i]);
             Debug.Log(nrrd.dims[i] * nrrd.scale[i]);
         }
 
@@ -179,6 +177,8 @@ public class CTReader : MonoBehaviour
     }
 
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned, Vector4 bCol) {
+        Debug.Log("Slicing!");
+
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
@@ -194,9 +194,12 @@ public class CTReader : MonoBehaviour
         slicer.SetFloats("borderColor", new float[] { bCol.x, bCol.y, bCol.z, bCol.w });
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);
 
+        var oldRtex = RenderTexture.active;
         RenderTexture.active = rtex;
         result.ReadPixels(new Rect(0, 0, rtex.width, rtex.height), 0, 0);
         result.Apply();
+        RenderTexture.active = oldRtex;
+        rtex.Release();
     }
 
     public Vector3 TransformWorldCoords(Vector3 p) {
