@@ -177,8 +177,6 @@ public class CTReader : MonoBehaviour
     }
 
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned, Vector4 bCol) {
-        Debug.Log("Slicing!");
-
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
@@ -281,6 +279,8 @@ public class NRRD {
             using (var stream = new GZipStream(reader.BaseStream, CompressionMode.Decompress)) stream.CopyTo(mem);
             data = new float[dims[0] * dims[1] * dims[2]];
             Buffer.BlockCopy(mem.ToArray(), 0, data, 0, data.Length * sizeof(float));
+            mem.Dispose();
+            reader.Dispose();
         }
     }
 }
