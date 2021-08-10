@@ -52,6 +52,11 @@ public class SliderSlice : MonoBehaviour {
 
     public void UpdateHelper()
     {
+        if(ct.NotReady())
+        {
+            return;
+        }
+
         currentVal = slider.SliderValue;
         var val = currentVal - 0.5f;
 

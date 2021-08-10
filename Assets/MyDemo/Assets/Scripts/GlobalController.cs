@@ -70,10 +70,15 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     void Start()
     {
 
+        System.Diagnostics.Debug.WriteLine("Hello!");
+        Debug.Log("Hello1");
+
         // init bone references
         InitBoneReferences();
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
+
+        System.Diagnostics.Debug.WriteLine("I am Debugging!");
     }
 
     public void InitBoneReferences()

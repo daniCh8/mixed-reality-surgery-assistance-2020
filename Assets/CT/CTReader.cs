@@ -1,12 +1,14 @@
-using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Text;
 using UnityEngine;
+
+#if !UNITY_EDITOR && UNITY_WSA
+using Windows.System;
+#endif
 
 public class CTReader : MonoBehaviour
 {
@@ -28,7 +30,7 @@ public class CTReader : MonoBehaviour
     private NRRD nrrd;
 
     void Start() {
-        Init();
+        // Init();
     }
 
     public void Init()
@@ -41,10 +43,25 @@ public class CTReader : MonoBehaviour
 
         kernel = slicer.FindKernel("CSMain");
         var buf = new ComputeBuffer(nrrd.data.Length, sizeof(float));
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 44: " + MemoryManager.AppMemoryUsage);
+#endif
         buf.SetData(nrrd.data);
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 45: " + MemoryManager.AppMemoryUsage);
+#endif
         slicer.SetBuffer(kernel, "data", buf);
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 46: " + MemoryManager.AppMemoryUsage);
+#endif
         slicer.SetInts("dims", nrrd.dims);
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 47: " + MemoryManager.AppMemoryUsage);
+#endif
         PointCloud(nrrd);
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 48: " + MemoryManager.AppMemoryUsage);
+#endif
     }
 
     private void PointCloud(NRRD nrrd)
@@ -176,7 +193,15 @@ public class CTReader : MonoBehaviour
         return arr;
     }
 
+    public bool NotReady()
+    {
+        return (center == null);
+    }
+
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned, Vector4 bCol) {
+        System.Diagnostics.Debug.WriteLine("Slicing1");
+        System.Diagnostics.Debug.Write("Slicing2");
+        Debug.Log("Slicing3");
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
@@ -247,6 +272,11 @@ public class NRRD {
 
     public NRRD(TextAsset asset) {
         using (var reader = new BinaryReader(new MemoryStream(asset.bytes))) {
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 256: " + MemoryManager.AppMemoryUsage);
+#endif
+
             for (string line = reader.ReadLine(); line.Length > 0; line = reader.ReadLine()) {
                 if (line.StartsWith("#") || !line.Contains(":")) continue;
                 var tokens = line.Split(':');
@@ -275,12 +305,30 @@ public class NRRD {
                 lengthDirection = scale[2][2];
             }
 
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 257: " + MemoryManager.AppMemoryUsage);
+#endif
+
             var mem = new MemoryStream();
             using (var stream = new GZipStream(reader.BaseStream, CompressionMode.Decompress)) stream.CopyTo(mem);
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 258: " + MemoryManager.AppMemoryUsage);
+#endif
+
             data = new float[dims[0] * dims[1] * dims[2]];
             Buffer.BlockCopy(mem.ToArray(), 0, data, 0, data.Length * sizeof(float));
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 259: " + MemoryManager.AppMemoryUsage);
+#endif
+
             mem.Dispose();
             reader.Dispose();
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 260: " + MemoryManager.AppMemoryUsage);
+#endif
         }
     }
 }
