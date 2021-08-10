@@ -8,9 +8,7 @@ public class PatientsController : MonoBehaviour
 {
     // Manipulation Scene References
     public GameObject newPatientManip, referencePatientManip, onScreenPatientManip;
-
     public GameObject pinchSliderHor, pinchSliderVer;
-
     public CTReader cTReader;
     public TextAsset newScans, referenceScans, onScreenScans;
 
@@ -18,6 +16,16 @@ public class PatientsController : MonoBehaviour
     public GameObject dummyObject;
 
     void Start()
+    {
+        // TutunePinchSliders();
+    }
+
+    public void Step1()
+    {
+        cTReader.Init();
+    }
+
+    public void Step2()
     {
         TutunePinchSliders();
     }
