@@ -43,25 +43,39 @@ public class CTReader : MonoBehaviour
 
         kernel = slicer.FindKernel("CSMain");
         var buf = new ComputeBuffer(nrrd.data.Length, sizeof(float));
+
 #if !UNITY_EDITOR && UNITY_WSA
         Debug.Log("Line 44: " + MemoryManager.AppMemoryUsage);
 #endif
+        // 1,662,406,656
+
         buf.SetData(nrrd.data);
+
 #if !UNITY_EDITOR && UNITY_WSA
         Debug.Log("Line 45: " + MemoryManager.AppMemoryUsage);
 #endif
+        // 2,118,561,792
+
         slicer.SetBuffer(kernel, "data", buf);
+
 #if !UNITY_EDITOR && UNITY_WSA
         Debug.Log("Line 46: " + MemoryManager.AppMemoryUsage);
 #endif
+        // 2,118,594,560
+
         slicer.SetInts("dims", nrrd.dims);
+
 #if !UNITY_EDITOR && UNITY_WSA
         Debug.Log("Line 47: " + MemoryManager.AppMemoryUsage);
 #endif
+        // 2,118,627,328
+
         PointCloud(nrrd);
+
 #if !UNITY_EDITOR && UNITY_WSA
         Debug.Log("Line 48: " + MemoryManager.AppMemoryUsage);
 #endif
+        // 2,118,668,288
     }
 
     private void PointCloud(NRRD nrrd)
@@ -199,9 +213,8 @@ public class CTReader : MonoBehaviour
     }
 
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned, Vector4 bCol) {
-        System.Diagnostics.Debug.WriteLine("Slicing1");
-        System.Diagnostics.Debug.Write("Slicing2");
-        Debug.Log("Slicing3");
+        // Debug.Log("Slicing!");
+
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
@@ -276,6 +289,7 @@ public class NRRD {
 #if !UNITY_EDITOR && UNITY_WSA
             Debug.Log("Line 256: " + MemoryManager.AppMemoryUsage);
 #endif
+            // 525,135,872
 
             for (string line = reader.ReadLine(); line.Length > 0; line = reader.ReadLine()) {
                 if (line.StartsWith("#") || !line.Contains(":")) continue;
@@ -308,6 +322,7 @@ public class NRRD {
 #if !UNITY_EDITOR && UNITY_WSA
             Debug.Log("Line 257: " + MemoryManager.AppMemoryUsage);
 #endif
+            // 525,135,872
 
             var mem = new MemoryStream();
             using (var stream = new GZipStream(reader.BaseStream, CompressionMode.Decompress)) stream.CopyTo(mem);
@@ -315,6 +330,7 @@ public class NRRD {
 #if !UNITY_EDITOR && UNITY_WSA
             Debug.Log("Line 258: " + MemoryManager.AppMemoryUsage);
 #endif
+            // 1,178,079,232
 
             data = new float[dims[0] * dims[1] * dims[2]];
             Buffer.BlockCopy(mem.ToArray(), 0, data, 0, data.Length * sizeof(float));
@@ -322,6 +338,7 @@ public class NRRD {
 #if !UNITY_EDITOR && UNITY_WSA
             Debug.Log("Line 259: " + MemoryManager.AppMemoryUsage);
 #endif
+            // 1,662,283,776
 
             mem.Dispose();
             reader.Dispose();
@@ -329,6 +346,7 @@ public class NRRD {
 #if !UNITY_EDITOR && UNITY_WSA
             Debug.Log("Line 260: " + MemoryManager.AppMemoryUsage);
 #endif
+            // 1,662,283,776
         }
     }
 }
