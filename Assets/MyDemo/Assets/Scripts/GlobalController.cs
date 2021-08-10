@@ -4,6 +4,10 @@ using TMPro;
 using Debug = UnityEngine.Debug;
 using System;
 
+#if !UNITY_EDITOR && UNITY_WSA
+using Windows.ApplicationModel.Core;
+#endif
+
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
 public enum BoneState { ShowAll, HidePlates, HideAll };
@@ -69,16 +73,10 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     // Start is called before the first frame update
     void Start()
     {
-
-        System.Diagnostics.Debug.WriteLine("Hello!");
-        Debug.Log("Hello1");
-
         // init bone references
         InitBoneReferences();
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
-
-        System.Diagnostics.Debug.WriteLine("I am Debugging!");
     }
 
     public void InitBoneReferences()
@@ -203,6 +201,20 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         {
             ShowSlider();
         }
+    }
+    public async void RestartApp()
+    {
+#if !UNITY_EDITOR && UNITY_WSA
+        // Attempt restart, with arguments.
+        AppRestartFailureReason result =
+            await CoreApplication.RequestRestartAsync("");
+
+        if (result == AppRestartFailureReason.NotInForeground
+            || result == AppRestartFailureReason.Other)
+        {
+            Debug.Log("Please manually restart.");
+        }
+#endif
     }
 }
 
