@@ -16,7 +16,7 @@ public class SliderSlice : MonoBehaviour {
     public enum ColorFlag { Cyan, Yellow, Red }
     public ColorFlag colorTexture;
 
-    public Texture2D tex;
+    Texture2D tex;
     float currentVal = -1;
     Vector4 bCol;
 
@@ -53,6 +53,11 @@ public class SliderSlice : MonoBehaviour {
 
     public void UpdateHelper()
     {
+        if(ct.NotReady())
+        {
+            return;
+        }
+
         currentVal = slider.SliderValue;
         var val = currentVal - 0.5f;
 

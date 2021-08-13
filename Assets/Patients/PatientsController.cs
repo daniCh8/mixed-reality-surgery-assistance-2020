@@ -16,65 +16,19 @@ using Windows.Storage.Streams;
 public class PatientsController : MonoBehaviour
 {
     // Manipulation Scene References
-    public GameObject newPatientManip, referencePatientManip, onScreenPatientManip;
+    public GameObject patientManip;
 
     public GameObject pinchSliderHor, pinchSliderVer;
 
     public CTReader cTReader;
-    public TextAsset newScans, referenceScans, onScreenScans;
-    private byte[] newScansB, referenceScansB, onScreenScansB;
-
-    // Screw Scene References
-    public GameObject referencePatientScrew, newPatientScrew;
+    public TextAsset scans;
+    private byte[] scansB;
 
     // Dummy Object at (0,0,0)
     public GameObject dummyObject;
 
     public GlobalController globalController;
-    public ScrewSceneController screwController;
-    public TextAsset newLatScrew, newDistScrew, newMedScrew;
-    private string newLatScrewS, newDistScrewS, newMedScrewS;
     private char sep = Path.DirectorySeparatorChar;
-
-    public void Init()
-    {
-        return;
-
-        newScansB = newScans.bytes;
-        referenceScansB = referenceScans.bytes;
-        onScreenScansB = onScreenScans.bytes;
-
-        newLatScrewS = newLatScrew.text;
-        newMedScrewS = newMedScrew.text;
-        newDistScrewS = newDistScrew.text;
-
-        TutunePinchSliders();
-        cTReader.ComputeOffsets();
-    }
-
-    private void TutuneTranslation()
-    {
-        Vector3 refCenter = cTReader.GetCenterOfCt(referenceScansB);
-        Vector3 newCenter = cTReader.GetCenterOfCt(newScansB);
-        float xTranslation = refCenter.x - newCenter.x,
-            yTranslation = refCenter.y - newCenter.y,
-            zTranslation = refCenter.z - newCenter.z;
-        newPatientManip.transform.localPosition = new Vector3(xTranslation, yTranslation, zTranslation);
-        
-        Vector3 pshPos = pinchSliderHor.transform.localPosition,
-            psvPos = pinchSliderVer.transform.localPosition;
-        pinchSliderHor.transform.localPosition = new Vector3(
-            pshPos.x + xTranslation, pshPos.y + yTranslation, pshPos.z + zTranslation);
-        pinchSliderVer.transform.localPosition = new Vector3(
-            psvPos.x + xTranslation, psvPos.y + yTranslation, psvPos.z + zTranslation);
-
-        foreach (GameObject go in cTReader.GetPoints())
-        {
-            Vector3 goPos = go.transform.localPosition;
-            go.transform.localPosition = new Vector3(
-                goPos.x + xTranslation, goPos.y + yTranslation, goPos.z + zTranslation);
-        }
-    }
 
     private void TutunePinchSliders()
     {
@@ -110,65 +64,6 @@ public class PatientsController : MonoBehaviour
             cTReader.bottomFrontRight.transform.localPosition.z);
     }
 
-    public void SwitchPatient()
-    {
-        /*
-        foreach (GameObject go in cTReader.GetPoints())
-        {
-            Destroy(go);
-        }
-
-        cTReader.ct_bytes = newScansB;
-        cTReader.Init();
-
-        TutunePinchSliders();
-        TutuneTranslation();
-        cTReader.ComputeOffsets();
-
-        globalController.patient = newPatientManip;
-        byte[] boxCtB = newScansB;
-        newPatientManip = onScreenPatientManip;
-        newScansB = onScreenScansB;
-        onScreenPatientManip = globalController.patient;
-        onScreenScansB = boxCtB;
-
-        newPatientManip.SetActive(false);
-        onScreenPatientManip.SetActive(true);
-
-        foreach (var item in new GameObject[] { pinchSliderHor, pinchSliderVer })
-        {
-            foreach (SliderSlice sliderSlice in item.GetComponentsInChildren<SliderSlice>())
-            {
-                if (sliderSlice.tex == null)
-                {
-                    sliderSlice.Init();
-                }
-                sliderSlice.UpdateHelper();
-            }
-        }
-        */
-
-        screwController.ResetState();
-        AlignScrewScene();
-
-        string boxD = screwController.screwDistPositionsS;
-        string boxL = screwController.screwLatPositionsS;
-        string boxM = screwController.screwMedPositionsS;
-
-        screwController.screwDistPositionsS = newDistScrewS;
-        screwController.screwLatPositionsS = newLatScrewS;
-        screwController.screwMedPositionsS = newMedScrewS;
-        
-        newDistScrewS = boxD;
-        newLatScrewS = boxL;
-        newMedScrewS = boxM;
-
-        screwController.screwGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.SCREW_GROUP);
-        screwController.plateGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.PLATE_GROUP);
-        screwController.boneGroup = findChildrenWithName(referencePatientScrew.transform, GlobalConstants.BONE_GROUP);
-        screwController.ReInit();
-    }
-
     private GameObject findChildrenWithName(Transform parent, String name)
     {
         foreach (Transform child in parent)
@@ -185,17 +80,6 @@ public class PatientsController : MonoBehaviour
         }
 
         return null;
-    }
-
-    private void AlignScrewScene()
-    {
-        CenterToRef(newPatientScrew,
-                RetrieveCombinedBounds(referencePatientScrew).center);
-        GameObject boxPatient = referencePatientScrew;
-        referencePatientScrew = newPatientScrew;
-        newPatientScrew = boxPatient;
-        newPatientScrew.SetActive(false);
-        referencePatientScrew.SetActive(true);
     }
 
     public void CenterToRef(GameObject obj, Vector3 referencePosition)
@@ -217,16 +101,6 @@ public class PatientsController : MonoBehaviour
         return combinedBounds;
     }
 
-    public void PickPatientInFolderOne()
-    {
-        PickNewPatient(true);
-    }
-
-    public void PickPatientInFolderTwo()
-    {
-        PickNewPatient(false);
-    }
-
     public void PickNewPatient(bool first)
     {
         // instantiate new bones and create new patient with it
@@ -234,12 +108,11 @@ public class PatientsController : MonoBehaviour
         // call switch patients
         // destroy old patient instead of keeping it
 
-        globalController.GoToScrewScene();
-        // LoadNewCT(first);
-        LoadNewScrews(first);
-        // LoadNewPatientManip(first);
-        LoadNewPatientScrew(first);
-        SwitchPatient();
+        LoadNewCT(first);
+        LoadNewPatientManip(first);
+        cTReader.Init();
+        TutunePinchSliders();
+        globalController.Init();
     }
 
     private void LoadObjsFrom(string[] paths, Transform parent)
@@ -279,6 +152,7 @@ public class PatientsController : MonoBehaviour
         return File.ReadAllBytes(path);
     }
 
+    /*
     public void LoadNewScrews(bool flag)
     {
 #if WINDOWS_UWP
@@ -295,15 +169,15 @@ public class PatientsController : MonoBehaviour
                     {
                         if (screwPosFile.Name.IndexOf(ScrewConstants.LAT_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
                         {
-                            newLatScrewS = await FileIO.ReadTextAsync(screwPosFile);
+                            // newLatScrewS = await FileIO.ReadTextAsync(screwPosFile);
                         }
                         else if (screwPosFile.Name.IndexOf(ScrewConstants.MED_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
                         {
-                            newMedScrewS = await FileIO.ReadTextAsync(screwPosFile);
+                            // newMedScrewS = await FileIO.ReadTextAsync(screwPosFile);
                         }
                         else if (screwPosFile.Name.IndexOf(ScrewConstants.DIST_SCREW_TAG, StringComparison.CurrentCultureIgnoreCase) >= 0)
                         {
-                            newDistScrewS = await FileIO.ReadTextAsync(screwPosFile);
+                            // newDistScrewS = await FileIO.ReadTextAsync(screwPosFile);
                         }
                     }
                 }
@@ -320,6 +194,7 @@ public class PatientsController : MonoBehaviour
 		LoadNewScrewsUnity();
 #endif
     }
+    */
 
     public void LoadNewCT(bool flag)
     {
@@ -341,7 +216,7 @@ public class PatientsController : MonoBehaviour
                             DataReader dataReader = DataReader.FromBuffer(buffer);
                             byte[] ctBytes = new byte[buffer.Length];
                             dataReader.ReadBytes(ctBytes);
-                            newScansB = ctBytes;
+                            scansB = ctBytes;
                         }
                     }
                 }
@@ -367,7 +242,7 @@ public class PatientsController : MonoBehaviour
             {
                 try
                 {
-                    Transform newPatHandles = referencePatientManip == onScreenPatientManip ? newPatientManip.transform : onScreenPatientManip.transform;
+                    Transform newPatHandles = patientManip.transform;
                     DestroyAllChildren(newPatHandles);
                     
                     StorageFolder cs = await KnownFolders.DocumentsLibrary.GetFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
@@ -398,6 +273,7 @@ public class PatientsController : MonoBehaviour
 #endif
     }
 
+    /*
     public void LoadNewPatientScrew(bool flag)
     {
 #if WINDOWS_UWP
@@ -455,7 +331,9 @@ public class PatientsController : MonoBehaviour
 		LoadNewPatientScrewUnity();
 #endif
     }
+    */
 
+    /*
     private void LoadNewPatientScrewUnity()
     {
         Transform newPatScrew = newPatientScrew.transform;
@@ -473,10 +351,11 @@ public class PatientsController : MonoBehaviour
         string[] platesPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Plates{sep}", "*.obj", SearchOption.TopDirectoryOnly);
         LoadObjsFrom(platesPaths, platesPat);
     }
+    */
 
     private void LoadNewPatientManipUnity()
     {
-        Transform newPatHandles = referencePatientManip == onScreenPatientManip ? newPatientManip.transform : onScreenPatientManip.transform;
+        Transform newPatHandles = patientManip.transform;
         DestroyAllChildren(newPatHandles);
 
         // fractured
@@ -484,6 +363,7 @@ public class PatientsController : MonoBehaviour
         LoadObjsFrom(fracturedPaths, newPatHandles);
     }
 
+    /*
     private void LoadNewScrewsUnity()
     {
         string[] screwPosPaths = Directory.GetFiles($"Assets{sep}Patients{sep}TestPatient{sep}Screws{sep}", "*.txt", SearchOption.TopDirectoryOnly);
@@ -503,11 +383,12 @@ public class PatientsController : MonoBehaviour
             }
         }
     }
+    */
 
     private void LoadNewCTUnity()
     {
         string ctPath = $"Assets{sep}Patients{sep}TestPatient{sep}CT{sep}ct.bytes";
-        newScansB = ReadBytesFromPath(ctPath);
+        scansB = ReadBytesFromPath(ctPath);
     }
 
 }

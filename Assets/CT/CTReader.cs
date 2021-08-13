@@ -31,18 +31,9 @@ public class CTReader : MonoBehaviour
     private float minx, maxx, miny, maxy, minz, maxz, width, height, depth;
     private NRRD nrrd;
 
-    void Start() {
-        ct_bytes = ct.bytes;
-        Init();
-    }
-
     public void Init()
     {
         nrrd = new NRRD(ct_bytes);
-        for (int i = 0; i < 3; i++)
-        {
-            Debug.Log(nrrd.dims[i] * nrrd.scale[i]);
-        }
 
         kernel = slicer.FindKernel("CSMain");
         var buf = new ComputeBuffer(nrrd.data.Length, sizeof(float));
@@ -163,6 +154,7 @@ public class CTReader : MonoBehaviour
         return new Vector3(middlex, middley, middlez);
     }
 
+    /*
     public Vector3 GetCenterOfCt(byte[] ctBytes)
     {
         var nrrd = new NRRD(ctBytes);
@@ -186,11 +178,17 @@ public class CTReader : MonoBehaviour
         dummyHandler.RestoreBackup();
         return ccct;
     }
+    */
 
     public GameObject[] GetPoints()
     {
         GameObject[] arr = new GameObject[] { bottomBackLeft, bottomBackRight, topBackLeft, topBackRight, bottomFrontLeft, bottomFrontRight, topFrontLeft, topFrontRight, center };
         return arr;
+    }
+
+    public bool NotReady()
+    {
+        return (center == null);
     }
 
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned, Vector4 bCol) {
@@ -209,9 +207,12 @@ public class CTReader : MonoBehaviour
         slicer.SetFloats("borderColor", new float[] { bCol.x, bCol.y, bCol.z, bCol.w });
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);
 
+        var oldRtex = RenderTexture.active;
         RenderTexture.active = rtex;
         result.ReadPixels(new Rect(0, 0, rtex.width, rtex.height), 0, 0);
         result.Apply();
+        RenderTexture.active = oldRtex;
+        rtex.Release();
     }
 
     public Vector3 TransformWorldCoords(Vector3 p) {
@@ -293,6 +294,9 @@ public class NRRD {
             using (var stream = new GZipStream(reader.BaseStream, CompressionMode.Decompress)) stream.CopyTo(mem);
             data = new float[dims[0] * dims[1] * dims[2]];
             Buffer.BlockCopy(mem.ToArray(), 0, data, 0, data.Length * sizeof(float));
+
+            mem.Dispose();
+            reader.Dispose();
         }
     }
 }
