@@ -10,6 +10,10 @@ using System;
 using System.Linq;
 using Microsoft.MixedReality.Toolkit;
 
+#if !UNITY_EDITOR && UNITY_WSA
+using Windows.ApplicationModel.Core;
+#endif
+
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
 public enum BoneState { ShowAll, HidePlates, HideAll };
@@ -75,13 +79,16 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     public static ScaleState gScaleState { get; set; }
 
     // Screw Scene References
-    public GameObject screwScene, manipulationScene, startingScene;
-    public ScrewSceneController screwSceneController;
+    public GameObject manipulationScene, startingScene;
 
     // Start is called before the first frame update
     void Start()
     {
-        /*
+        FilePicker.CreateFolders();
+    }
+
+    public void Init()
+    {
         // init bone references
         InitBoneReferences();
 
@@ -94,7 +101,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         Material firstPage = docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Pages>().getMat();
         docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = firstPage;
         docSlate.SetActive(false);
-        
+
         // bone manipulation components
         boneBoundingBox = boneGroup.gameObject.GetComponent<BoundingBox>();
         boneManipulationHandler = boneGroup.gameObject.GetComponent<ManipulationHandler>();
@@ -108,34 +115,12 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         allManipulationHandler = boneRef.GetComponent<ManipulationHandler>();
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
-        */
-
-        screwSceneController.Init();
-        patientsController.Init();
-        FilePicker.CreateFolders();
-
-        GoToStartingScene();
     }
 
     public void GoToManipScene()
     {
         startingScene.SetActive(false);
-        screwScene.SetActive(false);
         manipulationScene.SetActive(true);
-    }
-
-    public void GoToScrewScene()
-    {
-        startingScene.SetActive(false);
-        manipulationScene.SetActive(false);
-        screwScene.SetActive(true);
-    }
-
-    public void GoToStartingScene()
-    {
-        manipulationScene.SetActive(false);
-        screwScene.SetActive(false);
-        startingScene.SetActive(true);
     }
 
     public void InitBoneReferences()
@@ -555,33 +540,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = prevPage;
     }
 
-    public void ChangeScene()
-    {
-        Debug.Log("Change Scene Button Pressed");
-
-        if (screwScene.activeInHierarchy)
-        {
-            manipulationScene.SetActive(true);
-
-            /*UpdateScenePosition(screwSceneController.allGroup.transform,
-                screwSceneController.nearMenu.transform,
-                boneRef.transform,
-                nearMenu.transform);*/
-            screwScene.SetActive(false);
-        }
-        else
-        {
-            screwScene.SetActive(true);
-
-            /*UpdateScenePosition(boneRef.transform,
-                nearMenu.transform,
-                screwSceneController.allGroup.transform,
-                screwSceneController.nearMenu.transform);*/
-
-            manipulationScene.SetActive(false);
-        }
-    }
-
     public void ChangePatient()
     {
         patientsController.PickNewPatient(true);
@@ -605,6 +563,21 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
                 s.Init();
             }
         }
+    }
+
+    public async void RestartApp()
+    {
+#if !UNITY_EDITOR && UNITY_WSA
+        // Attempt restart, with arguments.
+        AppRestartFailureReason result =
+            await CoreApplication.RequestRestartAsync("");
+
+        if (result == AppRestartFailureReason.NotInForeground
+            || result == AppRestartFailureReason.Other)
+        {
+            Debug.Log("Please manually restart.");
+        }
+#endif
     }
 }
 
