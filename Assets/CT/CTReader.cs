@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class CTReader : MonoBehaviour
 {
-    public TextAsset ct;
+    // public TextAsset ct;
     public ComputeShader slicer;
     public GameObject oo;
     public GameObject sliderH, sliderV;
@@ -135,7 +135,7 @@ public class CTReader : MonoBehaviour
     {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.transform.position = new Vector3(x, y, z);
-        sphere.transform.localScale = new Vector3(0f, 0f, 0f);
+        sphere.transform.localScale = new Vector3(10f, 10f, 10f);
         sphere.name = n;
         sphere.transform.parent = oo.transform;
 
@@ -154,11 +154,8 @@ public class CTReader : MonoBehaviour
         return new Vector3(middlex, middley, middlez);
     }
 
-    /*
-    public Vector3 GetCenterOfCt(byte[] ctBytes)
+    public Vector3 GetCenterOfCt()
     {
-        var nrrd = new NRRD(ctBytes);
-
         DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
         dummyHandler.GoToZero();
 
@@ -176,9 +173,11 @@ public class CTReader : MonoBehaviour
         Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
 
         dummyHandler.RestoreBackup();
+
+        Debug.Log("Center of CT: (" + ccct.x + ", " + ccct.y + ", " + ccct.z + ")");
+
         return ccct;
     }
-    */
 
     public GameObject[] GetPoints()
     {

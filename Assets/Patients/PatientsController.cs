@@ -64,6 +64,30 @@ public class PatientsController : MonoBehaviour
             cTReader.bottomFrontRight.transform.localPosition.z);
     }
 
+    private void TutuneTranslation()
+    {
+        Vector3 refCenter = CTConstants.REFERENCE_CENTER;
+        Vector3 newCenter = cTReader.GetCenterOfCt();
+        float xTranslation = refCenter.x - newCenter.x,
+            yTranslation = refCenter.y - newCenter.y,
+            zTranslation = refCenter.z - newCenter.z;
+        patientManip.transform.localPosition = new Vector3(xTranslation, yTranslation, zTranslation);
+
+        Vector3 pshPos = pinchSliderHor.transform.localPosition,
+            psvPos = pinchSliderVer.transform.localPosition;
+        pinchSliderHor.transform.localPosition = new Vector3(
+            pshPos.x + xTranslation, pshPos.y + yTranslation, pshPos.z + zTranslation);
+        pinchSliderVer.transform.localPosition = new Vector3(
+            psvPos.x + xTranslation, psvPos.y + yTranslation, psvPos.z + zTranslation);
+
+        foreach (GameObject go in cTReader.GetPoints())
+        {
+            Vector3 goPos = go.transform.localPosition;
+            go.transform.localPosition = new Vector3(
+                goPos.x + xTranslation, goPos.y + yTranslation, goPos.z + zTranslation);
+        }
+    }
+
     private GameObject findChildrenWithName(Transform parent, String name)
     {
         foreach (Transform child in parent)
@@ -109,10 +133,19 @@ public class PatientsController : MonoBehaviour
         // destroy old patient instead of keeping it
 
         LoadNewCT(first);
+        Debug.Log("Loaded CT");
+        cTReader.ct_bytes = scansB;
         LoadNewPatientManip(first);
+        Debug.Log("Loaded Bones");
         cTReader.Init();
+        Debug.Log("CT Reader Init");
         TutunePinchSliders();
+        Debug.Log("Pinch Sliders Tuned");
+        TutuneTranslation();
+        Debug.Log("Translations Tuned");
         globalController.Init();
+        Debug.Log("Global Controller Inited");
+        globalController.GoToManipScene();
     }
 
     private void LoadObjsFrom(string[] paths, Transform parent)
@@ -391,4 +424,9 @@ public class PatientsController : MonoBehaviour
         scansB = ReadBytesFromPath(ctPath);
     }
 
+}
+
+static class CTConstants
+{
+    public static readonly Vector3 REFERENCE_CENTER = new Vector3(-3.244141f, -226.2559f, -248.5f);
 }

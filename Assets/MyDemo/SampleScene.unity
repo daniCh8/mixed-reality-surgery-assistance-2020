@@ -305,7 +305,6 @@ MonoBehaviour:
   quad: {fileID: 1482785198}
   disaligned: 0
   colorTexture: 1
-  tex: {fileID: 0}
 --- !u!1 &128135503
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &128135504
 Transform:
   m_ObjectHideFlags: 0
@@ -1053,7 +1052,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &278603712
 Transform:
   m_ObjectHideFlags: 0
@@ -1080,7 +1079,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e415674c384175a44ab6e2750ea79dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ct: {fileID: 4900000, guid: 2f80e13d2e0498a409e47cb3956fe5be, type: 3}
   slicer: {fileID: 7200000, guid: ea9a1b7e79a1e044d88a72a42e6e8a4c, type: 3}
   oo: {fileID: 1516372278}
   sliderH: {fileID: 4464616428543595917}
@@ -1464,7 +1462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &345277761
 Transform:
   m_ObjectHideFlags: 0
@@ -2441,7 +2439,6 @@ MonoBehaviour:
   quad: {fileID: 640187606}
   disaligned: 0
   colorTexture: 0
-  tex: {fileID: 0}
 --- !u!1 &527670175
 GameObject:
   m_ObjectHideFlags: 0
@@ -2901,7 +2898,6 @@ MonoBehaviour:
   quad: {fileID: 640187606}
   disaligned: 1
   colorTexture: 0
-  tex: {fileID: 0}
 --- !u!64 &640187609
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3683,7 +3679,6 @@ MonoBehaviour:
   quad: {fileID: 768218865}
   disaligned: 1
   colorTexture: 0
-  tex: {fileID: 0}
 --- !u!64 &768218867
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4116,7 +4111,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &903487278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5567,7 +5562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28078059c62e8214cb3a0561c30694c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patientManip: {fileID: 0}
+  patientManip: {fileID: 1792547352}
   pinchSliderHor: {fileID: 4464616428543595917}
   pinchSliderVer: {fileID: 903487277}
   cTReader: {fileID: 278603713}
@@ -6912,7 +6907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1482425388
 Transform:
   m_ObjectHideFlags: 0
@@ -7059,7 +7054,6 @@ MonoBehaviour:
   quad: {fileID: 1482785198}
   disaligned: 0
   colorTexture: 1
-  tex: {fileID: 0}
 --- !u!64 &1482785201
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8025,7 +8019,6 @@ MonoBehaviour:
   quad: {fileID: 1869905220}
   disaligned: 0
   colorTexture: 1
-  tex: {fileID: 0}
 --- !u!64 &1869905223
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -19522,7 +19515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &4464616428707548234
 Animator:
   serializedVersion: 3
