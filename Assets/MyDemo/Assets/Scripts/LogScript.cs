@@ -4,13 +4,7 @@ using UnityEngine;
 
 public class LogScript : MonoBehaviour
 {
-    TextMesh textMesh;
-
-    // Use this for initialization
-    void Awake()
-    {
-        textMesh = gameObject.GetComponent<TextMesh>();
-    }
+    public TextMesh textMesh;
 
     void OnEnable()
     {
@@ -24,7 +18,7 @@ public class LogScript : MonoBehaviour
 
     public void LogMessage(string message, string stackTrace, LogType type)
     {
-        if (textMesh.text.Length > 200)
+        if (textMesh.text.Length > 300000)
         {
             textMesh.text = message + "\n";
         }
@@ -34,15 +28,15 @@ public class LogScript : MonoBehaviour
         }
     }
 
-    public void saySomething(string something)
+    public void Log(string message)
     {
-        if (textMesh.text.Length > 200)
+        if (textMesh.text.Length > 300000)
         {
-            textMesh.text = something + "\n";
+            textMesh.text = message + "\n";
         }
         else
         {
-            textMesh.text += something + "\n";
+            textMesh.text += message + "\n";
         }
     }
 }

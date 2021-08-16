@@ -30,6 +30,8 @@ public class PatientsController : MonoBehaviour
     public GlobalController globalController;
     private char sep = Path.DirectorySeparatorChar;
 
+    public LogScript logger;
+
     private void TutunePinchSliders()
     {
         pinchSliderHor.transform.localPosition = cTReader.center.transform.localPosition;
@@ -132,22 +134,23 @@ public class PatientsController : MonoBehaviour
         // call switch patients
         // destroy old patient instead of keeping it
 
-        LoadNewCT(first);
-        Debug.Log("Loaded CT");
-        cTReader.ct_bytes = scansB;
         LoadNewPatientManip(first);
-        Debug.Log("Loaded Bones");
-        cTReader.Init();
-        Debug.Log("CT Reader Init");
+        FilePicker.Log("Loaded Bones");
+        LoadNewCT(first);
+        FilePicker.Log("\nLoaded CT");
+        cTReader.ct_bytes = scansB;
+        cTReader.Init(); //ArgumentNullException: Buffer cannot be null, parameter name: buffer
+        FilePicker.Log("CT Reader Init");
         TutunePinchSliders();
-        Debug.Log("Pinch Sliders Tuned");
+        FilePicker.Log("Pinch Sliders Tuned");
         TutuneTranslation();
-        Debug.Log("Translations Tuned");
+        FilePicker.Log("Translations Tuned");
         cTReader.ComputeOffsets();
-        Debug.Log("Offsets Computed");
+        FilePicker.Log("Offsets Computed");
         globalController.Init();
-        Debug.Log("Global Controller Inited");
+        FilePicker.Log("Global Controller Inited");
         globalController.GoToManipScene();
+        globalController.LogBones();
     }
 
     private void LoadObjsFrom(string[] paths, Transform parent)
@@ -159,6 +162,8 @@ public class PatientsController : MonoBehaviour
                 Debug.LogError(fracturedP + " is not a valid path.");
                 return;
             }
+
+            FilePicker.Log("loading file: " + fracturedP);
 
             //load
             var loadedObj = new OBJLoader().Load(fracturedP);
@@ -218,7 +223,8 @@ public class PatientsController : MonoBehaviour
                 }
                 catch (Exception)
                 {
-                    Debug.Log("Failed to locate documents folder!");
+                    FilePicker.Log(e.Message);
+                    FilePicker.Log(e.StackTrace);
                 }
             });
 
@@ -239,25 +245,39 @@ public class PatientsController : MonoBehaviour
             {
                 try
                 {
+                    int counter = 1;
+                    FilePicker.Log("ct task " + counter++);
                     StorageFolder cs = await KnownFolders.DocumentsLibrary.GetFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
+                    FilePicker.Log("ct task " + counter++);
                     StorageFolder p = await cs.GetFolderAsync(flag ? FolderCostants.FOLDER_CUSTOM_PATIENT_1 : FolderCostants.FOLDER_CUSTOM_PATIENT_2);
+                    FilePicker.Log("ct task " + counter++);
                     StorageFolder ctFolder = await p.GetFolderAsync(FolderCostants.CT);
+                    FilePicker.Log("ct task " + counter++);
                     var ctFiles = await ctFolder.GetFilesAsync();
+                    FilePicker.Log("ct task " + counter++ + "; files: " + ctFiles.ToString());
                     foreach (StorageFile ctFile in ctFiles)
                     {
-                        if (ctFile.Name.IndexOf(FolderCostants.OBJ_EXTENSION, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        FilePicker.Log("ct task " + counter++ + "; file name: " + ctFile.Name);
+                        if (ctFile.Name.IndexOf(FolderCostants.BYTES_EXTENSION, StringComparison.CurrentCultureIgnoreCase) >= 0)
                         {
+                            FilePicker.Log("ct task " + counter++ + "; we're inside");
                             IBuffer buffer = await FileIO.ReadBufferAsync(ctFile);
+                            FilePicker.Log("ct task " + counter++ + "; read ct file buffer");
                             DataReader dataReader = DataReader.FromBuffer(buffer);
+                            FilePicker.Log("ct task " + counter++ + "; created datareader");
                             byte[] ctBytes = new byte[buffer.Length];
+                            FilePicker.Log("ct task " + counter++ + "; created byte array");
                             dataReader.ReadBytes(ctBytes);
+                            FilePicker.Log("ct task " + counter++ + "; copied bytes");
                             scansB = ctBytes;
+                            FilePicker.Log("ct task " + counter++ + "; saved bytes");
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Debug.Log("Failed to locate documents folder!");
+                    FilePicker.Log(e.Message);
+                    FilePicker.Log(e.StackTrace);
                 }
             });
 
@@ -277,26 +297,38 @@ public class PatientsController : MonoBehaviour
             {
                 try
                 {
+                    int counter = 1;
+                    FilePicker.Log("new patient manip " + counter++);
                     Transform newPatHandles = patientManip.transform;
+                    FilePicker.Log("new patient manip " + counter++);
                     DestroyAllChildren(newPatHandles);
-                    
+                    FilePicker.Log("new patient manip " + counter++);
+
                     StorageFolder cs = await KnownFolders.DocumentsLibrary.GetFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
+                    FilePicker.Log("new patient manip " + counter++);
                     StorageFolder p = await cs.GetFolderAsync(flag ? FolderCostants.FOLDER_CUSTOM_PATIENT_1 : FolderCostants.FOLDER_CUSTOM_PATIENT_2);
+                    FilePicker.Log("new patient manip " + counter++);
                     StorageFolder boneFolder = await p.GetFolderAsync(FolderCostants.FRACTURED_BONES);
+                    FilePicker.Log("new patient manip " + counter++);
                     var boneFiles = await boneFolder.GetFilesAsync();
+                    FilePicker.Log("new patient manip " + counter++ + "; boneFiles: " + boneFiles.ToString());
                     List<string> bonePaths = new List<string>();
                     foreach (StorageFile boneFile in boneFiles)
                     {
+                        FilePicker.Log("new patient manip " + counter++ + "; boneFile name: " + boneFile.Name);
                         if (boneFile.Name.IndexOf(FolderCostants.OBJ_EXTENSION, StringComparison.CurrentCultureIgnoreCase) >= 0)
                         {
+                            FilePicker.Log("new patient manip " + counter++ + "; " + boneFile.Name + " added!");
                             bonePaths.Add(boneFile.Path);
                         }
                     }
                     LoadObjsFrom(bonePaths.ToArray(), newPatHandles);
+                    FilePicker.Log("new patient manip " + counter++ + "; obj loaded.");
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Debug.Log("Failed to locate documents folder!");
+                    FilePicker.Log(e.Message);
+                    FilePicker.Log(e.StackTrace);
                 }
             });
 
@@ -355,7 +387,8 @@ public class PatientsController : MonoBehaviour
                 }
                 catch (Exception)
                 {
-                    Debug.Log("Failed to locate documents folder!");
+                    FilePicker.Log(e.Message);
+                    FilePicker.Log(e.StackTrace);
                 }
             });
 

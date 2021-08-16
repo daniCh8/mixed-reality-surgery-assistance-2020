@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1462,7 +1462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &345277761
 Transform:
   m_ObjectHideFlags: 0
@@ -1477,7 +1477,6 @@ Transform:
   - {fileID: 5006512735835402284}
   - {fileID: 6497819335402071177}
   - {fileID: 7779420038883905342}
-  - {fileID: 1979024854}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5569,6 +5568,7 @@ MonoBehaviour:
   scans: {fileID: 0}
   dummyObject: {fileID: 1516372278}
   globalController: {fileID: 326163310}
+  logger: {fileID: 1979024851}
 --- !u!1001 &1243643595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6907,7 +6907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1482425388
 Transform:
   m_ObjectHideFlags: 0
@@ -8098,7 +8098,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1979024851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8111,6 +8111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efaab0d9847ab654c98acc1e6d006de9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textMesh: {fileID: 1979024852}
 --- !u!102 &1979024852
 TextMesh:
   serializedVersion: 3
@@ -8179,13 +8180,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979024850}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.79, y: -0.061, z: 1.141}
+  m_LocalRotation: {x: -0, y: 0.25350258, z: -0, w: 0.96733475}
+  m_LocalPosition: {x: 0.15482667, y: 0.0063000005, z: 0.13948907}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
-  m_Father: {fileID: 345277761}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 29.37, z: 0}
 --- !u!1001 &2037222902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15853,7 +15854,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 326163310}
-        m_MethodName: 
+        m_MethodName: LogBones
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25773,7 +25774,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &7779420038953342121
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -293,6 +293,22 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         manipulationMenuCollection.SetActive(true);
     }
 
+    public void LogBones()
+    {
+        Debug.Log("patient: " + patient.transform.name +
+                "; position: " + patient.transform.localPosition +
+                "; scale: " + patient.transform.localScale +
+                "; rotation: " + patient.transform.localEulerAngles + ".");
+
+        foreach (Transform item in patient.transform)
+        {
+            Debug.Log("bone: " + item.name +
+                "; position: " + item.localPosition +
+                "; scale: " + item.localScale +
+                "; rotation: " + item.localEulerAngles + ".");
+        }
+    }
+
     public void GoBackToMainMenu()
     {
         Debug.Log("Back to Main pressed");
