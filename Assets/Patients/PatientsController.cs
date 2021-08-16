@@ -143,6 +143,8 @@ public class PatientsController : MonoBehaviour
         Debug.Log("Pinch Sliders Tuned");
         TutuneTranslation();
         Debug.Log("Translations Tuned");
+        cTReader.ComputeOffsets();
+        Debug.Log("Offsets Computed");
         globalController.Init();
         Debug.Log("Global Controller Inited");
         globalController.GoToManipScene();

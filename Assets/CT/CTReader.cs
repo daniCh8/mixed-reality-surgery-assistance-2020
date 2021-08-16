@@ -129,6 +129,12 @@ public class CTReader : MonoBehaviour
                 }
             }
         }
+        Debug.Log("minx: " + minx);
+        Debug.Log("maxx: " + maxx);
+        Debug.Log("miny: " + miny);
+        Debug.Log("maxy: " + maxy);
+        Debug.Log("minz: " + minz);
+        Debug.Log("maxz: " + maxz);
     }
 
     private GameObject CreateSphereFromPos(float x, float y, float z, String n)
