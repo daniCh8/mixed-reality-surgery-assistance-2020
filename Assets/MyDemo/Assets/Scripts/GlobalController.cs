@@ -78,10 +78,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     public GameObject screwScene, manipulationScene, startingScene;
     public ScrewSceneController screwSceneController;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
-        /*
         // init bone references
         InitBoneReferences();
 
@@ -94,7 +92,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         Material firstPage = docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Pages>().getMat();
         docSlate.transform.Find("ContentQuad").gameObject.GetComponent<Renderer>().material = firstPage;
         docSlate.SetActive(false);
-        
+
         // bone manipulation components
         boneBoundingBox = boneGroup.gameObject.GetComponent<BoundingBox>();
         boneManipulationHandler = boneGroup.gameObject.GetComponent<ManipulationHandler>();
@@ -108,13 +106,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         allManipulationHandler = boneRef.GetComponent<ManipulationHandler>();
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
-        */
-
-        screwSceneController.Init();
-        patientsController.Init();
-        FilePicker.CreateFolders();
-
-        GoToStartingScene();
     }
 
     public void GoToManipScene()
@@ -580,11 +571,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
             manipulationScene.SetActive(false);
         }
-    }
-
-    public void ChangePatient()
-    {
-        patientsController.PickNewPatient(true);
     }
 
     public void ScanToPlanes()

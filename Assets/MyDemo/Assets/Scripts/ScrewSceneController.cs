@@ -17,8 +17,6 @@ public class ScrewSceneController : MonoBehaviour
 
     // Screw Positions
     public TextAsset screwLatPositions, screwDistPositions, screwMedPositions;
-    [HideInInspector]
-    public string screwLatPositionsS, screwDistPositionsS, screwMedPositionsS;
 
     // Plates Visibility State
     public enum PlatesState { Both, Lat, Med, None }
@@ -27,7 +25,7 @@ public class ScrewSceneController : MonoBehaviour
     public GameObject screwPrefab;
 
     // Groups
-    public GameObject screwGroup, plateGroup, boneGroup, allGroup;
+    public GameObject patient, screwGroup, plateGroup, boneGroup, allGroup;
 
     // Screws Materials
     public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, distScrewMaterial, selectedScrewMaterial, boneMaterial;
@@ -78,9 +76,22 @@ public class ScrewSceneController : MonoBehaviour
 
     public void Init()
     {
-        screwLatPositionsS = screwLatPositions == null ? null : screwLatPositions.text;
-        screwMedPositionsS = screwMedPositions == null ? null : screwMedPositions.text;
-        screwDistPositionsS = screwDistPositions == null ? null : screwDistPositions.text;
+        foreach (Transform child in patient.transform)
+        {
+            if (child.name == ScrewConstants.BONE)
+            {
+                boneGroup = child.gameObject;
+            }
+            else if (child.name == ScrewConstants.PLATES)
+            {
+                plateGroup = child.gameObject;
+            }
+            else if (child.name == ScrewConstants.SCREWS)
+            {
+                screwGroup = child.gameObject;
+            }
+        }
+
         // Initialize Screws and Bones
         InitScrews();
         // Initialize Plate List
@@ -127,19 +138,19 @@ public class ScrewSceneController : MonoBehaviour
         bool backupSceneActive = scene.activeSelf;
         scene.SetActive(true);
 
-        if (screwLatPositionsS != null)
+        if (screwLatPositions != null)
         {
-            GenerateScrewsFromTextFileHelper(screwLatPositionsS, ScrewConstants.LAT_SCREW_TAG, latScrewMaterial);
+            GenerateScrewsFromTextFileHelper(screwLatPositions.text, ScrewConstants.LAT_SCREW_TAG, latScrewMaterial);
         }
 
-        if (screwMedPositionsS != null)
+        if (screwMedPositions != null)
         {
-            GenerateScrewsFromTextFileHelper(screwMedPositionsS, ScrewConstants.MED_SCREW_TAG, medScrewMaterial);
+            GenerateScrewsFromTextFileHelper(screwMedPositions.text, ScrewConstants.MED_SCREW_TAG, medScrewMaterial);
         }
 
-        if (screwDistPositionsS != null)
+        if (screwDistPositions != null)
         {
-            GenerateScrewsFromTextFileHelper(screwDistPositionsS, ScrewConstants.DIST_SCREW_TAG, distScrewMaterial);
+            GenerateScrewsFromTextFileHelper(screwDistPositions.text, ScrewConstants.DIST_SCREW_TAG, distScrewMaterial);
         }
 
         scene.SetActive(backupSceneActive);
@@ -231,30 +242,6 @@ public class ScrewSceneController : MonoBehaviour
                 }
             }
         }
-    }
-
-    public void ResetState()
-    {
-        while(manipulating)
-        {
-            ManipulateScrew();
-        }
-        while(gPlatesState != PlatesState.Both)
-        {
-            ChangePlatesVisibility();
-        }
-        while (!boneGroup.activeSelf)
-        {
-            ChangeBoneVisibility();
-        }
-        ResetScrews();
-        SetScrewTags();
-    }
-
-    public void ReInit()
-    {
-        InitScrews();
-        InitPlates();
     }
 
     private TextMeshPro[] RetrieveButtonText(String buttonName)
@@ -821,6 +808,9 @@ public static class ScrewConstants
     public const String ICON_STOP_HAND_GESTURE = "stop-hand-gest";
     public const String SCREW_SIZE_STUB_START = "Screw Length: ";
     public const String SCREW_SIZE_STUB_END = " cm.";
+    public const String SCREWS = "Screws";
+    public const String PLATES = "Plates";
+    public const String BONE = "Bone";
 }
 
 public static class StringExtensions
