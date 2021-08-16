@@ -12,6 +12,39 @@ using Windows.Storage;
 
 public class FilePicker : MonoBehaviour
 {
+#if WINDOWS_UWP
+    private static StorageFile loggerFile;
+#endif
+
+    public static void Log(string text)
+    {
+#if WINDOWS_UWP
+        Task appendToLoggerTask = new Task(
+            async () =>
+            {
+                try
+                {
+                    await FileIO.AppendTextAsync(loggerFile, text + Environment.NewLine);
+                }
+                catch (Exception)
+                {
+                    Debug.Log("Failed to locate documents folder!");
+                }
+            });
+
+        appendToLoggerTask.Start();
+#endif
+#if UNITY_EDITOR
+		Debug.Log(text);
+#endif
+    }
+
+#if WINDOWS_UWP
+    private static void SetLoggerFile(StorageFile file)
+    {
+        loggerFile = file;
+    }
+#endif
 
     public static void CreateFolders()
     {
@@ -21,9 +54,12 @@ public class FilePicker : MonoBehaviour
             {
                 try
                 {
-                    var customSurg = await KnownFolders.DocumentsLibrary.CreateFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG);
+                    var customSurg = await KnownFolders.DocumentsLibrary.CreateFolderAsync(FolderCostants.FOLDER_CUSTOM_SURG, CreationCollisionOption.OpenIfExists);
                     var newFolderDescription = await customSurg.CreateFileAsync(FolderCostants.OVERALL_FILE, CreationCollisionOption.ReplaceExisting);
                     await FileIO.AppendTextAsync(newFolderDescription, FolderCostants.OVERALL_FILE + Environment.NewLine);
+
+                    var loggerFile = await customSurg.CreateFileAsync(FolderCostants.LOGGER_FILE, CreationCollisionOption.ReplaceExisting);
+                    SetLoggerFile(loggerFile);
 
                     var p1 = await customSurg.CreateFolderAsync(FolderCostants.FOLDER_CUSTOM_PATIENT_1, CreationCollisionOption.OpenIfExists);
                     var p2 = await customSurg.CreateFolderAsync(FolderCostants.FOLDER_CUSTOM_PATIENT_2, CreationCollisionOption.OpenIfExists);
@@ -78,6 +114,8 @@ public static class FolderCostants
     public readonly static string PLATES_EXPLANATION = "Here you should put the plate models. They should have the .obj extension.";
     public readonly static string[] FOLDER_CUSTOM_TEXTS = new string[] { CT_EXPLANATION, FRACTURED_BONES_EXPLANATION, REALIGNED_BONES_EXPLANATION, SCREWS_EXPLANATION, PLATES_EXPLANATION };
     public readonly static string OVERALL_FILE = "Info.txt";
+    public readonly static string LOGGER_FILE = "Log.txt";
     public readonly static string OVERALL_EXPLANATION = "These are the patients folders. You can use them to change the patient. Once you completed uploading all the files for one patient, you can go back to the application and choose that patient. Go inside a patient's subfolder to find more information about the files you should upload.";
     public readonly static string OBJ_EXTENSION = ".obj";
+    public readonly static string BYTES_EXTENSION = ".bytes";
 }

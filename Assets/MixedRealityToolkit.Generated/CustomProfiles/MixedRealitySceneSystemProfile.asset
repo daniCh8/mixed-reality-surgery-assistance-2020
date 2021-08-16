@@ -22,7 +22,7 @@ MonoBehaviour:
     Tag: Untagged
     Asset: {fileID: 0}
   useLightingScene: 0
-  defaultLightingSceneIndex: -1
+  defaultLightingSceneIndex: 0
   lightingScenes: []
   contentScenes:
   - Name: SampleScene
