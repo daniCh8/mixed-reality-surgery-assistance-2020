@@ -79,15 +79,15 @@ public class ScrewSceneController : MonoBehaviour
     {
         foreach (Transform child in patient.transform)
         {
-            if (child.name == ScrewConstants.BONE)
+            if (String.Compare(child.name, ScrewConstants.BONE) == 0)
             {
                 boneGroup = child.gameObject;
             }
-            else if (child.name == ScrewConstants.PLATES)
+            else if (String.Compare(child.name, ScrewConstants.PLATES) == 0)
             {
                 plateGroup = child.gameObject;
             }
-            else if (child.name == ScrewConstants.SCREWS)
+            else if (String.Compare(child.name, ScrewConstants.SCREWS) == 0)
             {
                 screwGroup = child.gameObject;
             }

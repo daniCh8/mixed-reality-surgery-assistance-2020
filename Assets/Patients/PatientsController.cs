@@ -123,23 +123,18 @@ public class PatientsController : MonoBehaviour
         return null;
     }
 
-    /*
-    private void AlignScrewScene()
-    {
-        CenterToRef(newPatientScrew,
-                RetrieveCombinedBounds(referencePatientScrew).center);
-        GameObject boxPatient = referencePatientScrew;
-        referencePatientScrew = newPatientScrew;
-        newPatientScrew = boxPatient;
-        newPatientScrew.SetActive(false);
-        referencePatientScrew.SetActive(true);
-    }
-
-    public void CenterToRef(GameObject obj, Vector3 referencePosition)
+    public static void CenterToRef(GameObject obj, Vector3 referencePosition)
     {
         obj.transform.position = obj.transform.position -
-            RetrieveCombinedBounds(obj).center +
+            obj.transform.gameObject.GetComponentInChildren<Renderer>().bounds.center +
             referencePosition;
+    }
+    public static void SameResizeToRef(GameObject obj, Vector3 referenceSize)
+    {
+        Vector3 oldLocalScale = obj.transform.localScale;
+        Vector3 oldSize = obj.GetComponentInChildren<Renderer>().bounds.size;
+        float newX = oldLocalScale.x / oldSize.x * referenceSize.x;
+        obj.transform.localScale = new Vector3(newX, newX, newX);
     }
 
     private Bounds RetrieveCombinedBounds(GameObject parent)
@@ -153,7 +148,6 @@ public class PatientsController : MonoBehaviour
         }
         return combinedBounds;
     }
-    */
 
     public void PickNewPatient(bool first)
     {
