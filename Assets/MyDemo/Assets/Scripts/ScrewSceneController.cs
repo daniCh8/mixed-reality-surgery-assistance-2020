@@ -375,11 +375,6 @@ public class ScrewSceneController : MonoBehaviour
 
     public void ChangePlatesVisibility()
     {
-        if(plateGroup.transform.childCount <= 0)
-        {
-            return;
-        }
-
         TextMeshPro[] texts = RetrieveButtonText(ScrewConstants.CHANGE_PLATES_VISIBILITY);
         bool latPlateActivation = true, medPlateActivation = true;
 
