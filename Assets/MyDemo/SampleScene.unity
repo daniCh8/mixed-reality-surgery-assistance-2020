@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13990,7 +13990,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 0c656b6797165534ea23477b5c0bdc60,
         type: 3}
       propertyPath: m_Name
-      value: LatScrewCut1
+      value: LatScrewCut
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0c656b6797165534ea23477b5c0bdc60,
         type: 3}
@@ -15120,8 +15120,8 @@ MonoBehaviour:
   pinchSliderHor: {fileID: 4464616428543595917}
   pinchSliderVer: {fileID: 903487277}
   cTReader: {fileID: 278603713}
-  scansOne: {fileID: 4900000, guid: 06b3b452149a440c69707fea0a6a5df1, type: 3}
-  scansTwo: {fileID: 4900000, guid: b73b39adb0858480a90c93956b74475f, type: 3}
+  scansOne: {fileID: 4900000, guid: 2f80e13d2e0498a409e47cb3956fe5be, type: 3}
+  scansTwo: {fileID: 4900000, guid: 8c0260bf1e7595243867644158c26ae5, type: 3}
   screwPatOne: {fileID: 253716662}
   screwPatTwo: {fileID: 85439648}
   dummyObject: {fileID: 1516372278}
@@ -17985,7 +17985,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: df0f8426bfe3df94da4953cc9ec50589,
         type: 3}
       propertyPath: m_Name
-      value: MedScrewCut1
+      value: MedScrewCut
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: df0f8426bfe3df94da4953cc9ec50589,
         type: 3}
