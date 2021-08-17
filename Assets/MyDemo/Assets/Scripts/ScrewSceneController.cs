@@ -101,6 +101,7 @@ public class ScrewSceneController : MonoBehaviour
         gPlatesState = PlatesState.Both;
         manipulating = false;
         screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
+        allGroup.AddComponent<IgnoreBoxCollider>();
     }
 
     private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(string textScrewPositions)
@@ -110,7 +111,6 @@ public class ScrewSceneController : MonoBehaviour
         List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
         Vector3 dummyVector = new Vector3(0, 0, 0);
         Vector3 item1 = dummyVector;
-        int counter = 0;
 
         foreach(String line in lines)
         {
@@ -120,12 +120,6 @@ public class ScrewSceneController : MonoBehaviour
                 Vector3 newPoint = new Vector3(-1f * float.Parse(vector[0], CultureInfo.InvariantCulture.NumberFormat), 
                     float.Parse(vector[1], CultureInfo.InvariantCulture.NumberFormat), 
                     float.Parse(vector[2], CultureInfo.InvariantCulture.NumberFormat));
-
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.position = newPoint;
-                sphere.transform.localScale = new Vector3(10f, 10f, 10f);
-                sphere.name = "Point" + counter++;
-                // sphere.transform.parent = oo.transform;
 
                 if (item1 == dummyVector)
                 {
@@ -306,6 +300,11 @@ public class ScrewSceneController : MonoBehaviour
 
     public void ChangePlatesVisibility()
     {
+        if(plateGroup.transform.childCount <= 0)
+        {
+            return;
+        }
+
         TextMeshPro[] texts = RetrieveButtonText(ScrewConstants.CHANGE_PLATES_VISIBILITY);
         bool latPlateActivation = true, medPlateActivation = true;
 
@@ -512,7 +511,16 @@ public class ScrewSceneController : MonoBehaviour
             screwButton.SetActive(true);
             FindNextIndex();
             ActivateScrew(screws[screwIndex]);
+            DeactivateAllBounds();
             SetTexts(texts, ScrewConstants.STOP_MANIPULATING_SCREWS);
+        }
+    }
+
+    private void DeactivateAllBounds()
+    {
+        while(allGroup.GetComponentInChildren<BoxCollider>(true).enabled == true)
+        {
+            ChangeBoundsControlState();
         }
     }
 
@@ -530,6 +538,8 @@ public class ScrewSceneController : MonoBehaviour
             boundingBox.enabled = false;
             manipulationHandler.enabled = false;
             nearInteractionGrabbable.enabled = false;
+            // boneMix.GetComponentInChildren<BoundsControl>(true).enabled = true;
+            // boneMix.GetComponentInChildren<BoxCollider>(true).enabled = true;
             SetTexts(texts, ScrewConstants.ALLOW_MANIPULATION);
         }
         else
@@ -538,6 +548,8 @@ public class ScrewSceneController : MonoBehaviour
             boundingBox.enabled = true;
             manipulationHandler.enabled = true;
             nearInteractionGrabbable.enabled = true;
+            // boneMix.GetComponentInChildren<BoundsControl>(true).enabled = false;
+            // boneMix.GetComponentInChildren<BoxCollider>(true).enabled = false;
             SetTexts(texts, ScrewConstants.DISALLOW_MANIPULATION);
         }
     }
@@ -724,6 +736,16 @@ public class ScrewSceneController : MonoBehaviour
         
         cylinder.transform.up = offset;
         cylinder.transform.localScale = scale;
+
+        cylinder.AddComponent<Rigidbody>();
+        cylinder.AddComponent<CapsuleCollider>();
+        cylinder.AddComponent<OnTrigger>();
+        cylinder.GetComponent<OnTrigger>().selectedScrewMaterial = selectedScrewMaterial;
+        cylinder.GetComponent<OnTrigger>().selectedFlag = false;
+        cylinder.GetComponent<CapsuleCollider>().isTrigger = true;
+        cylinder.GetComponent<Rigidbody>().useGravity = false;
+        cylinder.GetComponent<Rigidbody>().isKinematic = true;
+        cylinder.AddComponent<ScalePivot>();
 
         return cylinder;
     }

@@ -181,6 +181,7 @@ public class PatientsController : MonoBehaviour
         TutunePinchSliders();
         TutuneTranslation();
         cTReader.ComputeOffsets();
+        cTReader.CenterToCCCT();
 
         globalController.Init();
         screwController.Init();

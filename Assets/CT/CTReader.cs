@@ -14,7 +14,7 @@ public class CTReader : MonoBehaviour
     public ComputeShader slicer;
     public GameObject oo;
     public GameObject sliderH, sliderV;
-    public GameObject quadH, revQuadH, quadV, revQuadV;
+    public GameObject quadH, revQuadH, quadV, revQuadV, ctPlaneV;
     int kernel;
 
     [HideInInspector]
@@ -85,9 +85,24 @@ public class CTReader : MonoBehaviour
         quadV.transform.localScale = quadLocalScaleV * 0.0025f;
         revQuadV.transform.localScale = revQuadLocalScaleV * 0.0025f;
 
+        Vector3 ctPlaneVLocalScale = new Vector3(ctPlaneV.transform.localScale.y / Math.Abs(height / width),
+            ctPlaneV.transform.localScale.y, ctPlaneV.transform.localScale.z);
+        ctPlaneV.transform.localScale = ctPlaneVLocalScale;
+
         dummyHandler.ChangeTransform(new Vector3(0.941f, 0.75f, 1.729f),
             new Vector3(0f, 90f, 0f),
             new Vector3(0.0025f, 0.0025f, 0.0025f));
+
+        transform.localPosition = center.transform.localPosition;
+        transform.localScale = new Vector3(height, depth, width);
+    }
+
+    public void CenterToCCCT()
+    {
+        if (transform.localPosition != center.transform.localPosition)
+        {
+            transform.localPosition = center.transform.localPosition;
+        }
     }
 
     public void ComputeOffsets()
