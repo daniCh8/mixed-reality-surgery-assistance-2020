@@ -10,6 +10,10 @@ using System;
 using System.Linq;
 using Microsoft.MixedReality.Toolkit;
 
+#if !UNITY_EDITOR && UNITY_WSA
+using Windows.ApplicationModel.Core;
+#endif
+
 public enum ColorState { Select, Edit };
 public enum ScaleState { Half, Original, Double };
 public enum BoneState { ShowAll, HidePlates, HideAll };
@@ -591,6 +595,21 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
                 s.Init();
             }
         }
+    }
+
+    public async void RestartApp()
+    {
+#if !UNITY_EDITOR && UNITY_WSA
+        // Attempt restart, with arguments.
+        AppRestartFailureReason result =
+            await CoreApplication.RequestRestartAsync("");
+
+        if (result == AppRestartFailureReason.NotInForeground
+            || result == AppRestartFailureReason.Other)
+        {
+            Debug.Log("Please manually restart.");
+        }
+#endif
     }
 }
 
