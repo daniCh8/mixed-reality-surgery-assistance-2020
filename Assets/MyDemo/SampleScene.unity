@@ -765,7 +765,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85439648}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 99, y: 0, z: 690}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 504641538}
@@ -821,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &104295576
 Transform:
   m_ObjectHideFlags: 0
@@ -15060,9 +15060,9 @@ MonoBehaviour:
   dummyObject: {fileID: 1516372278}
   globalController: {fileID: 326163310}
   screwController: {fileID: 2319737}
-  latScrewOne: {fileID: 4900000, guid: 2e786de6ffc511e4e9cc4edba438c5f8, type: 3}
+  latScrewOne: {fileID: 4900000, guid: c20d8f5d1ac1e5040b98c2d2d7139b08, type: 3}
   distScrewOne: {fileID: 0}
-  medScrewOne: {fileID: 4900000, guid: 236e7140cf9025145b31e586795cf578, type: 3}
+  medScrewOne: {fileID: 4900000, guid: 3187104b5aab2ec4195a2a6ce418939d, type: 3}
   latScrewTwo: {fileID: 4900000, guid: 24d47d4584ca14371b0708efcb9e0a62, type: 3}
   distScrewTwo: {fileID: 4900000, guid: b6e8097eb0375c940be5918c1d811a61, type: 3}
   medScrewTwo: {fileID: 4900000, guid: 7078098a7503d4d57a2b6bf35d8e38a5, type: 3}

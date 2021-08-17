@@ -6,6 +6,7 @@ using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
@@ -109,14 +110,22 @@ public class ScrewSceneController : MonoBehaviour
         List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
         Vector3 dummyVector = new Vector3(0, 0, 0);
         Vector3 item1 = dummyVector;
+        int counter = 0;
 
         foreach(String line in lines)
         {
             if(line.Contains(",")) 
             {
                 String[] vector = Regex.Split(line, ",");
-                Vector3 newPoint = new Vector3(-1f * float.Parse(vector[0]), float.Parse(vector[1]), float.Parse(vector[2]));
+                Vector3 newPoint = new Vector3(-1f * float.Parse(vector[0], CultureInfo.InvariantCulture.NumberFormat), 
+                    float.Parse(vector[1], CultureInfo.InvariantCulture.NumberFormat), 
+                    float.Parse(vector[2], CultureInfo.InvariantCulture.NumberFormat));
 
+                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.transform.position = newPoint;
+                sphere.transform.localScale = new Vector3(10f, 10f, 10f);
+                sphere.name = "Point" + counter++;
+                // sphere.transform.parent = oo.transform;
 
                 if (item1 == dummyVector)
                 {
