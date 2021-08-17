@@ -20,7 +20,7 @@ public class ScrewSceneController : MonoBehaviour
     public TextAsset screwLatPositions, screwDistPositions, screwMedPositions;
 
     // Plates Visibility State
-    public enum PlatesState { Both, Lat, Med, None }
+    public enum PlatesState { All, Lat, Med, Dist, None }
 
     // Screw Prefab to Instantiate
     public GameObject screwPrefab;
@@ -53,7 +53,7 @@ public class ScrewSceneController : MonoBehaviour
     private static PlatesState gPlatesState { get; set; }
 
     // Slates Characterized
-    private GameObject latPlate, medPlate;
+    private GameObject latPlate, medPlate, distPlate;
 
     // Manipulating Screws
     private bool manipulating;
@@ -98,7 +98,7 @@ public class ScrewSceneController : MonoBehaviour
         // Initialize Plate List
         InitPlates();
 
-        gPlatesState = PlatesState.Both;
+        gPlatesState = PlatesState.All;
         manipulating = false;
         screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
         allGroup.AddComponent<IgnoreBoxCollider>();
@@ -216,9 +216,13 @@ public class ScrewSceneController : MonoBehaviour
             {
                 latPlate = plate.gameObject;
             }
-            else
+            else if (plate.gameObject.name.StartsWith(ScrewConstants.MED_SCREW_TAG))
             {
                 medPlate = plate.gameObject;
+            }
+            else
+            {
+                distPlate = plate.gameObject;
             }
         }
     }
@@ -298,6 +302,77 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    private void TrySettingPlate(PlatesState plate, bool flag)
+    {
+        switch (plate)
+        {
+            case PlatesState.Lat:
+                if (latPlate != null)
+                {
+                    latPlate.SetActive(flag);
+                }
+                break;
+            case PlatesState.Med:
+                if (medPlate != null)
+                {
+                    medPlate.SetActive(flag);
+                }
+                break;
+            case PlatesState.Dist:
+                if (distPlate != null)
+                {
+                    distPlate.SetActive(flag);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void ActivatePlate(PlatesState plate)
+    {
+        SetLatScrewsActive(false);
+        SetMedScrewsActive(false);
+        SetDistScrewsActive(false);
+
+        TrySettingPlate(PlatesState.Lat, false);
+        TrySettingPlate(PlatesState.Med, false);
+        TrySettingPlate(PlatesState.Dist, false);
+
+        gPlatesState = plate;
+
+        switch (plate)
+        {
+            case PlatesState.All:
+                SetLatScrewsActive(true);
+                SetMedScrewsActive(true);
+                SetDistScrewsActive(true);
+                TrySettingPlate(PlatesState.Lat, true);
+                TrySettingPlate(PlatesState.Med, true);
+                TrySettingPlate(PlatesState.Dist, true);
+                break;
+            case PlatesState.Lat:
+                SetLatScrewsActive(true);
+                TrySettingPlate(PlatesState.Lat, false);
+                break;
+            case PlatesState.Med:
+                SetMedScrewsActive(true);
+                TrySettingPlate(PlatesState.Med, false);
+                break;
+            case PlatesState.Dist:
+                SetDistScrewsActive(true);
+                TrySettingPlate(PlatesState.Dist, false);
+                break;
+            case PlatesState.None:
+                SetLatScrewsActive(true);
+                SetMedScrewsActive(true);
+                SetDistScrewsActive(true);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void ChangePlatesVisibility()
     {
         if(plateGroup.transform.childCount <= 0)
@@ -310,37 +385,71 @@ public class ScrewSceneController : MonoBehaviour
 
         switch (gPlatesState)
         {
-            case PlatesState.Both:
-                latPlateActivation = true;
-                medPlateActivation = false;
-                SetLatScrewsActive(true);
-                SetMedScrewsActive(false);
-                gPlatesState = PlatesState.Lat;
-                SetTexts(texts, ScrewConstants.SHOW_MED_PLATE);
+            case PlatesState.All:
+                if(AreThereLatScrews())
+                {
+                    ActivatePlate(PlatesState.Lat);
+                    if(AreThereMedScrews()) SetTexts(texts, ScrewConstants.SHOW_MED_PLATE);
+                    else if(AreThereDistScrews()) SetTexts(texts, ScrewConstants.SHOW_DIST_PLATE);
+                    else SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
+                }
+                else if(AreThereMedScrews())
+                {
+                    ActivatePlate(PlatesState.Med);
+                    if (AreThereDistScrews()) SetTexts(texts, ScrewConstants.SHOW_DIST_PLATE);
+                    else SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
+                }
+                else if (AreThereDistScrews())
+                {
+                    ActivatePlate(PlatesState.Dist);
+                    SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
+                }
+                else
+                {
+                    ActivatePlate(PlatesState.None);
+                    SetTexts(texts, ScrewConstants.SHOW_ALL_PLATES);
+                }
                 break;
             case PlatesState.Lat:
-                latPlateActivation = false;
-                medPlateActivation = true;
-                SetLatScrewsActive(false);
-                SetMedScrewsActive(true);
-                gPlatesState = PlatesState.Med;
-                SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
+                if (AreThereMedScrews())
+                {
+                    ActivatePlate(PlatesState.Med);
+                    if (AreThereDistScrews()) SetTexts(texts, ScrewConstants.SHOW_DIST_PLATE);
+                    else SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
+                }
+                else if (AreThereDistScrews())
+                {
+                    ActivatePlate(PlatesState.Dist);
+                    SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
+                }
+                else
+                {
+                    ActivatePlate(PlatesState.None);
+                    SetTexts(texts, ScrewConstants.SHOW_ALL_PLATES);
+                }
                 break;
             case PlatesState.Med:
-                latPlateActivation = false;
-                medPlateActivation = false;
-                SetLatScrewsActive(true);
-                SetMedScrewsActive(true);
-                gPlatesState = PlatesState.None;
-                SetTexts(texts, ScrewConstants.SHOW_BOTH_PLATES);
+                if (AreThereDistScrews())
+                {
+                    ActivatePlate(PlatesState.Dist);
+                    SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
+                }
+                else
+                {
+                    ActivatePlate(PlatesState.None);
+                    SetTexts(texts, ScrewConstants.SHOW_ALL_PLATES);
+                }
+                break;
+            case PlatesState.Dist:
+                ActivatePlate(PlatesState.None);
+                SetTexts(texts, ScrewConstants.SHOW_ALL_PLATES);
                 break;
             case PlatesState.None:
-                latPlateActivation = true;
-                medPlateActivation = true;
-                SetLatScrewsActive(true);
-                SetMedScrewsActive(true);
-                gPlatesState = PlatesState.Both;
-                SetTexts(texts, ScrewConstants.SHOW_LAT_PLATE);
+                ActivatePlate(PlatesState.All);
+                if (AreThereLatScrews()) SetTexts(texts, ScrewConstants.SHOW_LAT_PLATE);
+                else if (AreThereMedScrews()) SetTexts(texts, ScrewConstants.SHOW_MED_PLATE);
+                else if (AreThereDistScrews()) SetTexts(texts, ScrewConstants.SHOW_DIST_PLATE);
+                else SetTexts(texts, ScrewConstants.SHOW_NO_PLATES);
                 break;
             default:
                 break;
@@ -374,6 +483,17 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    private void SetDistScrewsActive(bool active)
+    {
+        foreach (GameObject screw in screws)
+        {
+            if (ScrewIsTag(screw, ScrewConstants.DIST_SCREW_TAG))
+            {
+                screw.SetActive(active);
+            }
+        }
+    }
+
     private void SetMedScrewsActive(bool active)
     {
         foreach (GameObject screw in screws)
@@ -383,6 +503,42 @@ public class ScrewSceneController : MonoBehaviour
                 screw.SetActive(active);
             }
         }
+    }
+
+    private bool AreThereDistScrews()
+    {
+        foreach (GameObject screw in screws)
+        {
+            if (ScrewIsTag(screw, ScrewConstants.DIST_SCREW_TAG))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool AreThereMedScrews()
+    {
+        foreach (GameObject screw in screws)
+        {
+            if (ScrewIsTag(screw, ScrewConstants.MED_SCREW_TAG))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool AreThereLatScrews()
+    {
+        foreach (GameObject screw in screws)
+        {
+            if (ScrewIsTag(screw, ScrewConstants.LAT_SCREW_TAG))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void NextScrew()
@@ -405,7 +561,7 @@ public class ScrewSceneController : MonoBehaviour
 
     private void FindNextIndex()
     {
-        if (gPlatesState == PlatesState.Both || gPlatesState == PlatesState.None)
+        if (gPlatesState == PlatesState.All || gPlatesState == PlatesState.None)
         {
             NextIndex();
             while(IsDeletedScrew(screws[screwIndex]))
@@ -415,7 +571,7 @@ public class ScrewSceneController : MonoBehaviour
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? ScrewConstants.LAT_SCREW_TAG : ScrewConstants.MED_SCREW_TAG;
+        String flag = RetrievePlatesFlag();
         NextIndex();
         while (ScrewIsNotTag(screws[screwIndex], flag) || IsDeletedScrew(screws[screwIndex]))
         {
@@ -423,9 +579,24 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    private String RetrievePlatesFlag()
+    {
+        switch (gPlatesState)
+        {
+            case PlatesState.Lat:
+                return ScrewConstants.LAT_SCREW_TAG;
+            case PlatesState.Med:
+                return ScrewConstants.MED_SCREW_TAG;
+            case PlatesState.Dist:
+                return ScrewConstants.DIST_SCREW_TAG;
+            default:
+                return null;
+        }
+    }
+
     private void FindPrevIndex()
     {
-        if (gPlatesState == PlatesState.Both || gPlatesState == PlatesState.None)
+        if (gPlatesState == PlatesState.All || gPlatesState == PlatesState.None)
         {
             PrevIndex();
             while(IsDeletedScrew(screws[screwIndex]))
@@ -435,7 +606,7 @@ public class ScrewSceneController : MonoBehaviour
             return;
         }
 
-        String flag = gPlatesState == PlatesState.Lat ? ScrewConstants.LAT_SCREW_TAG : ScrewConstants.MED_SCREW_TAG;
+        String flag = RetrievePlatesFlag();
         PrevIndex();
         while (ScrewIsNotTag(screws[screwIndex], flag) || IsDeletedScrew(screws[screwIndex]))
         {
@@ -829,8 +1000,9 @@ public static class ScrewConstants
     public const String CHANGE_PLATES_VISIBILITY = "ChangePlatesVisibility";
     public const String SHOW_MED_PLATE = "Show Only Med Plate";
     public const String SHOW_LAT_PLATE = "Show Only Lat Plate";
+    public const String SHOW_DIST_PLATE = "Show Only Dist Plate";
     public const String SHOW_NO_PLATES = "Hide Plates";
-    public const String SHOW_BOTH_PLATES = "Show Plates";
+    public const String SHOW_ALL_PLATES = "Show Plates";
     public const String BONE_VISIBILITY_BUTTON = "ChangeBoneVisibility";
     public const String SHOW_BONE = "Show Bone";
     public const String HIDE_BONE = "Hide Bone";
