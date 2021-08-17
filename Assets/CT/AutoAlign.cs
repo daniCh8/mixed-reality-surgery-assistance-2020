@@ -4,28 +4,29 @@ using UnityEngine;
 
 public class AutoAlign : MonoBehaviour
 {
-    public GameObject target;
-    public Vector3 offset;
-
-    void Start()
-    {
-        if (offset == null)
-        {
-            offset = new Vector3(-888, 0, 0);
-        }
-    }
+    // rotations sum up, scaling multiplies, translation's different
+    public GameObject boneGroup, allGroup;
+    private bool go = false;
 
     void Update()
     {
-        if (offset.x != -888)
+        if (!go)
         {
-            transform.position = target.transform.position + offset;
+            return;
         }
+
+        transform.localEulerAngles = boneGroup.transform.localEulerAngles +
+            allGroup.transform.localEulerAngles;
+
+        transform.localScale = Vector3.Scale(boneGroup.transform.localScale,
+            allGroup.transform.localScale);
+
+        transform.localPosition = allGroup.transform.localPosition +
+            Vector3.Scale(boneGroup.transform.localPosition, allGroup.transform.localScale);
     }
 
-    public void ComputeOffset()
+    public void SetGo(bool flag)
     {
-        offset = target.transform.position - transform.position;
-        offset *= -1;
+        go = flag;
     }
 }
