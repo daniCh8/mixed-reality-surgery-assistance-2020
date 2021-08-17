@@ -46,6 +46,8 @@ public class CTReader : MonoBehaviour
 
     private void PointCloud(NRRD nrrd)
     {
+        AutoAlign autoAlign = oo.GetComponent<AutoAlign>();
+        autoAlign.SetGo(false);
         DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
         dummyHandler.GoToZero();
 
@@ -95,6 +97,7 @@ public class CTReader : MonoBehaviour
 
         transform.localPosition = center.transform.localPosition;
         transform.localScale = new Vector3(height, depth, width);
+        autoAlign.SetGo(true);
     }
 
     public void CenterToCCCT()
@@ -105,6 +108,7 @@ public class CTReader : MonoBehaviour
         }
     }
 
+    /*
     public void ComputeOffsets()
     {
         foreach (var pt in GetPoints())
@@ -112,6 +116,7 @@ public class CTReader : MonoBehaviour
             pt.GetComponent<AutoAlign>().ComputeOffset();
         }
     }
+    */
 
     private void ComputeMinMaxFloats(NRRD nrrd)
     {
@@ -151,12 +156,9 @@ public class CTReader : MonoBehaviour
     {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.transform.position = new Vector3(x, y, z);
-        sphere.transform.localScale = new Vector3(0f, 0f, 0f);
+        sphere.transform.localScale = new Vector3();
         sphere.name = n;
         sphere.transform.parent = oo.transform;
-
-        AutoAlign autoAlign = sphere.AddComponent<AutoAlign>();
-        autoAlign.target = sliderH;
 
         return sphere;
     }
@@ -172,6 +174,8 @@ public class CTReader : MonoBehaviour
 
     public Vector3 GetCenterOfCt()
     {
+        AutoAlign autoAlign = oo.GetComponent<AutoAlign>();
+        autoAlign.SetGo(false);
         DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
         dummyHandler.GoToZero();
 
@@ -189,6 +193,7 @@ public class CTReader : MonoBehaviour
         Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
 
         dummyHandler.RestoreBackup();
+        autoAlign.SetGo(true);
         return ccct;
     }
 

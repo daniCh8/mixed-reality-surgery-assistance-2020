@@ -45,7 +45,6 @@ public class PatientsController : MonoBehaviour
     {
         TutunePinchSliders();
         TutuneTranslation();
-        cTReader.ComputeOffsets();
     }
 
     private void TutuneTranslation()
@@ -180,7 +179,6 @@ public class PatientsController : MonoBehaviour
 
         TutunePinchSliders();
         TutuneTranslation();
-        cTReader.ComputeOffsets();
         cTReader.CenterToCCCT();
 
         globalController.Init();
