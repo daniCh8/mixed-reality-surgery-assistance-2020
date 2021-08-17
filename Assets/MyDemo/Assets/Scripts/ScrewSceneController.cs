@@ -302,6 +302,11 @@ public class ScrewSceneController : MonoBehaviour
         }
     }
 
+    public void Debuggie()
+    {
+        return;
+    }
+
     private void TrySettingPlate(PlatesState plate, bool flag)
     {
         switch (plate)
@@ -353,15 +358,15 @@ public class ScrewSceneController : MonoBehaviour
                 break;
             case PlatesState.Lat:
                 SetLatScrewsActive(true);
-                TrySettingPlate(PlatesState.Lat, false);
+                TrySettingPlate(PlatesState.Lat, true);
                 break;
             case PlatesState.Med:
                 SetMedScrewsActive(true);
-                TrySettingPlate(PlatesState.Med, false);
+                TrySettingPlate(PlatesState.Med, true);
                 break;
             case PlatesState.Dist:
                 SetDistScrewsActive(true);
-                TrySettingPlate(PlatesState.Dist, false);
+                TrySettingPlate(PlatesState.Dist, true);
                 break;
             case PlatesState.None:
                 SetLatScrewsActive(true);
@@ -376,7 +381,6 @@ public class ScrewSceneController : MonoBehaviour
     public void ChangePlatesVisibility()
     {
         TextMeshPro[] texts = RetrieveButtonText(ScrewConstants.CHANGE_PLATES_VISIBILITY);
-        bool latPlateActivation = true, medPlateActivation = true;
 
         switch (gPlatesState)
         {
@@ -448,12 +452,6 @@ public class ScrewSceneController : MonoBehaviour
                 break;
             default:
                 break;
-        }
-
-        if(latPlate != null && medPlate != null)
-        {
-            latPlate.SetActive(latPlateActivation);
-            medPlate.SetActive(medPlateActivation);
         }
     }
 
