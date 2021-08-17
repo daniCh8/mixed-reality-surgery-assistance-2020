@@ -821,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &104295576
 Transform:
   m_ObjectHideFlags: 0
@@ -3924,6 +3924,7 @@ MonoBehaviour:
   revQuadH: {fileID: 1869905220}
   quadV: {fileID: 640187606}
   revQuadV: {fileID: 768218865}
+  ctPlaneV: {fileID: 527049730}
   bottomBackLeft: {fileID: 0}
   bottomBackRight: {fileID: 0}
   topBackLeft: {fileID: 0}
@@ -7135,8 +7136,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527049730}
   m_LocalRotation: {x: -0, y: -0.7071068, z: 0.000000014901145, w: 0.70710677}
-  m_LocalPosition: {x: -11.000013, y: -10.2, z: -33.800007}
-  m_LocalScale: {x: 200.00034, y: 200.00005, z: 200.00035}
+  m_LocalPosition: {x: -11, y: -10.2, z: 54}
+  m_LocalScale: {x: 425, y: 200.00005, z: 200.00035}
   m_Children: []
   m_Father: {fileID: 1141950650}
   m_RootOrder: 1
@@ -7220,7 +7221,7 @@ MonoBehaviour:
   slider: {fileID: 903487279}
   axis: 0
   quad: {fileID: 640187606}
-  disaligned: 0
+  disaligned: 1
   colorTexture: 0
   tex: {fileID: 0}
 --- !u!1 &527670175
@@ -16078,7 +16079,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293588172}
   m_LocalRotation: {x: -0, y: -0.7071068, z: 0.000000014901145, w: 0.70710677}
-  m_LocalPosition: {x: -11.000013, y: -10.200024, z: -452.8}
+  m_LocalPosition: {x: -11, y: -10.200024, z: -478}
   m_LocalScale: {x: 200.00034, y: 200.00005, z: 200.00035}
   m_Children: []
   m_Father: {fileID: 1141950650}
@@ -16091,7 +16092,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293588172}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4bc4a2b53ff6fc41b00ea8898685d28, type: 3}
   m_Name: 
@@ -18492,7 +18493,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1482425388
 Transform:
   m_ObjectHideFlags: 0
@@ -22824,7 +22825,7 @@ PrefabInstance:
         type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2319737}
     - target: {fileID: 8779034279059886464, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
         type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -22833,7 +22834,7 @@ PrefabInstance:
     - target: {fileID: 8779034279059886464, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
         type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CreateFolders
+      value: ChangePlatesVisibility
       objectReference: {fileID: 0}
     - target: {fileID: 8779034279059886464, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
         type: 3}
