@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5842,6 +5842,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 426674604}
+  - component: {fileID: 426674608}
+  - component: {fileID: 426674607}
+  - component: {fileID: 426674606}
+  - component: {fileID: 426674605}
   m_Layer: 0
   m_Name: Bone
   m_TagString: Untagged
@@ -5865,6 +5869,89 @@ Transform:
   m_Father: {fileID: 85439649}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &426674605
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426674603}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!114 &426674606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426674603}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b259af14e4cc1fc4388769317b27d3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPrefab: {fileID: 8609933443147746813, guid: 99f88f06acc702e459ce49192dc44226,
+    type: 3}
+  ScrewVisualizer: {fileID: 2101932496}
+--- !u!114 &426674607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426674603}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110ae70ac8c4b7c45bfefd5290deb776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwPrefab: {fileID: 8609933443147746813, guid: 99f88f06acc702e459ce49192dc44226,
+    type: 3}
+  ScrewSceneCtrl: {fileID: 2319737}
+  ScrewVisualizer: {fileID: 2101932496}
+  HandPlaneScrew: {fileID: 320114416}
+--- !u!114 &426674608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426674603}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e736ec19b1c5543a9bb27c150f94fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFocusRequired: 1
+  MarkEventsAsUsed: 0
+  OnPointerDown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUp:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerClicked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2319737}
+        m_MethodName: Screwpointregister
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerDragged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &429646853
 GameObject:
   m_ObjectHideFlags: 0
@@ -15054,8 +15141,8 @@ MonoBehaviour:
   pinchSliderHor: {fileID: 4464616428543595917}
   pinchSliderVer: {fileID: 903487277}
   cTReader: {fileID: 278603713}
-  scansOne: {fileID: 4900000, guid: 654d1f4ce35625f46a412a16fdda123c, type: 3}
-  scansTwo: {fileID: 4900000, guid: 9397081da9804734fa5987f3a6d2cbd0, type: 3}
+  scansOne: {fileID: 4900000, guid: 06b3b452149a440c69707fea0a6a5df1, type: 3}
+  scansTwo: {fileID: 4900000, guid: b73b39adb0858480a90c93956b74475f, type: 3}
   screwPatOne: {fileID: 253716662}
   screwPatTwo: {fileID: 85439648}
   dummyObject: {fileID: 1516372278}
@@ -19018,6 +19105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1516372279}
   - component: {fileID: 1516372280}
+  - component: {fileID: 1516372281}
   m_Layer: 0
   m_Name: DummyHolder
   m_TagString: Untagged
@@ -19053,6 +19141,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae4b73bbfa1753448034099526a5e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1516372281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516372278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d67eb46b03954599aa03c6411768489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneGroup: {fileID: 1781766567}
+  allGroup: {fileID: 8296172668703916607}
 --- !u!1 &1525709182
 GameObject:
   m_ObjectHideFlags: 0

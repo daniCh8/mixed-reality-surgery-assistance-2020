@@ -558,23 +558,32 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         {
             manipulationScene.SetActive(true);
 
-            /*UpdateScenePosition(screwSceneController.allGroup.transform,
+            UpdateScenePosition(screwSceneController.allGroup.transform,
                 screwSceneController.nearMenu.transform,
                 boneRef.transform,
-                nearMenu.transform);*/
+                nearMenu.transform);
             screwScene.SetActive(false);
         }
         else
         {
             screwScene.SetActive(true);
 
-            /*UpdateScenePosition(boneRef.transform,
+            UpdateScenePosition(boneRef.transform,
                 nearMenu.transform,
                 screwSceneController.allGroup.transform,
-                screwSceneController.nearMenu.transform);*/
+                screwSceneController.nearMenu.transform);
 
             manipulationScene.SetActive(false);
         }
+    }
+
+    private void UpdateScenePosition(Transform oldSceneBone, Transform oldSceneMenu, Transform newSceneBone, Transform newSceneMenu)
+    {
+        PatientsController.CenterToRef(newSceneBone.gameObject, oldSceneBone.gameObject.GetComponentInChildren<Renderer>().bounds.center);
+        PatientsController.CenterToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.center);
+        newSceneBone.rotation = oldSceneBone.rotation;
+        newSceneMenu.rotation = oldSceneMenu.rotation;
+        PatientsController.SameResizeToRef(newSceneMenu.gameObject, oldSceneMenu.gameObject.GetComponentInChildren<Renderer>().bounds.size);
     }
 
     public void ScanToPlanes()
