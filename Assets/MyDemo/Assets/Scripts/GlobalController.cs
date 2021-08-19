@@ -82,6 +82,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     public GameObject screwScene, manipulationScene, startingScene;
     public ScrewSceneController screwSceneController;
 
+    public bool canChangeScene;
+
     public void Init()
     {
         // init bone references
@@ -553,6 +555,11 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     public void ChangeScene()
     {
         Debug.Log("Change Scene Button Pressed");
+
+        if(!canChangeScene)
+        {
+            return;
+        }
 
         if (screwScene.activeInHierarchy)
         {

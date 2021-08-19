@@ -909,7 +909,7 @@ public class ScrewSceneController : MonoBehaviour
         cylinder.GetComponent<CapsuleCollider>().isTrigger = true;
         cylinder.GetComponent<Rigidbody>().useGravity = false;
         cylinder.GetComponent<Rigidbody>().isKinematic = true;
-        cylinder.AddComponent<ScalePivot>();
+        // cylinder.AddComponent<ScalePivot>();
 
         return cylinder;
     }
