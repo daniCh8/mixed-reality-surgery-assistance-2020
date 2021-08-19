@@ -154,6 +154,7 @@ public class PatientsController : MonoBehaviour
         patientManip = first ? patientManipOne : patientManipTwo;
         patientManip.SetActive(true);
         globalController.patient = patientManip;
+        globalController.canChangeScene = first;
 
         patientScrew = first ? screwPatOne : screwPatTwo;
         patientScrew.SetActive(true);
