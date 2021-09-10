@@ -436,7 +436,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         slider2.SetActive(true);
         foreach (TextMeshPro tmp in texts)
         {
-            tmp.text = "Hide Slider";
+            tmp.text = "Hide Sliders";
         }
     }
 
@@ -447,7 +447,7 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         slider2.SetActive(false);
         foreach (TextMeshPro tmp in texts)
         {
-            tmp.text = "Show Slider";
+            tmp.text = "Show Sliders";
         }
     }
 
