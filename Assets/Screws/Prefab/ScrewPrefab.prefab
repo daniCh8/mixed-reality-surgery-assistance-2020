@@ -12,12 +12,9 @@ GameObject:
   - component: {fileID: 8609933443147746811}
   - component: {fileID: 8609933443147746808}
   - component: {fileID: 8609933443147746814}
-  - component: {fileID: 8609933443147746810}
-  - component: {fileID: 8609933443147746805}
   - component: {fileID: -204587220742175584}
-  - component: {fileID: -8503025961728210015}
-  - component: {fileID: -8851742554300735506}
   - component: {fileID: 1826355368676703827}
+  - component: {fileID: -2507924663665247004}
   m_Layer: 0
   m_Name: ScrewPrefab
   m_TagString: New
@@ -101,33 +98,6 @@ MonoBehaviour:
   autoConstraintSelection: 1
   selectedConstraints:
   - {fileID: 0}
---- !u!114 &8609933443147746810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8609933443147746813}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32bb5b062f9bdc24b915b16ab5333660, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  handType: 3
-  proximityType: 3
---- !u!114 &8609933443147746805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8609933443147746813}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a3b1b144618cf24b9c1e5ed444f53bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  screwPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &-204587220742175584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,75 +138,6 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-8503025961728210015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8609933443147746813}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f2a2a27e4336ff44bd536e07883fa7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  handType: 3
-  proximityType: 3
---- !u!114 &-8851742554300735506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8609933443147746813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
-  boundsOverride: {fileID: 0}
-  boundsCalculationMethod: 0
-  activation: 0
-  flattenAxis: 0
-  boxPadding: {x: 0, y: 0, z: 0}
-  boxDisplayConfiguration: {fileID: 11400000, guid: 16c4fa0d0b5be35488858d9b12cd1b25,
-    type: 2}
-  linksConfiguration: {fileID: 11400000, guid: fe0c653414b7c1141b8ba543151e2f45, type: 2}
-  scaleHandlesConfiguration: {fileID: 11400000, guid: ed182010cb4d7a1439e894f3816230bb,
-    type: 2}
-  rotationHandlesConfiguration: {fileID: 11400000, guid: 85c7e0a4a9c4d4440b3b9109e395d676,
-    type: 2}
-  translationHandlesConfiguration: {fileID: 11400000, guid: 4711fd72143851c4eab9d575290477af,
-    type: 2}
-  handleProximityEffectConfiguration: {fileID: 11400000, guid: c870b87e98c90f540b52d57bbf3908f9,
-    type: 2}
-  hideElementsInInspector: 1
-  smoothingActive: 0
-  rotateLerpTime: 0.001
-  scaleLerpTime: 0.001
-  translateLerpTime: 0.001
-  enableConstraints: 1
-  constraintsManager: {fileID: 8609933443147746814}
-  rotateStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  rotateStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  scaleStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  scaleStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  translateStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  translateStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  elasticsManager: {fileID: 0}
 --- !u!114 &1826355368676703827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,3 +152,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTetherWhenManipulating: 0
   IsBoundsHandles: 0
+--- !u!114 &-2507924663665247004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609933443147746813}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a776cbd208f4811a5bce33a5feb772, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screwSize: 0
+  previousPinchSliderVal: 0
+  screwSceneController: {fileID: 0}
+  pinchSlider: {fileID: 0}
