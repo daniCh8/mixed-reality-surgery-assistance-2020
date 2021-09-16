@@ -32,7 +32,8 @@ public class ScrewSceneController : MonoBehaviour
     public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, distScrewMaterial, selectedScrewMaterial, boneMaterial;
 
     // Screw Button Handler
-    public GameObject screwButton;
+    public GameObject screwButton, screwSizeSliderObject;
+    private PinchSlider screwSizeSlider;
 
     // Scene
     public GameObject scene;
@@ -102,6 +103,7 @@ public class ScrewSceneController : MonoBehaviour
         manipulating = false;
         screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
         allGroup.AddComponent<IgnoreBoxCollider>();
+        screwSizeSlider = screwSizeSliderObject.GetComponentInChildren<PinchSlider>(true);
     }
 
     private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(string textScrewPositions)
@@ -172,12 +174,13 @@ public class ScrewSceneController : MonoBehaviour
             cylinderScrew.tag = tag;
             cylinderScrew.name = tag + i++;
             cylinderScrew.GetComponent<MeshRenderer>().material = material;
-            cylinderScrew.GetComponent<BoundsControl>().enabled = false;
             cylinderScrew.GetComponent<ObjectManipulator>().enabled = false;
-            cylinderScrew.GetComponent<ScaleConstraint>().enabled = false;
-            cylinderScrew.GetComponent<WholeScaleConstraint>().enabled = false;
-            cylinderScrew.GetComponent<PositionConstraint>().enabled = false;
             cylinderScrew.GetComponent<NearInteractionGrabbable>().enabled = false;
+
+            // cylinderScrew.GetComponent<BoundsControl>().enabled = false;
+            // cylinderScrew.GetComponent<ScaleConstraint>().enabled = false;
+            // cylinderScrew.GetComponent<WholeScaleConstraint>().enabled = false;
+            // cylinderScrew.GetComponent<PositionConstraint>().enabled = false;
 
             screws.Add(cylinderScrew);
             originalScrewPositions.Add(cylinderScrew.name, cylinderScrew.transform.position);
@@ -633,28 +636,47 @@ public class ScrewSceneController : MonoBehaviour
         }
 
         SetCurrObjectManipulator(screw, false);
-        screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
-        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = false;
-        screw.GetComponentInChildren<PositionConstraint>(true).enabled = false;
+        // screw.GetComponentInChildren<BoundsControl>(true).enabled = false;
+        // screw.GetComponentInChildren<ScaleConstraint>(true).enabled = false;
+        // screw.GetComponentInChildren<PositionConstraint>(true).enabled = false;
+        screw.GetComponentInChildren<ScrewSizeUpdate>(true).enabled = false;
     }
 
     private void ActivateScrew(GameObject screw)
     {
-        screw.GetComponentInChildren<BoundsControl>(true).enabled = true;
+        // screw.GetComponentInChildren<BoundsControl>(true).enabled = true;
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
-        SetCurrObjectManipulator(screw, manipulating);
-        SetScrewSizeText(screw);
+        UpdateScrewSizeSlider(screw);
+        screw.GetComponentInChildren<ScrewSizeUpdate>(true).enabled = true;
+        SetCurrObjectManipulator(screw, true);
+        SetScrewSizeText(screw.GetComponentInChildren<ScrewSizeUpdate>(true).screwSize);
     }
 
-    private void SetScrewSizeText(GameObject screw)
+    private void UpdateScrewSizeSlider(GameObject screw)
     {
-        screwSizeText.text = ScrewConstants.SCREW_SIZE_STUB_START + ComputeScrewSize(screw) + ScrewConstants.SCREW_SIZE_STUB_END;
+        var size = ComputeScrewSize(screw);
+        var screwSizeUpdate = screw.GetComponentInChildren<ScrewSizeUpdate>(true);
+
+        //TODO define screwsizeupdateinit
+        screwSizeUpdate.screwSize = size;
+        screwSizeUpdate.pinchSlider = screwSizeSlider;
+        screwSizeUpdate.screwSceneController = this;
+
+        screwSizeSlider.SliderValue = (float)(size / ScrewConstants.MAX_LENGTH_SCREW);
+        screwSizeUpdate.previousPinchSliderVal = screwSizeSlider.SliderValue;
+    }
+
+    public void SetScrewSizeText(double size)
+    {
+        screwSizeText.text = ScrewConstants.SCREW_SIZE_STUB_START +
+            Math.Round(size, 2) +
+            ScrewConstants.SCREW_SIZE_STUB_END;
     }
 
     private double ComputeScrewSize(GameObject screw)
     {
         float scale = screw.transform.localScale.y * scene.transform.localScale.y * 100;
-        return Math.Round(scale, 2);
+        return scale;
     }
 
     public void ChangeScrewState()
@@ -664,6 +686,7 @@ public class ScrewSceneController : MonoBehaviour
         if (screwButton.activeInHierarchy)
         {
             screwButton.SetActive(false);
+            screwSizeSliderObject.SetActive(false);
             foreach (GameObject screw in screws)
             {
                 DeactivateScrew(screw);
@@ -673,6 +696,7 @@ public class ScrewSceneController : MonoBehaviour
         else
         {
             screwButton.SetActive(true);
+            screwSizeSliderObject.SetActive(true);
             FindNextIndex();
             ActivateScrew(screws[screwIndex]);
             DeactivateAllBounds();
@@ -890,16 +914,36 @@ public class ScrewSceneController : MonoBehaviour
         screws[screwIndex].GetComponentInChildren<BoundsControl>(true).enabled = true;
     }
 
-    public GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end)
+    public void AlignCylinder(GameObject cylinder, Vector3 start, Vector3 end)
     {
+        Transform parentBackup = cylinder.transform.parent;
+        cylinder.transform.parent = null;
+
         var offset = end - start;
         var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
         var position = start + (offset / 2.0f);
-
-        var cylinder = Instantiate(screwPrefab, position, Quaternion.identity);
-        
+        cylinder.transform.localPosition = position;
+        cylinder.transform.localRotation = Quaternion.identity;
         cylinder.transform.up = offset;
         cylinder.transform.localScale = scale;
+        cylinder.transform.parent = parentBackup;
+    }
+
+    public GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end)
+    {
+        /*
+        var offset = end - start;
+        var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
+        var position = start + (offset / 2.0f);
+        */
+
+        // var cylinder = Instantiate(screwPrefab, position, Quaternion.identity);
+
+        var cylinder = Instantiate(screwPrefab);
+        AlignCylinder(cylinder, start, end);
+
+        // cylinder.transform.up = offset;
+        // cylinder.transform.localScale = scale;
 
         cylinder.AddComponent<Rigidbody>();
         cylinder.AddComponent<CapsuleCollider>();
@@ -909,7 +953,18 @@ public class ScrewSceneController : MonoBehaviour
         cylinder.GetComponent<CapsuleCollider>().isTrigger = true;
         cylinder.GetComponent<Rigidbody>().useGravity = false;
         cylinder.GetComponent<Rigidbody>().isKinematic = true;
-        // cylinder.AddComponent<ScalePivot>();
+
+        var startPt = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        startPt.transform.position = start;
+        startPt.transform.localScale = new Vector3();
+        startPt.transform.name = ScrewConstants.FIRST_POINT_NAME;
+        startPt.transform.parent = cylinder.transform;
+
+        var endPt = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        endPt.transform.position = end;
+        endPt.transform.localScale = new Vector3();
+        endPt.transform.name = ScrewConstants.SECOND_POINT_NAME;
+        endPt.transform.parent = cylinder.transform;
 
         return cylinder;
     }
@@ -935,9 +990,9 @@ public class ScrewSceneController : MonoBehaviour
     {
         screw.GetComponentInChildren<ObjectManipulator>(true).enabled = activate;
         screw.GetComponentInChildren<NearInteractionGrabbable>(true).enabled = activate;
-        screw.GetComponentInChildren<WholeScaleConstraint>(true).enabled = activate;
-        screw.GetComponentInChildren<ScaleConstraint>(true).enabled = !activate;
-        screw.GetComponentInChildren<PositionConstraint>(true).enabled = !activate;
+        // screw.GetComponentInChildren<WholeScaleConstraint>(true).enabled = false;// activate;
+        // screw.GetComponentInChildren<ScaleConstraint>(true).enabled = false; //!activate;
+        // screw.GetComponentInChildren<PositionConstraint>(true).enabled = false; // !activate;
     }
 
     public void DeleteScrew()
@@ -1007,6 +1062,9 @@ public static class ScrewConstants
     public const String SCREWS = "Screws";
     public const String PLATES = "Plates";
     public const String BONE = "Bone";
+    public const String FIRST_POINT_NAME = "StartPoint";
+    public const String SECOND_POINT_NAME = "EndPoint";
+    public const float MAX_LENGTH_SCREW = 15f;
 }
 
 public static class StringExtensions
