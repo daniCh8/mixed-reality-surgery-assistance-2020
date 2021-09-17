@@ -22,6 +22,8 @@ public class ScrewSceneController : MonoBehaviour
     // Plates Visibility State
     public enum PlatesState { All, Lat, Med, Dist, None }
 
+    public enum RotDir { Up, Down, Right, Left, Forward, Downward }
+
     // Screw Prefab to Instantiate
     public GameObject screwPrefab;
 
@@ -308,6 +310,42 @@ public class ScrewSceneController : MonoBehaviour
     public void Debuggie()
     {
         return;
+    }
+
+    public void ScrewRotDir(String dir)
+    {
+        GameObject screw = screws[screwIndex];
+        Vector3 axis;
+        Enum.TryParse<RotDir>(dir, out RotDir direction);
+        switch (direction)
+        {
+            case RotDir.Up:
+                axis = screw.transform.up;
+                break;
+            case RotDir.Down:
+                axis = screw.transform.up * -1.0f;
+                break;
+            case RotDir.Right:
+                axis = screw.transform.right;
+                break;
+            case RotDir.Left:
+                axis = screw.transform.right * -1.0f;
+                break;
+            case RotDir.Forward:
+                axis = screw.transform.forward;
+                break;
+            case RotDir.Downward:
+                axis = screw.transform.forward * -1.0f;
+                break;
+            default:
+                axis = screw.transform.up;
+                break;
+        }
+        Vector3 firstEndPoint = screw.transform.Find(
+                ScrewConstants.FIRST_POINT_NAME).position;
+        screw.transform.RotateAround(firstEndPoint,
+            axis,
+            10f);
     }
 
     private void TrySettingPlate(PlatesState plate, bool flag)
@@ -637,25 +675,15 @@ public class ScrewSceneController : MonoBehaviour
 
         SetCurrObjectManipulator(screw, false);
         screw.GetComponentInChildren<ScrewSizeUpdate>(true).enabled = false;
-        screw.GetComponentInChildren<ScrewRotationUpdate>(true).enabled = false;
     }
 
     private void ActivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
         UpdateScrewSizeSlider(screw);
-        UpdateScrewRotationHandler(screw);
         screw.GetComponentInChildren<ScrewSizeUpdate>(true).enabled = true;
         SetCurrObjectManipulator(screw, true);
         SetScrewSizeText(screw.GetComponentInChildren<ScrewSizeUpdate>(true).screwSize);
-    }
-
-    private void UpdateScrewRotationHandler(GameObject screw)
-    {
-        rotationHandlerObject.transform.eulerAngles = screw.transform.eulerAngles;
-        var screwRotationUpdate = screw.GetComponentInChildren<ScrewRotationUpdate>(true);
-        screwRotationUpdate.rotationHandler = rotationHandlerObject;
-        screwRotationUpdate.enabled = true;
     }
 
     private void UpdateScrewSizeSlider(GameObject screw)

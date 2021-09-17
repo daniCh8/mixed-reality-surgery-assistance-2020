@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: -204587220742175584}
   - component: {fileID: 1826355368676703827}
   - component: {fileID: -2507924663665247004}
-  - component: {fileID: 367949573050506432}
   m_Layer: 0
   m_Name: ScrewPrefab
   m_TagString: New
@@ -169,16 +168,3 @@ MonoBehaviour:
   previousPinchSliderVal: 0
   screwSceneController: {fileID: 0}
   pinchSlider: {fileID: 0}
---- !u!114 &367949573050506432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8609933443147746813}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f79d626d614d444a9a1e988772a74893, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationHandler: {fileID: 0}
