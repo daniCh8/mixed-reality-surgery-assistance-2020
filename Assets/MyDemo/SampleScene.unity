@@ -181,6 +181,7 @@ MonoBehaviour:
   selectedScrewMaterial: {fileID: 2100000, guid: fe191538d84eb3d47b0a6ad47cb0e184,
     type: 2}
   boneMaterial: {fileID: 2100000, guid: 0fd7b0f17edd68d4282d0b8a3cc79214, type: 2}
+  collidingMaterial: {fileID: 2100000, guid: f42cfc08efa894f55bc302dad8fb8dad, type: 2}
   screwButton: {fileID: 1397392969}
   screwSizeSliderObject: {fileID: 7284754285783294329}
   rotationHandlerObject: {fileID: 447971687}
@@ -16030,7 +16031,7 @@ GameObject:
   - component: {fileID: 1062284234}
   - component: {fileID: 1062284233}
   m_Layer: 0
-  m_Name: RotateDown
+  m_Name: RotateForward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16242,7 +16243,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Down
+          m_StringArgument: Forward
           m_BoolArgument: 0
         m_CallState: 2
   Events:
@@ -16678,12 +16679,12 @@ GameObject:
   - component: {fileID: 1071186833}
   - component: {fileID: 1071186832}
   m_Layer: 0
-  m_Name: RotateDownward
+  m_Name: RotateDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1071186831
 Transform:
   m_ObjectHideFlags: 0
@@ -16890,7 +16891,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Downward
+          m_StringArgument: Down
           m_BoolArgument: 0
         m_CallState: 2
   Events:
@@ -23567,12 +23568,12 @@ GameObject:
   - component: {fileID: 1407810380}
   - component: {fileID: 1407810379}
   m_Layer: 0
-  m_Name: RotateForward
+  m_Name: RotateUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1407810378
 Transform:
   m_ObjectHideFlags: 0
@@ -23779,7 +23780,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Forward
+          m_StringArgument: Up
           m_BoolArgument: 0
         m_CallState: 2
   Events:
@@ -35145,7 +35146,7 @@ GameObject:
   - component: {fileID: 1899616810}
   - component: {fileID: 1899616809}
   m_Layer: 0
-  m_Name: RotateUp
+  m_Name: RotateBackward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35357,7 +35358,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Up
+          m_StringArgument: Backward
           m_BoolArgument: 0
         m_CallState: 2
   Events:

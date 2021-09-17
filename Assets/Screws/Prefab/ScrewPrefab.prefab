@@ -15,6 +15,9 @@ GameObject:
   - component: {fileID: -204587220742175584}
   - component: {fileID: 1826355368676703827}
   - component: {fileID: -2507924663665247004}
+  - component: {fileID: -7251884587933560475}
+  - component: {fileID: -5493142088090260580}
+  - component: {fileID: 340682945632533539}
   m_Layer: 0
   m_Name: ScrewPrefab
   m_TagString: New
@@ -168,3 +171,48 @@ MonoBehaviour:
   previousPinchSliderVal: 0
   screwSceneController: {fileID: 0}
   pinchSlider: {fileID: 0}
+--- !u!54 &-7251884587933560475
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609933443147746813}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &-5493142088090260580
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609933443147746813}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5000001
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &340682945632533539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609933443147746813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acfb6671a3ab63441b393210c5273786, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collidingMaterial: {fileID: 0}
+  selectedScrewMaterial: {fileID: 0}
+  selectedFlag: 0

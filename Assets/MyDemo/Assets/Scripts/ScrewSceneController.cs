@@ -968,9 +968,6 @@ public class ScrewSceneController : MonoBehaviour
         var cylinder = Instantiate(screwPrefab);
         AlignCylinder(cylinder, start, end);
 
-        cylinder.AddComponent<Rigidbody>();
-        cylinder.AddComponent<CapsuleCollider>();
-        cylinder.AddComponent<OnTrigger>();
         cylinder.GetComponent<OnTrigger>().selectedScrewMaterial = selectedScrewMaterial;
         cylinder.GetComponent<OnTrigger>().collidingMaterial = collidingMaterial;
         cylinder.GetComponent<OnTrigger>().selectedFlag = false;
