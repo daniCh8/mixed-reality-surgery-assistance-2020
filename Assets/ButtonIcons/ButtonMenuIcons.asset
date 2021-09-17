@@ -24,6 +24,12 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 6966a491d09495d45b8ddd95db4a7e13, type: 3}
   - {fileID: 2800000, guid: 3fcc437a61273cc4db3dbdf4d6b405fa, type: 3}
   - {fileID: 2800000, guid: 89258f232e5ced24395a061269e9b3be, type: 3}
+  - {fileID: 2800000, guid: f20db3bedf8cb4fdba5524fd9df4c1ed, type: 3}
+  - {fileID: 2800000, guid: 5ce8cc558916a444d88e3d593cfccb51, type: 3}
+  - {fileID: 2800000, guid: bad674b4e26044caa8ff6ce846335efc, type: 3}
+  - {fileID: 2800000, guid: 5fbee74028c184ac6afc72d10f2c69d1, type: 3}
+  - {fileID: 2800000, guid: 8a4bde7b1541444008f46f5868eefc28, type: 3}
+  - {fileID: 2800000, guid: 86a9be54813e84a259c23fb6401f8db9, type: 3}
   spriteIcons: []
   charIconFont: {fileID: 0}
   charIcons:
