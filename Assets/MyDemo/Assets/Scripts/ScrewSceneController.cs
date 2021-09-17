@@ -22,7 +22,7 @@ public class ScrewSceneController : MonoBehaviour
     // Plates Visibility State
     public enum PlatesState { All, Lat, Med, Dist, None }
 
-    public enum RotDir { Up, Down, Right, Left, Forward, Downward }
+    public enum RotDir { Up, Down, Right, Left, Forward, Backward }
 
     // Screw Prefab to Instantiate
     public GameObject screwPrefab;
@@ -31,7 +31,8 @@ public class ScrewSceneController : MonoBehaviour
     public GameObject patient, screwGroup, plateGroup, boneGroup, allGroup;
 
     // Screws Materials
-    public Material newScrewMaterial, medScrewMaterial, latScrewMaterial, distScrewMaterial, selectedScrewMaterial, boneMaterial;
+    public Material newScrewMaterial, medScrewMaterial, latScrewMaterial,
+        distScrewMaterial, selectedScrewMaterial, boneMaterial, collidingMaterial;
 
     // Screw Button Handler
     public GameObject screwButton, screwSizeSliderObject, rotationHandlerObject;
@@ -334,7 +335,7 @@ public class ScrewSceneController : MonoBehaviour
             case RotDir.Forward:
                 axis = screw.transform.forward;
                 break;
-            case RotDir.Downward:
+            case RotDir.Backward:
                 axis = screw.transform.forward * -1.0f;
                 break;
             default:
@@ -673,6 +674,7 @@ public class ScrewSceneController : MonoBehaviour
                 break;
         }
 
+        screw.GetComponent<OnTrigger>().selectedFlag = false;
         SetCurrObjectManipulator(screw, false);
         screw.GetComponentInChildren<ScrewSizeUpdate>(true).enabled = false;
     }
@@ -680,6 +682,7 @@ public class ScrewSceneController : MonoBehaviour
     private void ActivateScrew(GameObject screw)
     {
         screw.GetComponentInChildren<Renderer>().material = selectedScrewMaterial;
+        screw.GetComponent<OnTrigger>().selectedFlag = true;
         UpdateScrewSizeSlider(screw);
         screw.GetComponentInChildren<ScrewSizeUpdate>(true).enabled = true;
         SetCurrObjectManipulator(screw, true);
@@ -969,6 +972,7 @@ public class ScrewSceneController : MonoBehaviour
         cylinder.AddComponent<CapsuleCollider>();
         cylinder.AddComponent<OnTrigger>();
         cylinder.GetComponent<OnTrigger>().selectedScrewMaterial = selectedScrewMaterial;
+        cylinder.GetComponent<OnTrigger>().collidingMaterial = collidingMaterial;
         cylinder.GetComponent<OnTrigger>().selectedFlag = false;
         cylinder.GetComponent<CapsuleCollider>().isTrigger = true;
         cylinder.GetComponent<Rigidbody>().useGravity = false;
