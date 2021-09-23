@@ -644,7 +644,7 @@ PlayerSettings:
   metroCertificatePassword: 
   metroCertificateSubject: MRLab
   metroCertificateIssuer: MRLab
-  metroCertificateNotAfter: 80fdf669189dd801
+  metroCertificateNotAfter: 800068e82facd801
   metroApplicationDescription: Template_3D
   wsaImages:
     65636: Assets/Icon/store_logo/logo_50.png

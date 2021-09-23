@@ -1,12 +1,14 @@
-using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Text;
 using UnityEngine;
+
+#if !UNITY_EDITOR && UNITY_WSA
+using Windows.System;
+#endif
 
 public class CTReader : MonoBehaviour
 {
@@ -32,8 +34,7 @@ public class CTReader : MonoBehaviour
     private NRRD nrrd;
 
     void Start() {
-        ct_bytes = ct.bytes;
-        Init();
+        // Init();
     }
 
     public void Init()
@@ -46,10 +47,39 @@ public class CTReader : MonoBehaviour
 
         kernel = slicer.FindKernel("CSMain");
         var buf = new ComputeBuffer(nrrd.data.Length, sizeof(float));
+
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 44: " + MemoryManager.AppMemoryUsage);
+#endif
+        // 1,662,406,656
+
         buf.SetData(nrrd.data);
+
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 45: " + MemoryManager.AppMemoryUsage);
+#endif
+        // 2,118,561,792
+
         slicer.SetBuffer(kernel, "data", buf);
+
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 46: " + MemoryManager.AppMemoryUsage);
+#endif
+        // 2,118,594,560
+
         slicer.SetInts("dims", nrrd.dims);
+
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 47: " + MemoryManager.AppMemoryUsage);
+#endif
+        // 2,118,627,328
+
         PointCloud(nrrd);
+
+#if !UNITY_EDITOR && UNITY_WSA
+        Debug.Log("Line 48: " + MemoryManager.AppMemoryUsage);
+#endif
+        // 2,118,668,288
     }
 
     private void PointCloud(NRRD nrrd)
@@ -193,7 +223,14 @@ public class CTReader : MonoBehaviour
         return arr;
     }
 
+    public bool NotReady()
+    {
+        return (center == null);
+    }
+
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result, bool disaligned, Vector4 bCol) {
+        // Debug.Log("Slicing!");
+
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;
         rtex.Create();
@@ -209,9 +246,12 @@ public class CTReader : MonoBehaviour
         slicer.SetFloats("borderColor", new float[] { bCol.x, bCol.y, bCol.z, bCol.w });
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);
 
+        var oldRtex = RenderTexture.active;
         RenderTexture.active = rtex;
         result.ReadPixels(new Rect(0, 0, rtex.width, rtex.height), 0, 0);
         result.Apply();
+        RenderTexture.active = oldRtex;
+        rtex.Release();
     }
 
     public Vector3 TransformWorldCoords(Vector3 p) {
@@ -259,8 +299,14 @@ public class NRRD {
     readonly public Vector3 origin = new Vector3(0, 0, 0);
     readonly public Vector3 scale = new Vector3(1, 1, 1);
 
-    public NRRD(byte[] bytes) {
-        using (var reader = new BinaryReader(new MemoryStream(bytes))) {
+    public NRRD(TextAsset asset) {
+        using (var reader = new BinaryReader(new MemoryStream(asset.bytes))) {
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 256: " + MemoryManager.AppMemoryUsage);
+#endif
+            // 525,135,872
+
             for (string line = reader.ReadLine(); line.Length > 0; line = reader.ReadLine()) {
                 if (line.StartsWith("#") || !line.Contains(":")) continue;
                 var tokens = line.Split(':');
@@ -289,10 +335,34 @@ public class NRRD {
                 lengthDirection = scale[2][2];
             }
 
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 257: " + MemoryManager.AppMemoryUsage);
+#endif
+            // 525,135,872
+
             var mem = new MemoryStream();
             using (var stream = new GZipStream(reader.BaseStream, CompressionMode.Decompress)) stream.CopyTo(mem);
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 258: " + MemoryManager.AppMemoryUsage);
+#endif
+            // 1,178,079,232
+
             data = new float[dims[0] * dims[1] * dims[2]];
             Buffer.BlockCopy(mem.ToArray(), 0, data, 0, data.Length * sizeof(float));
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 259: " + MemoryManager.AppMemoryUsage);
+#endif
+            // 1,662,283,776
+
+            mem.Dispose();
+            reader.Dispose();
+
+#if !UNITY_EDITOR && UNITY_WSA
+            Debug.Log("Line 260: " + MemoryManager.AppMemoryUsage);
+#endif
+            // 1,662,283,776
         }
     }
 }
