@@ -6,10 +6,9 @@ public class LogScript : MonoBehaviour
 {
     TextMesh textMesh;
 
-    // Use this for initialization
-    void Awake()
+    void Start()
     {
-        textMesh = gameObject.GetComponent<TextMesh>();
+        textMesh = gameObject.GetComponentInChildren<TextMesh>();
     }
 
     void OnEnable()
@@ -24,25 +23,13 @@ public class LogScript : MonoBehaviour
 
     public void LogMessage(string message, string stackTrace, LogType type)
     {
-        if (textMesh.text.Length > 200)
+        if (textMesh.text.Length > 300000)
         {
             textMesh.text = message + "\n";
         }
         else
         {
             textMesh.text += message + "\n";
-        }
-    }
-
-    public void saySomething(string something)
-    {
-        if (textMesh.text.Length > 200)
-        {
-            textMesh.text = something + "\n";
-        }
-        else
-        {
-            textMesh.text += something + "\n";
         }
     }
 }
