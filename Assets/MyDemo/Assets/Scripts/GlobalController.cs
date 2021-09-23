@@ -145,17 +145,14 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         foreach (Transform child in parent)
         {
             InitBoneReferencesHelper(child);
-            if (child.name.StartsWith("b"))
+            bones.Add(child.gameObject);
+            TransformInfo ti = new TransformInfo
             {
-                bones.Add(child.gameObject);
-                TransformInfo ti = new TransformInfo
-                {
-                    pos = child.transform.localPosition,
-                    rotate = child.transform.localRotation,
-                    scale = child.transform.localScale
-                };
-                originalTransform.Add(ti);
-            }
+                pos = child.transform.localPosition,
+                rotate = child.transform.localRotation,
+                scale = child.transform.localScale
+            };
+            originalTransform.Add(ti);
         }
     }
 
