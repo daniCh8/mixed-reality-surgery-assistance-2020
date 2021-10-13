@@ -41,7 +41,14 @@
 [Download here](https://unity3d.com/unity/qa/lts-releases?version=2019.4). On the linked website, expand LTS Release 2019.4.26f1, and click on Download (Win) or Download (Mac) based on the OS you use. Use the downloaded file to install Unity, and remember the installation location because we will need it later.
 
 ### Visual Studio
-[Download the Community version here](https://visualstudio.microsoft.com/). Visual Studio is a full-featured IDE to code, debug, test, and deploy to any platform. We will need it to build the application with the new patients loaded.
+[Download the Community version here](https://visualstudio.microsoft.com/). Visual Studio is a full-featured IDE to code, debug, test, and deploy to any platform. We will need it to build the application with the new patients loaded. On the installer, you have to tick the following boxes:
+
+- **.NET desktop development**
+- **Desktop development with C++**
+- **Universal Windows Platform development**
+- **Game development with Unity**
+
+![](./pictures/change-patient-guide/000a.gif)
 
 ### Project Download
 [Download the project folder here](https://github.com/daniCh8/mixed-reality-surgery-assistance-2020). Press on *Code*, select *Download ZIP*, and unzip the downloaded archive in your desired location. Keep in mind that the project's size is roughly 800 MB.
