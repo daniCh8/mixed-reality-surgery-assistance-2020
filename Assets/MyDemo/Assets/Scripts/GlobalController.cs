@@ -142,8 +142,10 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
     private void InitBoneReferencesHelper(Transform parent)
     {
+        int child_counter = 0;
         foreach (Transform child in parent)
         {
+            child_counter++;
             InitBoneReferencesHelper(child);
             bones.Add(child.gameObject);
             TransformInfo ti = new TransformInfo
@@ -153,6 +155,25 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
                 scale = child.transform.localScale
             };
             originalTransform.Add(ti);
+        }
+        if (child_counter == 0)
+        {
+            BoundingBox bb =
+                parent.gameObject.GetComponent<BoundingBox>() == null ?
+                parent.gameObject.AddComponent<BoundingBox>() :
+                parent.gameObject.GetComponent<BoundingBox>();
+            ManipulationHandler mh =
+                parent.gameObject.GetComponent<ManipulationHandler>() == null ?
+                parent.gameObject.AddComponent<ManipulationHandler>() :
+                parent.gameObject.GetComponent<ManipulationHandler>();
+
+            bb.ShowWireFrame = false;
+            bb.ShowScaleHandles = false;
+            bb.ShowRotationHandleForX = false;
+            bb.ShowRotationHandleForY = false;
+            bb.ShowRotationHandleForZ = false;
+
+            mh.TwoHandedManipulationType = ManipulationHandler.TwoHandedManipulation.MoveRotate;
         }
     }
 
