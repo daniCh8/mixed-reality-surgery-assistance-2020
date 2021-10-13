@@ -97,7 +97,9 @@ public class ScrewSceneController : MonoBehaviour
             }
         }
 
-        // Initialize Screws and Bones
+        // Initialize Bones
+        InitBones(boneGroup.transform);
+        // Initialize Screws
         InitScrews();
         // Initialize Plate List
         InitPlates();
@@ -189,6 +191,24 @@ public class ScrewSceneController : MonoBehaviour
             originalScrewPositions.Add(cylinderScrew.name, cylinderScrew.transform.position);
             originalScrewScales.Add(cylinderScrew.name, cylinderScrew.transform.localScale);
             originalScrewRotations.Add(cylinderScrew.name, cylinderScrew.transform.rotation);
+        }
+    }
+
+    private void InitBones(Transform parent)
+    {
+        int child_count = 0;
+        foreach (Transform child in parent)
+        {
+            child_count++;
+        }
+        if (child_count == 0)
+        {
+            MeshCollider mc =
+                parent.gameObject.GetComponent<MeshCollider>() == null ?
+                parent.gameObject.AddComponent<MeshCollider>() :
+                parent.gameObject.GetComponent<MeshCollider>();
+
+            mc.convex = true;
         }
     }
 
