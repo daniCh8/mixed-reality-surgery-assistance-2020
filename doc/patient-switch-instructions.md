@@ -1,5 +1,7 @@
 # Changing Patient through Unity
 
+<!-- TOC -->
+
 - [Changing Patient through Unity](#changing-patient-through-unity)
     - [Requirements](#requirements)
         - [Unity Hub](#unity-hub)
@@ -15,6 +17,20 @@
         - [Open the Project](#open-the-project)
         - [Project Setup](#project-setup)
         - [New Patient Import](#new-patient-import)
+        - [New Patient Setup](#new-patient-setup)
+            - [PatientsController Attributes](#patientscontroller-attributes)
+            - [BoneManipulation Attributes](#bonemanipulation-attributes)
+            - [ScrewObjManipulation Attributes](#screwobjmanipulation-attributes)
+            - [Save the scene](#save-the-scene)
+    - [Build and Deploy](#build-and-deploy)
+        - [Unity Build](#unity-build)
+        - [Visual Studio Package Creation](#visual-studio-package-creation)
+        - [Find the App Packages](#find-the-app-packages)
+    - [Deploying to the HoloLens](#deploying-to-the-hololens)
+        - [Connecting via WiFi](#connecting-via-wifi)
+        - [Installing the App](#installing-the-app)
+
+<!-- /TOC -->
 
 ## Requirements
 
@@ -122,4 +138,114 @@ Below is a GIF showing this process.
 
 #### `BoneManipulation` Attributes
 
-Now, we will need to update the patient bones.
+Now, we will need to update the patient references in the `BoneManipulation` scene. Let's see what steps we should follow:
+
+1. Navigate to `BoneManipulation` -> `Bone_1` -> `BoneGroup` -> `Patient1` in the hierarchy.
+2. Select all the objects under `Patient1` in the hierarchy, right-click on the selection, and press *Delete*.
+3. Drag and drop all the fractured bone objs under `Patient1` in the hierarchy.
+4. Select all the created objects, right-click on the selection, and press *Unpack Prefab Completely*.
+
+The GIF below shows this process.
+
+![](./pictures/change-patient-guide/010.gif)
+
+#### `ScrewObjManipulation` Attributes
+
+Now, we will need to update the patient references in the `ScrewObjManipulation` scene. Let's see what steps we should follow:
+
+1. Navigate to `ScrewObjManipulation` -> `BoneMix` -> `Patient1` in the hierarchy.
+2. Select all the objects under `Patient1` -> `Plates` in the hierarchy, right-click on the selection, and press *Delete*.
+3. Drag and drop all the plate objs under `Patient1` -> `Plates` in the hierarchy. You can skip this step if there are no plates for this patient.
+4. Select all the created objects, right-click on the selection, and press *Unpack Prefab Completely*.
+5. Select all the objects under `Patient1` -> `Bone` -> `MainBone` in the hierarchy, right-click on the selection and press *Delete*.
+6. Select all the objects under `Patient1` -> `Bone` -> `FractureCollection` in the hierarchy, right-click on the selection and press *Delete*.
+7. Drag and drop the main bone obj under `Patient1` -> `Bone` -> `MainBone` in the hierarchy.
+8. Select the created bone object, right-click on the selection, and press *Unpack Prefab Completely*.
+9. Drag and drop all the realigned fracture bone objs under `Patient1` -> `Bone` -> `FractureCollection` in the hierarchy.
+10. Select all the created bone objects, right-click on the selection, and press *Unpack Prefab Completely*.
+
+The GIF below shows this process.
+
+![](./pictures/change-patient-guide/011.gif)
+
+#### Save the scene
+
+The new patient is now ready to be used! Let's not forget to save the scene to make sure that our changes will be used during the build. To do so, from Unity, go to File -> Save.
+
+![](./pictures/change-patient-guide/012.gif)
+
+## Build and Deploy
+
+### Unity Build
+
+The first thing we need to do to create an app package is to build the Unity project. To do so, navigate to File -> Build Settings in Unity. Select Universal Windows Platform as a Platform (it should be selected by default). Pick the following configuration:
+
+- `Target Device`: `HoloLens`;
+- `Architecture`: `ARM64`;
+- `Build Type`: `D3D Project`;
+- `Target SDK Version`: `Latest installed`;
+- `Minimum Platform Version`: `10.0.10240.0`;
+- `Visual Studio Version`: `Latest installed`;
+- `Build and Run on`: `Local Machine`;
+- `Build configuration`: `Release`;
+- `Compression Method`: `Default`;
+- And leave the rest of the options unchecked.
+
+Press on Build, and select a folder where to build the project. It would be best to create a new folder outside of the project folder and choose this new one as the build location. After selecting the folder, please wait for the build to finish (it will take some minutes).
+
+The GIF below shows the building process in Unity.
+
+![](./pictures/change-patient-guide/013.gif)
+
+### Visual Studio Package Creation
+
+Now that we built the Unity project, we need to create the App Package using Visual Studio. To do so, follow these steps:
+1. Go to the build folder, and open the solution file (Surgery.sln). Keep in mind that Visual Studio could take some time to open and load the project.
+2. On the Solution Explorer of Visual Studio (on the right of the screen), expand Surgery (Universal Windows), and double click on `App.h`. Wait until the loading is finished.
+3. Click on Project -> Publish -> Create App Packages...
+4. Select Sideloading as distribution method and press Next.
+5. Select the current certificate as a signing method and press Next.
+6. Be careful with the selection of packages. Check only ARM64 as Architecture, and select Release (ARM64) as Solution Configuration.
+7. Press Create and wait for it to finish. This process takes some minutes.
+
+Below is a GIF explaining the deployment process.
+
+![](./pictures/change-patient-guide/014.gif)
+
+### Find the App Packages
+
+When Visual Studio has finished the creation pipeline, we will look for the packages in the folder we used to build the project. The path to the app package in the build folder is AppPackages -> Surgery -> Surgery_`VERSION`_ARM64_Test
+
+![](./pictures/change-patient-guide/015.gif)
+
+## Deploying to the HoloLens
+
+Please note that on this section I will repurpose [this page of documentation from Microsoft](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/platform-capabilities-and-apis/using-the-windows-device-portal#connecting-over-wi-fi).
+
+### Connecting via WiFi
+
+1. Connect your HoloLens to Wi-Fi.
+2. Look up your device's IP address by either:
+    - Going to Settings > Network & Internet > Wi-Fi > Advanced Options.
+    - Going to Settings > Network & Internet and selecting Hardware properties.
+    - Using the "What's my IP address?" voice command.
+3. From a web browser on your PC, go to `https:/<YOUR_HOLOLENS_IP_ADDRESS> `The browser will display the following message: "*There's a problem with this website's security certificate*" because the certificate, which is issued to the Device Portal is a test certificate. You can ignore this certificate error for now and continue.
+4. Enter your username and password to log in to the developer portal.
+
+### Installing the App
+
+1. In Windows Device Portal, navigate to the *Apps* manager page.
+
+2. Before installing the application, uninstall any previous version if present in the device. To do so, select the Surgery App on the dropdown menu under *Installed apps* and press Remove.
+
+![](./pictures/change-patient-guide/016.png)
+
+3. Now let's install our package. In the *Deploy apps* section, select *Local Storage*.
+
+![](./pictures/change-patient-guide/017.png)
+
+4. Under *Select the application package*, select *Choose File* and browse to the app package we created using Visual Studio.
+5. Select Install to start the installation.
+6. Once the installation is complete, the Surgery app with the new patient is successfully installed in the HoloLens 2 device.
+
+![](./pictures/change-patient-guide/018.png)
