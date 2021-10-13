@@ -2,7 +2,19 @@
 
 **Table of Contents**
 
-[TOC]
+- [Changing Patient through Unity](#changing-patient-through-unity)
+    - [Requirements](#requirements)
+        - [Unity Hub](#unity-hub)
+        - [Unity v2019.4.26f1](#unity-v2019426f1)
+        - [Visual Studio](#visual-studio)
+        - [Project Download](#project-download)
+    - [Getting Started](#getting-started)
+        - [Unity Account](#unity-account)
+        - [Unity Hub License](#unity-hub-license)
+        - [Unity Location](#unity-location)
+        - [Project Location](#project-location)
+    - [Change Patient](#change-patient)
+        - [Open the Project](#open-the-project)
 
 ## Requirements
 
@@ -48,7 +60,7 @@ We need to wire the Unity Version we installed with Unity Hub. To do so, open Un
 
 ![](./pictures/change-patient-guide/004.png)
 
-Press on the *Locate* button and select the Unity installation folder you used in the Unity Installation step.
+Press on the *Locate* button and select the Unity installation folder you used in the [Unity Installation](#unity-v2019426f1).
 
 ### Project Location
 
@@ -56,7 +68,7 @@ We need to locate the project folder in Unity Hub. To do so, open Unity Hub and 
 
 ![](./pictures/change-patient-guide/005.png)
 
-From here, press the *Add* button and select the project folder you used in the Project Download step.
+From here, press the *Add* button and select the project folder you used in the [Project Download](#project-download).
 
 ## Change Patient
 
