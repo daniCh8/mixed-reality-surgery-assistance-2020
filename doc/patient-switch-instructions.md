@@ -112,7 +112,7 @@ In Unity Hub, open the project by pressing it in the project list. Before openin
 If it is the first time you open the project, you will need to select the right scene to work on. To do so, you have to:
 
 1. Navigate to Assets -> MyDemo in the project folders on the bottom of the screen.
-2. Drag and drop SampleScene.unity in the hierarchy.
+2. Drag and drop CustomSurgScene.unity in the hierarchy.
 3. Remove the default scene.
 
 You can see this process in the GIF below.
