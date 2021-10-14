@@ -89,7 +89,7 @@ We need to wire the Unity Version we installed with Unity Hub. To do so, open Un
 
 ![](./pictures/change-patient-guide/004.png)
 
-Press on the _Locate_ button and select the Unity installation folder you used in the [Unity Installation](#unity-v2019426f1).
+Press on the _Locate_ button, go to the Unity installation folder you used in the [Unity Installation](#unity-v2019426f1) and select the file `unity.exe` inside the Editor folder.
 
 ### Project Location
 
