@@ -25,8 +25,8 @@ MonoBehaviour:
   defaultLightingSceneIndex: 0
   lightingScenes: []
   contentScenes:
-  - Name: SampleScene
-    Path: Assets/MyDemo/SampleScene.unity
+  - Name: CustomSurgScene
+    Path: Assets/MyDemo/CustomSurgScene.unity
     Included: 1
     BuildIndex: 0
     Tag: Untagged
