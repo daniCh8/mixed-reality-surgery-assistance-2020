@@ -78,6 +78,7 @@ public class ScrewSceneController : MonoBehaviour
     public static bool ScrewAddModePlanar = false;
     // Screw Size text
     private TextMesh screwSizeText;
+    public int boneCount = 0;
 
     public void Init()
     {
@@ -199,6 +200,7 @@ public class ScrewSceneController : MonoBehaviour
         int child_count = 0;
         foreach (Transform child in parent)
         {
+            boneCount++;
             child_count++;
             InitBones(child);
         }
