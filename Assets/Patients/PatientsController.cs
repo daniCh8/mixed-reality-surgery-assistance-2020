@@ -178,6 +178,11 @@ public class PatientsController : MonoBehaviour
         globalController.Init();
         screwController.Init();
 
+        if(screwController.boneCount == 0)
+        {
+            globalController.canChangeScene = false;
+        }
+
         globalController.GoToManipScene();
     }
 
