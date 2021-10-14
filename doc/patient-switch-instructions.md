@@ -138,7 +138,7 @@ This process is shown in the GIF below.
 
 To set up the new patient, we will first need to change the attributes of the PatientsController. The app supports up to two patients right now. For this guide, let's use the PatientOne features to store the new patient. We have to perform the following steps:
 
-1. Select the `PatientsController` in the hierarchy.
+1. Select the `Controllers` -> `PatientsController` in the hierarchy.
 2. Put the new variables in the appropriate fields of the inspector. We will need to update the following attributes:
     - `Scans One`, where we will put the new patient's scan. **The scans should have the `.bytes` extension. Once you generated the `ct.nrrd` file, simply rename it to` ct.bytes`**
     - `Lat Screw One`, where we will put the new patient's lat screw positions (or None, if there are no lat screws for this patient).
@@ -172,12 +172,9 @@ Now, we will need to update the patient references in the `ScrewObjManipulation`
 2. Select all the objects under `Patient1` -> `Plates` in the hierarchy, right-click on the selection, and press _Delete_.
 3. Drag and drop all the plate objs under `Patient1` -> `Plates` in the hierarchy. You can skip this step if there are no plates for this patient.
 4. Select all the created objects, right-click on the selection, and press _Unpack Prefab Completely_.
-5. Select all the objects under `Patient1` -> `Bone` -> `MainBone` in the hierarchy, right-click on the selection and press _Delete_.
-6. Select all the objects under `Patient1` -> `Bone` -> `FractureCollection` in the hierarchy, right-click on the selection and press _Delete_.
-7. Drag and drop the main bone obj under `Patient1` -> `Bone` -> `MainBone` in the hierarchy.
-8. Select the created bone object, right-click on the selection, and press _Unpack Prefab Completely_.
-9. Drag and drop all the realigned fracture bone objs under `Patient1` -> `Bone` -> `FractureCollection` in the hierarchy.
-10. Select all the created bone objects, right-click on the selection, and press _Unpack Prefab Completely_.
+5. Select all the objects under `Patient1` -> `Bone` in the hierarchy, right-click on the selection and press _Delete_.
+6. Drag and drop the realigned bone objs under `Patient1` -> `Bone` in the hierarchy.
+7. Select the created bone objects, right-click on the selection, and press _Unpack Prefab Completely_.
 
 The GIF below shows this process.
 
