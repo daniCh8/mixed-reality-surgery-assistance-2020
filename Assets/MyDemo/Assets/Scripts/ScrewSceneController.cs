@@ -200,6 +200,7 @@ public class ScrewSceneController : MonoBehaviour
         foreach (Transform child in parent)
         {
             child_count++;
+            InitBones(child);
         }
         if (child_count == 0)
         {
